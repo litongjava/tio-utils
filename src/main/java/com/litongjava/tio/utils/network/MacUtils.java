@@ -1,4 +1,4 @@
-package com.litongjava.tio.utils.mac;
+package com.litongjava.tio.utils.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
