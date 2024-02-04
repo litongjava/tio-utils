@@ -1,9 +1,13 @@
 package com.litongjava.tio.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.mail.MessagingException;
+import javax.mail.Service;
 
 /**
  * this class copied from org.apache.commons.io.IOUtils
@@ -58,5 +62,26 @@ public class IoUtils {
     } catch (Exception e) {
       return null;
     }
+  }
+
+  public static void closeQuietly(Closeable closeable) {
+    if (closeable != null) {
+      try {
+        closeable.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public static void closeQuietly(Service closeable) {
+    if (closeable != null) {
+      try {
+        closeable.close();
+      } catch (MessagingException e) {
+        e.printStackTrace();
+      }
+    }
+
   }
 }

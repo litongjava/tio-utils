@@ -6,6 +6,7 @@
     <version>3.7.3.v20240130-RELEASE</version>
   </parent>
   <artifactId>tio-utils</artifactId>
+  <version>3.7.3.v202400301-RELEASE</version>
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -25,12 +26,28 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.30</version>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.5.0-b01</version>
+      <scope>provided</scope>
+    </dependency>
+
 
     <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>

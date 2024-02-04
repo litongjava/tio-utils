@@ -101,13 +101,11 @@ public class EnvironmentUtils {
     }
   }
 
-  public static void load(String profile) {
-    if (PropUtils.isLoad()) {
-      PropUtils.use("app-" + profile + ".properties");
-    } else {
-      PropUtils.use(profile);
+  public static void load(String fileName) {
+    PropUtils.use(fileName);
+  }
 
-    }
-
+  public static void load(String env, String filename) {
+    PropUtils.use(filename, env);
   }
 }

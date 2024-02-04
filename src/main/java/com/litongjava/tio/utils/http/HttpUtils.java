@@ -1,9 +1,12 @@
 package com.litongjava.tio.utils.http;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.management.RuntimeErrorException;
 
 import com.litongjava.tio.utils.hutool.StrUtil;
 
@@ -75,7 +78,7 @@ public class HttpUtils {
    * @throws Exception
    */
   private static Response post(String url, Map<String, String> headerMap, MediaType mediaType, String bodyString,
-      Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) throws Exception {
+      Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) {
     Request.Builder builder = new Request.Builder().url(url);
     if (headerMap != null) {
       Headers headers = Headers.of(headerMap);
@@ -108,7 +111,12 @@ public class HttpUtils {
       builder.post(formBody);
     }
     Request request = builder.build();
-    Response response = client.newCall(request).execute();
+    Response response = null;
+    try {
+      response = client.newCall(request).execute();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     return response;
   }
 
@@ -147,7 +155,7 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, String bodyString) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, String bodyString) {
     return post(url, headerMap, (MediaType) null, bodyString, null, null, null);
   }
 
