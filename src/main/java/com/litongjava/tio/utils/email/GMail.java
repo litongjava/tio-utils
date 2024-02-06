@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import com.litongjava.tio.utils.environment.EnvironmentUtils;
 
-public class Wangyi126Mail implements EMail {
+public class GMail implements EMail {
 
   /**
    * 发送邮件
