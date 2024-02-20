@@ -58,8 +58,8 @@ public class WeComNotification implements INotification {
 
     String dateString = sdf.format(date);
 
-    String text = String.format(NotificationTemplate.alarmTemplate, appGroupName, appName, warningName, level,
-        deviceName, content, dateString);
+    String text = String.format(NotificationTemplate.alarmTemplate, dateString, appGroupName, appName, warningName,
+        level, deviceName, content);
     String webHookUrl = EnvironmentUtils.get("notification.webhook.url");
 
     Map<String, Object> reqMap = getReqMap(text);
