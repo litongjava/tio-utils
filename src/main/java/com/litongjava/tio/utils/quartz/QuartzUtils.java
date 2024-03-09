@@ -90,7 +90,7 @@ public class QuartzUtils {
 
           @SuppressWarnings("unused")
           Date d = scheduler.scheduleJob(job, trigger);
-          log.info("定时任务[{}]已经启动, cron:{}", clazzz.getName(), trigger.getCronExpression());
+          log.info("A scheduled task has been started:{}, cron:{}", clazzz.getName(), trigger.getCronExpression());
 
         } catch (ClassNotFoundException e) {
           log.error(e.toString(), e);
