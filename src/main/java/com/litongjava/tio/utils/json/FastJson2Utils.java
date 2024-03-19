@@ -1,6 +1,7 @@
 package com.litongjava.tio.utils.json;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 
 /**
@@ -25,6 +26,10 @@ public class FastJson2Utils {
 
   public static <T> T parse(String jsonString, Class<T> type) {
     return JSON.parseObject(jsonString, type);
+  }
+
+  public static JSONObject parseObject(String bodyString) {
+    return JSON.parseObject(bodyString);
   }
 
 }

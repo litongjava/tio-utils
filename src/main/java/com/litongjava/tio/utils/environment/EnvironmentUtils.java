@@ -3,6 +3,8 @@ package com.litongjava.tio.utils.environment;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.litongjava.tio.utils.hutool.ResourceUtil;
+
 public class EnvironmentUtils {
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
@@ -107,5 +109,21 @@ public class EnvironmentUtils {
 
   public static void load(String env, String filename) {
     PropUtils.use(filename, env);
+  }
+
+  public static void load() {
+
+    String env = EnvironmentUtils.get("app.env");
+    if (ResourceUtil.getResource("app.properties") != null) {
+      PropUtils.use("app.properties", env);
+    } else {
+      if (env != null) {
+        PropUtils.use("app-" + env + ".properties");
+      }
+    }
+
+    if (ResourceUtil.getResource(".env") != null) {
+      PropUtils.use(".env");
+    }
   }
 }
