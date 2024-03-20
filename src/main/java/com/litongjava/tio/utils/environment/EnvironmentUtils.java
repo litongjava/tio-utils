@@ -123,7 +123,8 @@ public class EnvironmentUtils {
     }
 
     if (ResourceUtil.getResource(".env") != null) {
-      PropUtils.use(".env");
+      PropUtils.append(".env");
     }
+
   }
 }
