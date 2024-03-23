@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.Map;
+
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
 
@@ -30,4 +32,8 @@ public class FastJson extends Json {
     return JSON.parseObject(jsonString, type);
   }
 
+  @Override
+  public Map<?, ?> parseToMap(String json) {
+    return JSON.parseObject(json, Map.class);
+  }
 }

@@ -1,6 +1,7 @@
 package com.litongjava.tio.utils.json;
 
 
+import java.util.Map;
 import java.util.function.Function;
 
 import com.litongjava.tio.utils.json.TioJsonKit.JsonResult;
@@ -191,6 +192,12 @@ public class TiolJson extends Json {
 		"默认 json 实现暂不支持 json 到 object 的转换,建议使用 active recrord 的 Generator 生成 base model，" +
 		"再通过 me.setJsonFactory(new MixedJsonFactory()) 来支持");
 	}
+
+  @Override
+  public Map<?, ?> parseToMap(String bodyString) {
+    
+    return null;
+  }
 }
 
 

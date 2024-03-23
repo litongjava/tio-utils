@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -81,6 +83,15 @@ public class Jackson extends Json {
   public <T> T parse(String jsonString, Class<T> type) {
     try {
       return objectMapper.readValue(jsonString, type);
+    } catch (Exception e) {
+      throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public Map<?, ?> parseToMap(String json) {
+    try {
+      return objectMapper.readValue(json, Map.class);
     } catch (Exception e) {
       throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
     }

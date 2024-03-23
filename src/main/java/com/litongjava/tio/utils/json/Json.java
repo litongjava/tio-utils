@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -51,6 +52,8 @@ public abstract class Json {
 	public abstract String toJson(Object object);
 	
 	public abstract <T> T parse(String jsonString, Class<T> type);
+
+	public abstract Map<?, ?> parseToMap(String json);
 }
 
 

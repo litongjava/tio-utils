@@ -1,7 +1,10 @@
 package com.litongjava.tio.utils.json;
 
-import com.google.gson.Gson;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 public class GsonJson extends Json {
 
   private Gson gson = new Gson();
@@ -14,5 +17,11 @@ public class GsonJson extends Json {
   @Override
   public <T> T parse(String jsonString, Class<T> type) {
     return gson.fromJson(jsonString, type);
+  }
+
+  @Override
+  public Map<?, ?> parseToMap(String json) {
+    Type mapType = new TypeToken<Map<?, ?>>(){}.getType();
+    return gson.fromJson(json, mapType);
   }
 }

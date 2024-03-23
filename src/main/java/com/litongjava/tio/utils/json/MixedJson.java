@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.Map;
+
 /**
  * JFinalJson 与 FastJson 混合做 json 转换
  * toJson 用 JFinalJson，parse 用 FastJson
@@ -43,5 +45,13 @@ public class MixedJson extends Json {
       fastJson.setDatePattern(datePattern);
     }
     return fastJson;
+  }
+
+  @Override
+  public Map<?, ?> parseToMap(String json) {
+    if (fastJson == null) {
+      fastJson = FastJson.getJson();
+    }
+    return fastJson.parseToMap(json);
   }
 }
