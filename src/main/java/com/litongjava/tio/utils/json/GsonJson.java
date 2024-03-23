@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
+
 public class GsonJson extends Json {
 
   private Gson gson = new Gson();
@@ -21,7 +22,15 @@ public class GsonJson extends Json {
 
   @Override
   public Map<?, ?> parseToMap(String json) {
-    Type mapType = new TypeToken<Map<?, ?>>(){}.getType();
+    Type mapType = new TypeToken<Map<?, ?>>() {
+    }.getType();
+    return gson.fromJson(json, mapType);
+  }
+
+  @Override
+  public <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
+    Type mapType = new TypeToken<Map<K, V>>() {
+    }.getType();
     return gson.fromJson(json, mapType);
   }
 }

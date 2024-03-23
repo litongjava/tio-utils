@@ -3,6 +3,7 @@ package com.litongjava.tio.utils.json;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.litongjava.tio.utils.date.TioTimeUtils;
@@ -92,6 +93,17 @@ public class Jackson extends Json {
   public Map<?, ?> parseToMap(String json) {
     try {
       return objectMapper.readValue(json, Map.class);
+    } catch (Exception e) {
+      throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
+    TypeReference<Map<K, V>> typeReference = new TypeReference<Map<K, V>>() {
+    };
+    try {
+      return objectMapper.readValue(json, typeReference);
     } catch (Exception e) {
       throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
     }

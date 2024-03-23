@@ -54,4 +54,12 @@ public class MixedJson extends Json {
     }
     return fastJson.parseToMap(json);
   }
+
+  @Override
+  public <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
+    if (fastJson != null) {
+      fastJson = FastJson.getJson();
+    }
+    return fastJson.parseToMap(json, kType, vType);
+  }
 }

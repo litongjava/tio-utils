@@ -54,6 +54,8 @@ public abstract class Json {
 	public abstract <T> T parse(String jsonString, Class<T> type);
 
 	public abstract Map<?, ?> parseToMap(String json);
+
+  public abstract <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType);
 }
 
 

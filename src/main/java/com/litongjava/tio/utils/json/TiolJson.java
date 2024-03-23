@@ -198,6 +198,12 @@ public class TiolJson extends Json {
     
     return null;
   }
+
+  @Override
+  public <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }
 
 
