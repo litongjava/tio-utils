@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.litongjava.tio.utils.hutool.ResourceUtil;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 /**
@@ -96,8 +97,11 @@ public class PropUtils {
     if (StrUtil.isNotBlank(env)) {
       int index = fileName.lastIndexOf('.');
       String envConfigName = fileName.substring(0, index) + "-" + env + fileName.substring(index);
-      Prop envConfig = new Prop(envConfigName);
-      result.append(envConfig); // 追加环境配置
+      if (ResourceUtil.getResource(envConfigName) != null) {
+        Prop envConfig = new Prop(envConfigName);
+        result.append(envConfig); // 追加环境配置
+      }
+
     }
   }
 
