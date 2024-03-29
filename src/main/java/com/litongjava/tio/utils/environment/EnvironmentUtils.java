@@ -103,6 +103,18 @@ public class EnvironmentUtils {
     }
   }
 
+  public static boolean isDev() {
+    return "dev".equals(getStr("app.env"));
+  }
+
+  public static boolean isTest() {
+    return "test".equals(getStr("app.env"));
+  }
+
+  public static boolean isProd() {
+    return "pord".equals(getStr("app.env"));
+  }
+
   public static void load(String fileName) {
     PropUtils.use(fileName);
   }
