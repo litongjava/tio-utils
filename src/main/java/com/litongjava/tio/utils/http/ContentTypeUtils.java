@@ -214,7 +214,6 @@ public class ContentTypeUtils {
     map.put("pls", "audio/scpls");
     map.put("plt", "application/x-plt");
     map.put("png", "image/png");
-    map.put("png", "application/x-png");
     map.put("pot", "application/vnd.ms-powerpoint");
     map.put("ppa", "application/vnd.ms-powerpoint");
     map.put("ppm", "application/x-ppm");
