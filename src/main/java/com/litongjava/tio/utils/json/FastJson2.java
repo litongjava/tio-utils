@@ -9,10 +9,10 @@ import com.alibaba.fastjson2.TypeReference;
 /**
  * Json 转换 fastjson 实现.
  */
-public class FastJson extends Json {
+public class FastJson2 extends Json {
 
-  public static FastJson getJson() {
-    return new FastJson();
+  public static FastJson2 getJson() {
+    return new FastJson2();
   }
 
   public String toJson(Object object) {
@@ -21,9 +21,9 @@ public class FastJson extends Json {
 
   /**
    * 支持传入更多 SerializerFeature
-   * 
+   * <p>
    * 例如：
-   *    SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
+   * SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
    */
   public String toJson(Object object, JSONWriter.Feature... features) {
     return JSON.toJSONString(object, features);
@@ -45,5 +45,15 @@ public class FastJson extends Json {
 
     Map<K, V> map = JSON.parseObject(json, typeReference);
     return map;
+  }
+
+  @Override
+  public Object parseObject(String jsonString) {
+    return JSON.parseObject(jsonString);
+  }
+
+  @Override
+  public Object parseArray(String jsonString) {
+    return JSON.parseArray(jsonString);
   }
 }

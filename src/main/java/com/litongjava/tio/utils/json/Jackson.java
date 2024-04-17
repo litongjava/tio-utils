@@ -1,16 +1,17 @@
 package com.litongjava.tio.utils.json;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.litongjava.tio.utils.date.TioTimeUtils;
 
+import java.util.Map;
+
 /**
  * Json 转换 jackson 实现.
- *
+ * <p>
  * json 到 java 类型转换规则: http://wiki.fasterxml.com/JacksonInFiveMinutes
  * JSON TYPE				JAVA TYPE
  * object					LinkedHashMap<String,Object>
@@ -108,4 +109,25 @@ public class Jackson extends Json {
       throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
     }
   }
+
+  @Override
+  public Object parseObject(String jsonString) {
+    try {
+      return objectMapper.readTree(jsonString);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public Object parseArray(String jsonString) {
+    try {
+      return objectMapper.readTree(jsonString);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
 }

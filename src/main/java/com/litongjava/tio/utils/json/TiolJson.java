@@ -204,6 +204,16 @@ public class TiolJson extends Json {
     // TODO Auto-generated method stub
     return null;
   }
+
+	@Override
+	public Object parseObject(String jsonString) {
+		return null;
+	}
+
+	@Override
+	public Object parseArray(String jsonString) {
+		return null;
+	}
 }
 
 

@@ -9,4 +9,12 @@ public class JsonUtils {
   public static <T> T parse(String jsonString, Class<T> type) {
     return Json.getJson().parse(jsonString, type);
   }
+
+  public static Object parseObject(String jsonString) {
+    return Json.getJson().parseObject(jsonString);
+  }
+
+  public static Object parseArray(String jsonString) {
+    return Json.getJson().parseArray(jsonString);
+  }
 }

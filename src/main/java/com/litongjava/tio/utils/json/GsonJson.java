@@ -3,7 +3,11 @@ package com.litongjava.tio.utils.json;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 
 public class GsonJson extends Json {
@@ -32,5 +36,19 @@ public class GsonJson extends Json {
     Type mapType = new TypeToken<Map<K, V>>() {
     }.getType();
     return gson.fromJson(json, mapType);
+  }
+
+  @Override
+  public Object parseObject(String jsonString) {
+    JsonParser parser = new JsonParser();
+    JsonElement jsonElement = parser.parse(jsonString);
+    return jsonElement.getAsJsonObject();
+  }
+
+  @Override
+  public Object parseArray(String jsonString) {
+    JsonParser parser = new JsonParser();
+    JsonElement jsonElement = parser.parse(jsonString);
+    return jsonElement.getAsJsonArray();
   }
 }
