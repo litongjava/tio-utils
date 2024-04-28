@@ -1,6 +1,6 @@
 package com.litongjava.tio.utils.dsn;
 
-public class DSNParser {
+public class DbDSNParser {
 
   public JdbcInfo parse(String dsn) {
     int userStart = dsn.indexOf("//") + 2;
