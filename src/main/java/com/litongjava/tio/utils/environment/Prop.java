@@ -9,9 +9,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Prop. Prop can load properties file from CLASSPATH or File object.
  */
+@Slf4j
 public class Prop {
 
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
@@ -49,13 +52,27 @@ public class Prop {
   public Prop(String fileName, Charset encoding) {
     encoding.toString();
     InputStream inputStream = null;
+    properties = new Properties();
     try {
       inputStream = getClassLoader().getResourceAsStream(fileName); // properties.load(Prop.class.getResourceAsStream(fileName));
-      if (inputStream == null) {
-        throw new IllegalArgumentException("Properties file not found in classpath: " + fileName);
+      if (inputStream != null) {
+        properties.load(new InputStreamReader(inputStream, encoding));
+      } else {
+        File file = new File(fileName);
+        if (!file.exists()) {
+          if (file.createNewFile()) {
+            log.info("file created successful：" + fileName);
+            inputStream = new FileInputStream(file);
+            properties.load(new InputStreamReader(inputStream, encoding));
+          } else {
+            log.info("failed to create file" + fileName);
+          }
+        } else {
+          log.info("load file：" + fileName);
+          inputStream = new FileInputStream(file);
+          properties.load(new InputStreamReader(inputStream, encoding));
+        }
       }
-      properties = new Properties();
-      properties.load(new InputStreamReader(inputStream, encoding));
     } catch (IOException e) {
       throw new RuntimeException("Error loading properties file.", e);
     } finally {

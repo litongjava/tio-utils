@@ -124,13 +124,18 @@ public class EnvironmentUtils {
   }
 
   public static void load() {
-
     String env = EnvironmentUtils.get("app.env");
-    if (ResourceUtil.getResource("app.properties") != null) {
-      PropUtils.use("app.properties", env);
+    String defaultFilename = "app.properties";
+    if (ResourceUtil.getResource(defaultFilename) != null) {
+      PropUtils.use(defaultFilename, env);
     } else {
       if (env != null) {
-        PropUtils.use("app-" + env + ".properties");
+        String fileName = "app-" + env + ".properties";
+        PropUtils.use(fileName);
+      } else {
+        // crate file
+        PropUtils.use(defaultFilename);
+
       }
     }
 
