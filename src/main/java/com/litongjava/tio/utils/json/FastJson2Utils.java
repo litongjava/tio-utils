@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.List;
+
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -34,5 +36,9 @@ public class FastJson2Utils {
 
   public static JSONArray parseArray(String jsonString) {
     return JSON.parseArray(jsonString);
+  }
+
+  public static <T> List<T> parseArray(String jsonString, Class<T> clazz) {
+    return JSON.parseArray(jsonString, clazz);
   }
 }
