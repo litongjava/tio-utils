@@ -2,7 +2,7 @@ package com.litongjava.tio.utils.email;
 
 import java.util.Properties;
 
-import com.litongjava.tio.utils.environment.EnvironmentUtils;
+import com.litongjava.tio.utils.environment.EnvUtils;
 
 public class GMail implements EMail {
 
@@ -14,13 +14,13 @@ public class GMail implements EMail {
    * @paaram isDebug 是否开启debug模式
    */
   public void send(String to, String subject, String content, boolean isDebug) {
-    String smptHost = EnvironmentUtils.get("mail.host");
-    String mailTransportProtocol = EnvironmentUtils.get("mail.protocol");
+    String smptHost = EnvUtils.get("mail.host");
+    String mailTransportProtocol = EnvUtils.get("mail.protocol");
 
-    Integer smtpPort = EnvironmentUtils.getInt("mail.smpt.port");
-    String user = EnvironmentUtils.get("mail.user");
-    String password = EnvironmentUtils.get("mail.password");
-    String from = EnvironmentUtils.get("mail.from");
+    Integer smtpPort = EnvUtils.getInt("mail.smpt.port");
+    String user = EnvUtils.get("mail.user");
+    String password = EnvUtils.get("mail.password");
+    String from = EnvUtils.get("mail.from");
 
     Properties prop = new Properties();
     // 邮件服务器

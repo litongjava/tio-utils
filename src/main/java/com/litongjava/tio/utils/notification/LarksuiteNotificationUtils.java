@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.litongjava.tio.utils.environment.EnvironmentUtils;
+import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 
@@ -14,7 +14,7 @@ import okhttp3.Response;
 public class LarksuiteNotificationUtils {
 
   public static Response send(Map<String, Object> reqMap) {
-    String webHookUrl = EnvironmentUtils.get("notification.webhook.url");
+    String webHookUrl = EnvUtils.get("notification.webhook.url");
     return send(webHookUrl, reqMap);
   }
 
@@ -59,7 +59,7 @@ public class LarksuiteNotificationUtils {
 
     String text = String.format(NotificationTemplate.alarmTemplate, dateString, appGroupName, appName, warningName,
         level, deviceName, content);
-    String webHookUrl = EnvironmentUtils.get("notification.webhook.url");
+    String webHookUrl = EnvUtils.get("notification.webhook.url");
 
     Map<String, Object> reqMap = getReqMap(text);
 
@@ -98,7 +98,7 @@ public class LarksuiteNotificationUtils {
     req.put("msg_type", "text");
     req.put("content", text);
 
-    String webHookUrl = EnvironmentUtils.get("notification.webhook.url");
+    String webHookUrl = EnvUtils.get("notification.webhook.url");
 
     return send(webHookUrl, req);
   }

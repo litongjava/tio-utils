@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.litongjava.tio.utils.hutool.ResourceUtil;
 
-public class EnvironmentUtils {
+public class EnvUtils {
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
 
@@ -18,7 +18,7 @@ public class EnvironmentUtils {
   }
 
   public static Map<String, String> buildCmdArgsMap(String[] args) {
-    EnvironmentUtils.args = args;
+    EnvUtils.args = args;
     Map<String, String> result = new HashMap<>();
     for (String arg : args) {
       if (arg.startsWith("--")) {
@@ -124,7 +124,7 @@ public class EnvironmentUtils {
   }
 
   public static void load() {
-    String env = EnvironmentUtils.get("app.env");
+    String env = EnvUtils.get("app.env");
     String defaultFilename = "app.properties";
     if (ResourceUtil.getResource(defaultFilename) != null) {
       PropUtils.use(defaultFilename, env);
