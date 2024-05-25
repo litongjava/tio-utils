@@ -31,8 +31,6 @@ public class HttpUtils {
 
   }
 
-  public static final OkHttpClient client = new OkHttpClient();
-
   /**
    * 
    * @param url
@@ -49,6 +47,7 @@ public class HttpUtils {
     builder.get();
 
     Request request = builder.build();
+    OkHttpClient client = OkHttpClientPool.getHttpClient();
     Response response = client.newCall(request).execute();
     return response;
   }
@@ -110,6 +109,7 @@ public class HttpUtils {
     }
     Request request = builder.build();
     Response response = null;
+    OkHttpClient client = OkHttpClientPool.getHttpClient();
     try {
       response = client.newCall(request).execute();
     } catch (IOException e) {
