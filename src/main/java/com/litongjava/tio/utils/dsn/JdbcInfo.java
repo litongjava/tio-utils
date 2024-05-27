@@ -8,5 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JdbcInfo {
+  //jdbc:postgresql://192.168.3.9/uh_courses
   private String url, user, pswd;
+  
+  /**
+   * mysql,oracle,postgresql,sqlite
+   * @return
+   */
+  public String getDbType() {
+    return url.split(":")[1];
+  }
 }
