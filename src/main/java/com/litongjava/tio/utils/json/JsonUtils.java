@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.Map;
+
 public class JsonUtils {
 
   public static String toJson(Object object) {
@@ -16,5 +18,9 @@ public class JsonUtils {
 
   public static Object parseArray(String jsonString) {
     return Json.getJson().parseArray(jsonString);
+  }
+
+  public static <K, V> Map<K, V> parseToMa(String json, Class<K> kType, Class<V> vType) {
+    return Json.getJson().parseToMap(json, kType, vType);
   }
 }
