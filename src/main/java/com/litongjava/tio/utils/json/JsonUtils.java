@@ -20,7 +20,7 @@ public class JsonUtils {
     return Json.getJson().parseArray(jsonString);
   }
 
-  public static <K, V> Map<K, V> parseToMa(String json, Class<K> kType, Class<V> vType) {
+  public static <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
     return Json.getJson().parseToMap(json, kType, vType);
   }
 }

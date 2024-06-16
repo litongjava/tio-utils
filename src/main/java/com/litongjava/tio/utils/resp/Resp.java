@@ -16,6 +16,14 @@ public class Resp implements java.io.Serializable {
     return fail().msg(msg);
   }
 
+  public static Resp fail(Object data) {
+    return fail().data(data);
+  }
+
+  public static Resp fail(String msg, Object data) {
+    return fail().msg(msg).data(data);
+  }
+
   public static Resp ok() {
     Resp resp = new Resp(RespResult.OK);
     return resp;
@@ -23,6 +31,10 @@ public class Resp implements java.io.Serializable {
 
   public static Resp ok(Object data) {
     return ok().data(data);
+  }
+
+  public static Resp ok(String msg, Object data) {
+    return ok().msg(msg).data(data);
   }
 
   /**
