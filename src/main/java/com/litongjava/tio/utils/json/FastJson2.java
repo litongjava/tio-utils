@@ -1,8 +1,11 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.TypeReference;
 
@@ -56,4 +59,20 @@ public class FastJson2 extends Json {
   public Object parseArray(String jsonString) {
     return JSON.parseArray(jsonString);
   }
+
+  @Override
+  public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
+    TypeReference<Map<K, V>> typeReference = new TypeReference<Map<K, V>>() {
+    };
+    JSONArray jsonArray = JSON.parseArray(stringValue);
+    List<Map<K, V>> listMap = new ArrayList<>();
+
+    for (int i = 0; i < jsonArray.size(); i++) {
+      Map<K, V> map = jsonArray.getJSONObject(i).to(typeReference);
+      listMap.add(map);
+    }
+
+    return listMap;
+  }
+
 }

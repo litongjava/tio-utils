@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,5 +78,11 @@ public class MixedJson extends Json {
       fastJson = FastJson2.getJson();
     }
     return fastJson.parseArray(jsonString);
+  }
+
+  @Override
+  public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

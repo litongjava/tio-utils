@@ -1,13 +1,14 @@
 package com.litongjava.tio.utils.json;
 
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.litongjava.tio.utils.date.TioTimeUtils;
-
-import java.util.Map;
 
 /**
  * Json 转换 jackson 实现.
@@ -130,4 +131,14 @@ public class Jackson extends Json {
     return null;
   }
 
+  @Override
+  public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
+    try {
+      TypeReference<List<Map<K, V>>> typeReference = new TypeReference<List<Map<K, V>>>() {
+      };
+      return objectMapper.readValue(stringValue, typeReference);
+    } catch (Exception e) {
+      throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+    }
+  }
 }

@@ -1,5 +1,8 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -7,8 +10,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 
 public class GsonJson extends Json {
 
@@ -40,15 +41,34 @@ public class GsonJson extends Json {
 
   @Override
   public Object parseObject(String jsonString) {
+    @SuppressWarnings("deprecation")
     JsonParser parser = new JsonParser();
+    @SuppressWarnings("deprecation")
     JsonElement jsonElement = parser.parse(jsonString);
     return jsonElement.getAsJsonObject();
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public Object parseArray(String jsonString) {
     JsonParser parser = new JsonParser();
     JsonElement jsonElement = parser.parse(jsonString);
     return jsonElement.getAsJsonArray();
   }
+
+  @Override
+  public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
+    Type mapType = new TypeToken<Map<K, V>>() {
+    }.getType();
+    JsonArray jsonArray = JsonParser.parseString(stringValue).getAsJsonArray();
+    List<Map<K, V>> listMap = new ArrayList<>();
+
+    for (JsonElement jsonElement : jsonArray) {
+      Map<K, V> map = gson.fromJson(jsonElement, mapType);
+      listMap.add(map);
+    }
+
+    return listMap;
+  }
+
 }
