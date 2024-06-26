@@ -82,7 +82,9 @@ public class MixedJson extends Json {
 
   @Override
   public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
-    // TODO Auto-generated method stub
-    return null;
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parseToListMap(stringValue, kType, vType);
   }
 }
