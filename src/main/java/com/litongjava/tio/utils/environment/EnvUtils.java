@@ -8,6 +8,7 @@ import com.litongjava.tio.utils.hutool.ResourceUtil;
 public class EnvUtils {
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
+  private static Map<String, String> appMap = new HashMap<>();
 
   public static String[] getArgs() {
     return args;
@@ -33,28 +34,36 @@ public class EnvUtils {
   }
 
   public static String getStr(String key) {
+    String value = appMap.get(key);
+    if (value != null) {
+      return value;
+    }
     // comamdn line
-    String value = cmdArgsMap.get(key);
+    value = cmdArgsMap.get(key);
+
+    if (value != null) {
+      return value;
+    }
+
     // java env
-    if (value == null) {
-      value = System.getProperty(key);
+    value = System.getProperty(key);
+    if (value != null) {
+      return value;
     }
     // system env
-    if (value == null) {
-      value = System.getenv(key);
-      if (value == null) {
-        value = System.getenv(key.replace(".", "_").toUpperCase());
-      }
+    value = System.getenv(key);
+    if (value != null) {
+      return value;
     }
 
+    value = System.getenv(key.replace(".", "_").toUpperCase());
+    if (value == null) {
+      return value;
+    }
     // config file
-    if (value == null) {
-      if (PropUtils.isLoad()) {
-        value = PropUtils.get(key);
-      }
-
+    if (PropUtils.isLoad()) {
+      value = PropUtils.get(key);
     }
-
     return value;
   }
 
@@ -121,6 +130,10 @@ public class EnvUtils {
 
   public static void load(String env, String filename) {
     PropUtils.use(filename, env);
+  }
+
+  public static void set(String key, String value) {
+    appMap.put(key, value);
   }
 
   public static void load() {
