@@ -57,7 +57,7 @@ public class EnvUtils {
     }
 
     value = System.getenv(key.replace(".", "_").toUpperCase());
-    if (value == null) {
+    if (value != null) {
       return value;
     }
     // config file

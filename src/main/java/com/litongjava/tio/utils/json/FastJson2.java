@@ -19,6 +19,7 @@ public class FastJson2 extends Json {
   }
 
   public String toJson(Object object) {
+
     return JSON.toJSONString(object);
   }
 
