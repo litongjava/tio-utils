@@ -87,4 +87,12 @@ public class MixedJson extends Json {
     }
     return fastJson.parseToListMap(stringValue, kType, vType);
   }
+
+  @Override
+  public Object parse(String stringValue) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parse(stringValue);
+  }
 }

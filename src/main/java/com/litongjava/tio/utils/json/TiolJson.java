@@ -215,4 +215,9 @@ public class TiolJson extends Json {
   public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
+
+  @Override
+  public Object parse(String stringValue) {
+    throw new RuntimeException(notSupportJsonToObjectMesage);
+  }
 }

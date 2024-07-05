@@ -71,4 +71,9 @@ public class GsonJson extends Json {
     return listMap;
   }
 
+  @Override
+  public Object parse(String stringValue) {
+    return gson.fromJson(stringValue, Object.class);
+  }
+
 }

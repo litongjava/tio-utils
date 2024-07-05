@@ -76,4 +76,9 @@ public class FastJson2 extends Json {
     return listMap;
   }
 
+  @Override
+  public Object parse(String stringValue) {
+    return JSON.parse(stringValue);
+  }
+
 }

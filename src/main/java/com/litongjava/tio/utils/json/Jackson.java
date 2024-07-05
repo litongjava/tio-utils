@@ -141,4 +141,13 @@ public class Jackson extends Json {
       throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
     }
   }
+
+  @Override
+  public Object parse(String stringValue) {
+    try {
+      return objectMapper.readValue(stringValue, Object.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
