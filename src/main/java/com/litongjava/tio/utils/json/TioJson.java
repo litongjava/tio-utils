@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.litongjava.tio.utils.json.TioJsonKit.JsonResult;
-import com.litongjava.tio.utils.json.TioJsonKit.ToJson;
 
 /**
  * Json 转换 JFinal 实现.
@@ -18,7 +17,9 @@ import com.litongjava.tio.utils.json.TioJsonKit.ToJson;
  * array			java.util.List
  * object			java.util.Map
  */
-public class TiolJson extends Json {
+public class TioJson extends Json {
+
+  private String notSupportJsonToObjectMesage = "The default json implementation currently does not support json to object conversion. It is recommended to use MixedJsonFactory and support it by setting Json.setDefaultJsonFactory(new MixedJsonFactory()).";
 
   protected static final TioJsonKit kit = TioJsonKit.me;
 
@@ -27,11 +28,10 @@ public class TiolJson extends Json {
   protected static int defaultConvertDepth = 16;
 
   protected int convertDepth = defaultConvertDepth;
-  protected String timestampPattern = "yyyy-MM-dd HH:mm:ss";
-  String notSupportJsonToObjectMesage = "The default json implementation currently does not support json to object conversion. It is recommended to use MixedJsonFactory and support it by setting Json.setDefaultJsonFactory(new MixedJsonFactory()).";
 
-  public static TiolJson getJson() {
-    return new TiolJson();
+
+  public static TioJson getJson() {
+    return new TioJson();
   }
 
   @Override
@@ -51,8 +51,8 @@ public class TiolJson extends Json {
 
       // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
       String dp = datePattern != null ? datePattern : getDefaultDatePattern();
-      ret.init(dp, timestampPattern);
-      ToJson toJson = kit.getToJson(object);
+      ret.init(dp, getTimestampPattern());
+      TioToJson toJson = kit.getToJson(object);
       toJson.toJson(object, convertDepth, ret);
       return ret.toString();
     } finally {
@@ -74,7 +74,7 @@ public class TiolJson extends Json {
    *     将其转换成了 long 型数据
    * </pre>
    */
-  public static void addToJson(Class<?> type, ToJson<?> toJson) {
+  public static void addToJson(Class<?> type, TioToJson<?> toJson) {
     TioJsonKit.addToJson(type, toJson);
   }
 
@@ -85,19 +85,14 @@ public class TiolJson extends Json {
     if (defaultConvertDepth < 2) {
       throw new IllegalArgumentException("defaultConvertDepth depth can not less than 2.");
     }
-    TiolJson.defaultConvertDepth = defaultConvertDepth;
+    TioJson.defaultConvertDepth = defaultConvertDepth;
   }
 
-  public TiolJson setConvertDepth(int convertDepth) {
+  public TioJson setConvertDepth(int convertDepth) {
     if (convertDepth < 2) {
       throw new IllegalArgumentException("convert depth can not less than 2.");
     }
     this.convertDepth = convertDepth;
-    return this;
-  }
-
-  public TiolJson setTimestampPattern(String timestampPattern) {
-    this.timestampPattern = timestampPattern;
     return this;
   }
 
@@ -175,7 +170,7 @@ public class TiolJson extends Json {
    *    });
    * </pre>
    */
-  public static void setToJsonFactory(Function<Object, ToJson<?>> toJsonFactory) {
+  public static void setToJsonFactory(Function<Object, TioToJson<?>> toJsonFactory) {
     TioJsonKit.setToJsonFactory(toJsonFactory);
   }
 

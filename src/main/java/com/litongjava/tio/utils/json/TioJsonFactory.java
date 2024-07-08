@@ -12,6 +12,6 @@ public class TioJsonFactory implements IJsonFactory {
   }
 
   public Json getJson() {
-    return new TiolJson();
+    return new TioJson();
   }
 }

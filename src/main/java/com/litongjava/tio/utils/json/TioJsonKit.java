@@ -34,7 +34,7 @@ public class TioJsonKit {
   public static final TioJsonKit me = new TioJsonKit();
 
   // 缓存 ToJson 对象
-  protected static SyncWriteMap<Class<?>, ToJson<?>> cache = new SyncWriteMap<>(512, 0.25F);
+  protected static SyncWriteMap<Class<?>, TioToJson<?>> cache = new SyncWriteMap<>(512, 0.25F);
 
   // StringBuilder 最大缓冲区大小
   protected static int maxBufferSize = 1024 * 512;
@@ -43,19 +43,15 @@ public class TioJsonKit {
   protected static boolean treatModelAsBean = false;
 
   // 是否跳过 null 值的字段，不对其进行转换
-  protected static boolean skipNullValueField = true;
+  protected static boolean skipNullValueField = false;
 
   // 对 Model 和 Record 的字段名进行转换的函数。例如转成驼峰形式对 oracle 支持更友好
   protected static Function<String, String> modelAndRecordFieldNameConverter = null;
 
-  protected static Function<Object, ToJson<?>> toJsonFactory = null;
+  protected static Function<Object, TioToJson<?>> toJsonFactory = null;
 
-  public interface ToJson<T> {
-    void toJson(T value, int depth, JsonResult ret);
-  }
-
-  public ToJson<?> getToJson(Object object) {
-    ToJson<?> ret = cache.get(object.getClass());
+  public TioToJson<?> getToJson(Object object) {
+    TioToJson<?> ret = cache.get(object.getClass());
     if (ret == null) {
       ret = createToJson(object);
       cache.putIfAbsent(object.getClass(), ret);
@@ -71,22 +67,22 @@ public class TioJsonKit {
    *       ret.addLong(value.getTime());
    *     };
    *     
-   *     JFinalJson.addToJson(Timestamp.class, toJson);
+   *     TioJson.addToJson(Timestamp.class, toJson);
    *     
    *     以上代码为 Timestamp 类型的 json 转换定制了转换规则
    *     将其转换成了 long 型数据
    * </pre>
    */
-  public static void addToJson(Class<?> type, ToJson<?> toJson) {
+  public static void addToJson(Class<?> type, TioToJson<?> toJson) {
     Objects.requireNonNull(type, "type can not be null");
     Objects.requireNonNull(toJson, "toJson can not be null");
     cache.put(type, toJson);
   }
 
-  protected ToJson<?> createToJson(Object value) {
+  protected TioToJson<?> createToJson(Object value) {
     // 优先使用 toJsonFactory 创建 ToJson 实例，方便用户优先接管 ToJson 转换器的创建
     if (toJsonFactory != null) {
-      ToJson<?> tj = toJsonFactory.apply(value);
+      TioToJson<?> tj = toJsonFactory.apply(value);
       if (tj != null) {
         return tj;
       }
@@ -188,31 +184,31 @@ public class TioJsonKit {
     }
   }
 
-  static class StrToJson implements ToJson<String> {
+  static class StrToJson implements TioToJson<String> {
     public void toJson(String str, int depth, JsonResult ret) {
       escape(str, ret.sb);
     }
   }
 
-  static class CharacterToJson implements ToJson<Character> {
+  static class CharacterToJson implements TioToJson<Character> {
     public void toJson(Character ch, int depth, JsonResult ret) {
       escape(ch.toString(), ret.sb);
     }
   }
 
-  static class IntToJson implements ToJson<Integer> {
+  static class IntToJson implements TioToJson<Integer> {
     public void toJson(Integer value, int depth, JsonResult ret) {
       ret.addInt(value);
     }
   }
 
-  static class LongToJson implements ToJson<Long> {
+  static class LongToJson implements TioToJson<Long> {
     public void toJson(Long value, int depth, JsonResult ret) {
       ret.addLong(value);
     }
   }
 
-  static class DoubleToJson implements ToJson<Double> {
+  static class DoubleToJson implements TioToJson<Double> {
     public void toJson(Double value, int depth, JsonResult ret) {
       if (value.isInfinite() || value.isNaN()) {
         ret.addNull();
@@ -222,7 +218,7 @@ public class TioJsonKit {
     }
   }
 
-  static class FloatToJson implements ToJson<Float> {
+  static class FloatToJson implements TioToJson<Float> {
     public void toJson(Float value, int depth, JsonResult ret) {
       if (value.isInfinite() || value.isNaN()) {
         ret.addNull();
@@ -233,55 +229,55 @@ public class TioJsonKit {
   }
 
   // 接管 int、long、double、float 之外的 Number 类型
-  static class NumberToJson implements ToJson<Number> {
+  static class NumberToJson implements TioToJson<Number> {
     public void toJson(Number value, int depth, JsonResult ret) {
       ret.addNumber(value);
     }
   }
 
-  static class BooleanToJson implements ToJson<Boolean> {
+  static class BooleanToJson implements TioToJson<Boolean> {
     public void toJson(Boolean value, int depth, JsonResult ret) {
       ret.addBoolean(value);
     }
   }
 
-  static class EnumToJson implements ToJson<Enum> {
+  static class EnumToJson implements TioToJson<Enum> {
     public void toJson(Enum en, int depth, JsonResult ret) {
       ret.addEnum(en);
     }
   }
 
-  static class TimestampToJson implements ToJson<Timestamp> {
+  static class TimestampToJson implements TioToJson<Timestamp> {
     public void toJson(Timestamp ts, int depth, JsonResult ret) {
       ret.addTimestamp(ts);
     }
   }
 
-  static class TimeToJson implements ToJson<Time> {
+  static class TimeToJson implements TioToJson<Time> {
     public void toJson(Time t, int depth, JsonResult ret) {
       ret.addTime(t);
     }
   }
 
-  static class DateToJson implements ToJson<Date> {
+  static class DateToJson implements TioToJson<Date> {
     public void toJson(Date value, int depth, JsonResult ret) {
       ret.addDate(value);
     }
   }
 
-  static class LocalDateTimeToJson implements ToJson<LocalDateTime> {
+  static class LocalDateTimeToJson implements TioToJson<LocalDateTime> {
     public void toJson(LocalDateTime value, int depth, JsonResult ret) {
       ret.addLocalDateTime(value);
     }
   }
 
-  static class LocalDateToJson implements ToJson<LocalDate> {
+  static class LocalDateToJson implements TioToJson<LocalDate> {
     public void toJson(LocalDate value, int depth, JsonResult ret) {
       ret.addLocalDate(value);
     }
   }
 
-  static class LocalTimeToJson implements ToJson<LocalTime> {
+  static class LocalTimeToJson implements TioToJson<LocalTime> {
     public void toJson(LocalTime value, int depth, JsonResult ret) {
       ret.addLocalTime(value);
     }
@@ -314,7 +310,7 @@ public class TioJsonKit {
       ret.addChar(':');
 
       if (value != null) {
-        ToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -323,7 +319,7 @@ public class TioJsonKit {
     ret.addChar('}');
   }
 
-  static class MapToJson implements ToJson<Map<?, ?>> {
+  static class MapToJson implements TioToJson<Map<?, ?>> {
     public void toJson(Map<?, ?> map, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -356,7 +352,7 @@ public class TioJsonKit {
       ret.addChar(':');
 
       if (value != null) {
-        ToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -365,7 +361,7 @@ public class TioJsonKit {
     ret.addChar('}');
   }
 
-  static class CollectionToJson implements ToJson<Collection> {
+  static class CollectionToJson implements TioToJson<Collection> {
     public void toJson(Collection c, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -375,7 +371,7 @@ public class TioJsonKit {
     }
   }
 
-  static class ArrayToJson implements ToJson<Object> {
+  static class ArrayToJson implements TioToJson<Object> {
     public void toJson(Object object, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -405,7 +401,7 @@ public class TioJsonKit {
     }
   }
 
-  static class EnumerationToJson implements ToJson<Enumeration> {
+  static class EnumerationToJson implements TioToJson<Enumeration> {
     public void toJson(Enumeration en, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -416,7 +412,7 @@ public class TioJsonKit {
     }
   }
 
-  static class IteratorToJson implements ToJson<Iterator> {
+  static class IteratorToJson implements TioToJson<Iterator> {
     public void toJson(Iterator it, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -438,7 +434,7 @@ public class TioJsonKit {
 
       Object value = it.next();
       if (value != null) {
-        ToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -447,7 +443,7 @@ public class TioJsonKit {
     ret.addChar(']');
   }
 
-  static class IterableToJson implements ToJson<Iterable> {
+  static class IterableToJson implements TioToJson<Iterable> {
     public void toJson(Iterable iterable, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
@@ -457,7 +453,7 @@ public class TioJsonKit {
     }
   }
 
-  static class BeanToJson implements ToJson<Object> {
+  static class BeanToJson implements TioToJson<Object> {
     private static final Object[] NULL_ARGS = new Object[0];
     private String[] fields;
     private Method[] methods;
@@ -497,7 +493,7 @@ public class TioJsonKit {
           ret.addChar(':');
 
           if (value != null) {
-            ToJson tj = me.getToJson(value);
+            TioToJson tj = me.getToJson(value);
             tj.toJson(value, depth, ret);
           } else {
             ret.addNull();
@@ -549,7 +545,7 @@ public class TioJsonKit {
     }
   }
 
-  static class UnknownToJson implements ToJson<Object> {
+  static class UnknownToJson implements TioToJson<Object> {
     public void toJson(Object object, int depth, JsonResult ret) {
       // 未知类型无法处理时当作字符串处理，否则 ajax 调用返回时 js 无法解析
       ret.addUnknown(object);
@@ -834,7 +830,7 @@ public class TioJsonKit {
     setModelAndRecordFieldNameToCamelCase(true);
   }
 
-  public static void setToJsonFactory(Function<Object, ToJson<?>> toJsonFactory) {
+  public static void setToJsonFactory(Function<Object, TioToJson<?>> toJsonFactory) {
     TioJsonKit.toJsonFactory = toJsonFactory;
   }
 

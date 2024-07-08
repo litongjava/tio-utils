@@ -18,6 +18,8 @@ public abstract class Json {
    * 默认使用自己的 date 转换策略
    */
   private static String defaultDatePattern = "yyyy-MM-dd HH:mm:ss"; // null;
+  // protected String timestampPattern = "yyyy-MM-dd HH:mm:ss";
+  private static String timestampPattern = null;
 
   /**
    * Json 继承类优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
@@ -27,6 +29,10 @@ public abstract class Json {
   public static void setDefaultJsonFactory(IJsonFactory defaultJsonFactory) {
     Objects.requireNonNull(defaultJsonFactory, "defaultJsonFactory can not be null");
     Json.defaultJsonFactory = defaultJsonFactory;
+  }
+
+  public static IJsonFactory getJsonFactory() {
+    return defaultJsonFactory;
   }
 
   public static void setDefaultDatePattern(String defaultDatePattern) {
@@ -48,6 +54,14 @@ public abstract class Json {
 
   public static Json getJson() {
     return defaultJsonFactory.getJson();
+  }
+
+  public static void setTimestampPattern(String timestampPattern) {
+    Json.timestampPattern = timestampPattern;
+  }
+
+  public static String getTimestampPattern() {
+    return timestampPattern;
   }
 
   public abstract String toJson(Object object);
