@@ -26,7 +26,7 @@ import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.map.SyncWriteMap;
 
 /**
- * JFinalJsonKit
+ * Tio JsonKit
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class TioJsonKit {
@@ -44,6 +44,9 @@ public class TioJsonKit {
 
   // 是否跳过 null 值的字段，不对其进行转换
   protected static boolean skipNullValueField = false;
+
+  // long to string
+  protected static boolean longToString = true;
 
   // 对 Model 和 Record 的字段名进行转换的函数。例如转成驼峰形式对 oracle 支持更友好
   protected static Function<String, String> modelAndRecordFieldNameConverter = null;
@@ -570,11 +573,19 @@ public class TioJsonKit {
 
     String datePattern;
     String timestampPattern;
+    boolean longToString;
     boolean inUse = false;
 
     public void init(String datePattern, String timestampPattern) {
       this.datePattern = datePattern;
       this.timestampPattern = timestampPattern;
+      inUse = true;
+    }
+
+    public void init(String dp, String timestampPattern, boolean longToString) {
+      this.datePattern = dp;
+      this.timestampPattern = timestampPattern;
+      this.longToString = longToString;
       inUse = true;
     }
 
@@ -624,7 +635,12 @@ public class TioJsonKit {
     }
 
     public void addLong(long l) {
-      sb.append(l);
+      if (longToString) {
+        sb.append("\"" + l + "\"");
+      } else {
+        sb.append(l);
+      }
+
     }
 
     public void addDouble(double d) {
@@ -713,6 +729,7 @@ public class TioJsonKit {
     public void addUnknown(Object obj) {
       escape(obj.toString(), sb);
     }
+
   }
 
   /**
@@ -836,5 +853,14 @@ public class TioJsonKit {
 
   public static void setSkipNullValueField(boolean skipNullValueField) {
     TioJsonKit.skipNullValueField = skipNullValueField;
+  }
+
+  public static void setLongToString(boolean b) {
+    TioJsonKit.longToString = b;
+
+  }
+
+  public static boolean getLongToString() {
+    return TioJsonKit.longToString;
   }
 }
