@@ -39,6 +39,8 @@ public class QuartzUtils {
 
   private static String file = DEFAULT_FILE;
 
+  private static Scheduler scheduler;
+
   /**
    * 
    * @author: tanyaowu
@@ -50,6 +52,10 @@ public class QuartzUtils {
    * 
    */
   private static final List<QuartzTimeVo> JOB_CLASSES = new ArrayList<>(10);
+
+  public static Scheduler getScheduler() {
+    return scheduler;
+  }
 
   /**
    * 配置文件为"/config/tio-quartz.properties"
@@ -73,11 +79,11 @@ public class QuartzUtils {
     }
     initJobClasses();
     if (JOB_CLASSES.size() <= 0) {
-      log.error("文件[{}]中没有配置定时任务类", file);
+      log.error("File [{}] do not have any task", file);
       return;
     }
     try {
-      Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+      scheduler = StdSchedulerFactory.getDefaultScheduler();
       int index = 1;
       for (QuartzTimeVo quartzTimeVo : JOB_CLASSES) {
         try {
@@ -130,6 +136,14 @@ public class QuartzUtils {
     }
   }
 
+  public static void stop() {
+    try {
+      scheduler.shutdown();
+    } catch (SchedulerException e) {
+      e.printStackTrace();
+    }
+  }
+
   private static class QuartzTimeVo {
     private String clazz = null;
     private String cron = null;
@@ -148,4 +162,5 @@ public class QuartzUtils {
       return cron;
     }
   }
+
 }
