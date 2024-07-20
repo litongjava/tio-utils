@@ -1,6 +1,7 @@
 package com.litongjava.tio.utils.json;
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,11 @@ public class GsonJson extends Json {
   @Override
   public String toJson(Object object) {
     return gson.toJson(object);
+  }
+
+  @Override
+  public byte[] toJsonBytes(Object object) {
+    return gson.toJson(object).getBytes(StandardCharsets.UTF_8);
   }
 
   @Override

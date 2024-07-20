@@ -66,6 +66,8 @@ public abstract class Json {
 
   public abstract String toJson(Object object);
 
+  public abstract byte[] toJsonBytes(Object object);
+
   public abstract Object parse(String stringValue);
 
   public abstract <T> T parse(String jsonString, Class<T> type);

@@ -9,6 +9,10 @@ public class JsonUtils {
     return Json.getJson().toJson(object);
   }
 
+  public static byte[] toJsonBytes(Object object) {
+    return Json.getJson().toJsonBytes(object);
+  }
+
   public static <T> T parse(String jsonString, Class<T> type) {
     return Json.getJson().parse(jsonString, type);
   }

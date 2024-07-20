@@ -83,6 +83,27 @@ public class Jackson extends Json {
     }
   }
 
+  @Override
+  public byte[] toJsonBytes(Object object) {
+    try {
+      // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
+      String dp = datePattern != null ? datePattern : getDefaultDatePattern();
+      if (dp != null) {
+        objectMapper.setDateFormat(TioTimeUtils.getSimpleDateFormat(dp));
+      }
+
+      // 优先使用对象属性 generateNullValue，决定转换 json时是否生成 null value
+      boolean pnv = generateNullValue != null ? generateNullValue : defaultGenerateNullValue;
+      if (!pnv) {
+        objectMapper.setSerializationInclusion(Include.NON_NULL);
+      }
+
+      return objectMapper.writeValueAsBytes(object);
+    } catch (Exception e) {
+      throw e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+    }
+  }
+
   public <T> T parse(String jsonString, Class<T> type) {
     try {
       return objectMapper.readValue(jsonString, type);
@@ -150,4 +171,5 @@ public class Jackson extends Json {
       throw new RuntimeException(e);
     }
   }
+
 }

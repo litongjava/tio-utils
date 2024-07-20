@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.litongjava.tio.utils.json.TioJsonKit.JsonResult;
-
 /**
  * Json 转换 JFinal 实现.
  * 
@@ -31,6 +29,32 @@ public class TioJson extends Json {
 
   public static TioJson getJson() {
     return new TioJson();
+  }
+
+  @Override
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  public byte[] toJsonBytes(Object object) {
+    if (object == null) {
+      return null;
+    }
+
+    JsonResult ret = TL.get();
+    try {
+
+      // 重入型转换场景，需要新建对象使用
+      if (ret.isInUse()) {
+        ret = new JsonResult();
+      }
+
+      // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
+      String dp = datePattern != null ? datePattern : getDefaultDatePattern();
+      ret.init(dp, getTimestampPattern(), getLongToString());
+      TioToJson toJson = kit.getToJson(object);
+      toJson.toJson(object, convertDepth, ret);
+      return ret.toBytes();
+    } finally {
+      ret.clear();
+    }
   }
 
   @Override
@@ -222,4 +246,5 @@ public class TioJson extends Json {
   public Object parse(String stringValue) {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
+
 }

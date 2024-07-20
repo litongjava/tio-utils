@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class MixedJson extends Json {
 
-  private TioJson jFinalJson;
+  private TioJson tioJson;
   private FastJson2 fastJson;
 
   public static MixedJson getJson() {
@@ -29,13 +29,13 @@ public class MixedJson extends Json {
   }
 
   private TioJson getJFinalJson() {
-    if (jFinalJson == null) {
-      jFinalJson = TioJson.getJson();
+    if (tioJson == null) {
+      tioJson = TioJson.getJson();
     }
     if (datePattern != null) {
-      jFinalJson.setDatePattern(datePattern);
+      tioJson.setDatePattern(datePattern);
     }
-    return jFinalJson;
+    return tioJson;
   }
 
   private FastJson2 getFastJson() {
@@ -94,5 +94,13 @@ public class MixedJson extends Json {
       fastJson = FastJson2.getJson();
     }
     return fastJson.parse(stringValue);
+  }
+
+  @Override
+  public byte[] toJsonBytes(Object object) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.toJsonBytes(object);
   }
 }

@@ -19,8 +19,12 @@ public class FastJson2 extends Json {
   }
 
   public String toJson(Object object) {
-
     return JSON.toJSONString(object);
+  }
+
+  @Override
+  public byte[] toJsonBytes(Object object) {
+    return JSON.toJSONBytes(object);
   }
 
   /**
@@ -80,5 +84,4 @@ public class FastJson2 extends Json {
   public Object parse(String stringValue) {
     return JSON.parse(stringValue);
   }
-
 }
