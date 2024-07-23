@@ -25,24 +25,44 @@ public class FastJson2Utils {
    * 例如：
    * SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
    */
-  public static String toJson(Object object, JSONWriter.Feature... features) {
-    return JSON.toJSONString(object, features);
+  public static String toJson(Object input, JSONWriter.Feature... features) {
+    return JSON.toJSONString(input, features);
+  }
+
+  public static byte[] toJSONBytes(Object input, JSONWriter.Feature... features) {
+    return JSON.toJSONBytes(input, features);
   }
 
   public static <T> T parse(String jsonString, Class<T> type) {
     return JSON.parseObject(jsonString, type);
   }
 
+  public static <T> T parse(byte[] input, Class<T> type) {
+    return JSON.parseObject(input, type);
+  }
+
   public static JSONObject parseObject(String bodyString) {
     return JSON.parseObject(bodyString);
+  }
+
+  public static JSONObject parseObject(byte[] bytes) {
+    return JSON.parseObject(bytes);
   }
 
   public static JSONArray parseArray(String jsonString) {
     return JSON.parseArray(jsonString);
   }
 
+  public static JSONArray parseArray(byte[] input) {
+    return JSON.parseArray(input);
+  }
+
   public static <T> List<T> parseArray(String jsonString, Class<T> clazz) {
     return JSON.parseArray(jsonString, clazz);
+  }
+
+  public static <T> List<T> parseArray(byte[] input, Class<T> clazz) {
+    return JSON.parseArray(input, clazz);
   }
 
   public static <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
