@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.http;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +9,11 @@ import java.util.Set;
 
 import com.litongjava.tio.utils.hutool.StrUtil;
 
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -23,13 +26,6 @@ import okhttp3.Response;
 public class HttpUtils {
 
   public static final MediaType MEDIATYPE_JSON_UTF8 = MediaType.parse("application/json; charset=utf-8");
-
-  /**
-   * 
-   */
-  public HttpUtils() {
-
-  }
 
   /**
    * 
@@ -58,8 +54,27 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response get(String url) throws Exception {
-    return get(url, null);
+  public static ResponseVo get(String url) {
+    Request request = new Request.Builder().url(url).get().build();
+    return call(request);
+  }
+
+  public static ResponseVo uploadImage(String url, File imageFile) {
+    // Create the request body with file and image media type
+    @SuppressWarnings("deprecation")
+    RequestBody fileBody = RequestBody.create(MediaType.parse("image"), imageFile);
+
+    // Create MultipartBody
+    okhttp3.MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    builder.addFormDataPart("file", imageFile.getName(), fileBody);
+
+    RequestBody requestBody = builder.build();
+
+    // Create request
+    Request request = new Request.Builder().url(url).post(requestBody).build();
+
+    ResponseVo responseVo = HttpUtils.call(request);
+    return responseVo;
   }
 
   /**
@@ -178,4 +193,20 @@ public class HttpUtils {
     return post(url, null);
   }
 
+  public static ResponseVo call(Request request) {
+    Call call = OkHttpClientPool.getHttpClient().newCall(request);
+    try (Response response = call.execute()) {
+      Headers headers = response.headers();
+      String body = response.body().string();
+
+      if (response.isSuccessful()) {
+        return ResponseVo.ok(headers, body);
+      } else {
+        return ResponseVo.fail(headers, body);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

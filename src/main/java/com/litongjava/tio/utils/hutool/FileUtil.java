@@ -84,6 +84,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -228,20 +229,29 @@ public class FileUtil {
     return true;
   }
 
-  public static byte[] readBytes(File file) throws Exception {
+  public static byte[] readBytes(File file) {
     Path fileLocation = file.toPath();// Paths.get(file);
-    byte[] data = Files.readAllBytes(fileLocation);
+    byte[] data = null;
+    try {
+      data = Files.readAllBytes(fileLocation);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     return data;
   }
 
-  public static String readString(File file) throws Exception {
+  public static String readString(File file) {
     byte[] data = readBytes(file);
     return new String(data);
   }
 
-  public static String readUTF8String(File file) throws Exception {
+  public static String readUTF8String(File file) {
     byte[] data = readBytes(file);
-    return new String(data, "utf-8");
+    try {
+      return new String(data, "utf-8");
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**

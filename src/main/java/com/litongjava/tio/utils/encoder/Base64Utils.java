@@ -204,4 +204,17 @@ public class Base64Utils {
     return new String(decodeToBytes(encoded));
   }
 
+  /**
+   * 
+   * @param imgageBase64Str "data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/"
+   * @return
+   */
+  public static ImageVo decodeImage(String imgageBase64Str) {
+    // 提取 MIME 类型和图片数据部分
+    String[] parts = imgageBase64Str.split(",");
+    String mimeType = parts[0].split(":")[1].split(";")[0];
+
+    return new ImageVo(mimeType, decodeToBytes(parts[1]));
+  }
+
 }
