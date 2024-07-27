@@ -19,6 +19,9 @@ public class FastJson2Utils {
     return JSON.toJSONString(object);
   }
 
+  public static byte[] toJSONBytes(Object input) {
+    return JSON.toJSONBytes(input);
+  }
   /**
    * 支持传入更多 SerializerFeature
    * <p>
