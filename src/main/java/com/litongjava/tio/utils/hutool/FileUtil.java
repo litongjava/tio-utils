@@ -91,6 +91,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileUtil {
 
@@ -376,7 +377,17 @@ public class FileUtil {
     }
   }
 
+  /**
+   * readURLAsLines
+   * @param resource
+   * @return
+   */
   public static List<String> readURLAsLines(URL resource) {
-    return null;
+    try (InputStream inputStream = resource.openStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+      return reader.lines().collect(Collectors.toList());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
