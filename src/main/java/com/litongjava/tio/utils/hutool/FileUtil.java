@@ -143,24 +143,28 @@ public class FileUtil {
    * @author tanyaowu
    * @throws IOException 
    */
-  public static void writeBytes(byte[] data, File file) throws IOException {
+  public static void writeBytes(byte[] data, File file) {
     if (!file.exists()) {
-      file.createNewFile();
+      try {
+        file.createNewFile();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     // 获取全路径
-    String canonicalPath = file.getCanonicalPath();
-    // 通过Files获取文件的输出流
-    OutputStream fos = null;
+    String canonicalPath = null;
     try {
-      fos = Files.newOutputStream(Paths.get(canonicalPath));
+      canonicalPath = file.getCanonicalPath();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    // 通过Files获取文件的输出流
+    try (OutputStream fos = Files.newOutputStream(Paths.get(canonicalPath));) {
       fos.write(data);
       fos.flush();
-    } finally {
-      if (fos != null) {
-        fos.close();
-      }
-      fos.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -370,5 +374,9 @@ public class FileUtil {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static List<String> readURLAsLines(URL resource) {
+    return null;
   }
 }
