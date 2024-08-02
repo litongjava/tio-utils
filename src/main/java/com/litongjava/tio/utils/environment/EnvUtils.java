@@ -121,7 +121,7 @@ public class EnvUtils {
   }
 
   public static boolean isProd() {
-    return "pord".equals(getStr("app.env"));
+    return "prod".equals(getStr("app.env"));
   }
 
   public static void load(String fileName) {
