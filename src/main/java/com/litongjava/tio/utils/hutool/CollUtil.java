@@ -193,7 +193,13 @@
 */
 package com.litongjava.tio.utils.hutool;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,5 +238,189 @@ public class CollUtil {
 	public static boolean isNotEmpty(Collection<?> collection) {
 		return false == isEmpty(collection);
 	}
+	
+//----------------------------------------------------------------------------------------------- List
+
+ /**
+  * 新建一个空List
+  *
+  * @param <T>      集合元素类型
+  * @param isLinked 是否新建LinkedList
+  * @return List对象
+  * @since 4.1.2
+  */
+ public static <T> List<T> list(boolean isLinked) {
+   return isLinked ? new LinkedList<T>() : new ArrayList<T>();
+ }
+
+ /**
+  * 新建一个List
+  *
+  * @param <T>      集合元素类型
+  * @param isLinked 是否新建LinkedList
+  * @param values   数组
+  * @return List对象
+  * @since 4.1.2
+  */
+ @SafeVarargs
+ public static <T> List<T> list(boolean isLinked, T... values) {
+   if (ArrayUtil.isEmpty(values)) {
+     return list(isLinked);
+   }
+   final List<T> arrayList = isLinked ? new LinkedList<T>() : new ArrayList<T>(values.length);
+   Collections.addAll(arrayList, values);
+   return arrayList;
+ }
+
+ /**
+  * 新建一个List
+  *
+  * @param <T>        集合元素类型
+  * @param isLinked   是否新建LinkedList
+  * @param collection 集合
+  * @return List对象
+  * @since 4.1.2
+  */
+ public static <T> List<T> list(boolean isLinked, Collection<T> collection) {
+   if (null == collection) {
+     return list(isLinked);
+   }
+   return isLinked ? new LinkedList<>(collection) : new ArrayList<>(collection);
+ }
+
+ /**
+  * 新建一个List<br>
+  * 提供的参数为null时返回空{@link ArrayList}
+  *
+  * @param <T>      集合元素类型
+  * @param isLinked 是否新建LinkedList
+  * @param iterable {@link Iterable}
+  * @return List对象
+  * @since 4.1.2
+  */
+ public static <T> List<T> list(boolean isLinked, Iterable<T> iterable) {
+   if (null == iterable) {
+     return list(isLinked);
+   }
+   return list(isLinked, iterable.iterator());
+ }
+
+ /**
+  * 新建一个ArrayList<br>
+  * 提供的参数为null时返回空{@link ArrayList}
+  *
+  * @param <T>      集合元素类型
+  * @param isLinked 是否新建LinkedList
+  * @param iter     {@link Iterator}
+  * @return ArrayList对象
+  * @since 4.1.2
+  */
+ public static <T> List<T> list(boolean isLinked, Iterator<T> iter) {
+   final List<T> list = list(isLinked);
+   if (null != iter) {
+     while (iter.hasNext()) {
+       list.add(iter.next());
+     }
+   }
+   return list;
+ }
+
+ /**
+  * 新建一个List<br>
+  * 提供的参数为null时返回空{@link ArrayList}
+  *
+  * @param <T>        集合元素类型
+  * @param isLinked   是否新建LinkedList
+  * @param enumration {@link Enumeration}
+  * @return ArrayList对象
+  * @since 3.0.8
+  */
+ public static <T> List<T> list(boolean isLinked, Enumeration<T> enumration) {
+   final List<T> list = list(isLinked);
+   if (null != enumration) {
+     while (enumration.hasMoreElements()) {
+       list.add(enumration.nextElement());
+     }
+   }
+   return list;
+ }
+
+	
+	/**
+   * 新建一个ArrayList
+   *
+   * @param <T>    集合元素类型
+   * @param values 数组
+   * @return ArrayList对象
+   */
+  @SafeVarargs
+  public static <T> ArrayList<T> newArrayList(T... values) {
+    return (ArrayList<T>) list(false, values);
+  }
+
+  /**
+   * 数组转为ArrayList
+   *
+   * @param <T>    集合元素类型
+   * @param values 数组
+   * @return ArrayList对象
+   * @since 4.0.11
+   */
+  @SafeVarargs
+  public static <T> ArrayList<T> toList(T... values) {
+    return newArrayList(values);
+  }
+
+  /**
+   * 新建一个ArrayList
+   *
+   * @param <T>        集合元素类型
+   * @param collection 集合
+   * @return ArrayList对象
+   */
+  public static <T> ArrayList<T> newArrayList(Collection<T> collection) {
+    return (ArrayList<T>) list(false, collection);
+  }
+
+  /**
+   * 新建一个ArrayList<br>
+   * 提供的参数为null时返回空{@link ArrayList}
+   *
+   * @param <T>      集合元素类型
+   * @param iterable {@link Iterable}
+   * @return ArrayList对象
+   * @since 3.1.0
+   */
+  public static <T> ArrayList<T> newArrayList(Iterable<T> iterable) {
+    return (ArrayList<T>) list(false, iterable);
+  }
+
+  /**
+   * 新建一个ArrayList<br>
+   * 提供的参数为null时返回空{@link ArrayList}
+   *
+   * @param <T>  集合元素类型
+   * @param iter {@link Iterator}
+   * @return ArrayList对象
+   * @since 3.0.8
+   */
+  public static <T> ArrayList<T> newArrayList(Iterator<T> iter) {
+    return (ArrayList<T>) list(false, iter);
+  }
+
+  /**
+   * 新建一个ArrayList<br>
+   * 提供的参数为null时返回空{@link ArrayList}
+   *
+   * @param <T>        集合元素类型
+   * @param enumration {@link Enumeration}
+   * @return ArrayList对象
+   * @since 3.0.8
+   */
+  public static <T> ArrayList<T> newArrayList(Enumeration<T> enumration) {
+    return (ArrayList<T>) list(false, enumration);
+  }
+
+
 
 }
