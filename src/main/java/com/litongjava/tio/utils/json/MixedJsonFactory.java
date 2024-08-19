@@ -13,7 +13,7 @@ public class MixedJsonFactory implements IJsonFactory {
 
   public MixedJsonFactory() {
     // 尽早触发 fastjson 的配置代码
-    new FastJson2();
+    // new FastJson2();
   }
 
   public static MixedJsonFactory me() {

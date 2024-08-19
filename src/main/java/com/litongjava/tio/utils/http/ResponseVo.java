@@ -10,6 +10,7 @@ import okhttp3.Headers;
 @Data
 public class ResponseVo {
   private boolean ok;
+  private int code;
   private Headers headers;
   private byte[] bytes;
   private String body;
@@ -39,6 +40,23 @@ public class ResponseVo {
     this.body = input;
   }
 
+  public ResponseVo(boolean ok, byte[] responseBody) {
+    this.ok = ok;
+    this.bytes = responseBody;
+  }
+
+  public ResponseVo(boolean ok, int responseCode, byte[] responseBody) {
+    this.ok = ok;
+    this.code = responseCode;
+    this.bytes = responseBody;
+  }
+
+  public ResponseVo(boolean b, int responseCode, String responseBody) {
+    this.ok = b;
+    this.code = responseCode;
+    this.body = responseBody;
+  }
+
   public static ResponseVo fail(Headers headers, byte[] bytes) {
     return new ResponseVo(false, headers, bytes);
   }
@@ -51,4 +69,27 @@ public class ResponseVo {
     return new ResponseVo(false, headers, input);
   }
 
+  public static ResponseVo ok(byte[] responseBody) {
+    return new ResponseVo(true, responseBody);
+  }
+
+  public static ResponseVo fail(byte[] responseBody) {
+    return new ResponseVo(false, responseBody);
+  }
+
+  public static ResponseVo ok(int responseCode, byte[] responseBody) {
+    return new ResponseVo(true, responseCode, responseBody);
+  }
+
+  public static ResponseVo fail(int responseCode, byte[] responseBody) {
+    return new ResponseVo(false, responseCode, responseBody);
+  }
+
+  public static ResponseVo ok(int responseCode, String responseBody) {
+    return new ResponseVo(true, responseCode, responseBody);
+  }
+
+  public static ResponseVo fail(int responseCode, String responseBody) {
+    return new ResponseVo(false, responseCode, responseBody);
+  }
 }

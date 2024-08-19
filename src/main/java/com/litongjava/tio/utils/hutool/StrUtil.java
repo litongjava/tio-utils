@@ -24,6 +24,7 @@ public class StrUtil {
 
   /**
    * 用缓存将int转成str
+   * 
    * @param data
    * @return
    */
@@ -67,6 +68,10 @@ public class StrUtil {
    * @return 是否为非空
    */
   public static boolean isNotBlank(CharSequence str) {
+    return false == isBlank(str);
+  }
+
+  public static boolean notBlank(CharSequence str) {
     return false == isBlank(str);
   }
 
@@ -139,7 +144,7 @@ public class StrUtil {
   /**
    * 是否以指定字符串开头，忽略大小写
    * 
-   * @param str 被监测字符串
+   * @param str    被监测字符串
    * @param prefix 开头字符串
    * @return 是否以指定字符串开头
    */
@@ -151,8 +156,8 @@ public class StrUtil {
    * 是否以指定字符串开头<br>
    * 如果给定的字符串和开头字符串都为null则返回true，否则任意一个值为null返回false
    * 
-   * @param str 被监测字符串
-   * @param prefix 开头字符串
+   * @param str          被监测字符串
+   * @param prefix       开头字符串
    * @param isIgnoreCase 是否忽略大小写
    * @return 是否以指定字符串开头
    */
@@ -214,8 +219,8 @@ public class StrUtil {
   /**
    * 比较两个字符串是否相等。
    * 
-   * @param str1 要比较的字符串1
-   * @param str2 要比较的字符串2
+   * @param str1       要比较的字符串1
+   * @param str2       要比较的字符串2
    * @param ignoreCase 是否忽略大小写
    * @return 如果两个字符串相同，或者都是<code>null</code>，则返回<code>true</code>
    * @since 3.2.0
@@ -241,9 +246,9 @@ public class StrUtil {
    * 将已有字符串填充为规定长度，如果已有字符串超过这个长度则返回这个字符串<br>
    * 字符填充于字符串后
    * 
-   * @param str 被填充的字符串
+   * @param str        被填充的字符串
    * @param filledChar 填充的字符
-   * @param len 填充长度
+   * @param len        填充长度
    * @return 填充后的字符串
    * @since 3.1.2
    */
@@ -254,10 +259,10 @@ public class StrUtil {
   /**
    * 将已有字符串填充为规定长度，如果已有字符串超过这个长度则返回这个字符串
    * 
-   * @param str 被填充的字符串
+   * @param str        被填充的字符串
    * @param filledChar 填充的字符
-   * @param len 填充长度
-   * @param isPre 是否填充在前
+   * @param len        填充长度
+   * @param isPre      是否填充在前
    * @return 填充后的字符串
    * @since 3.1.2
    */
@@ -274,7 +279,7 @@ public class StrUtil {
   /**
    * 重复某个字符
    * 
-   * @param c 被重复的字符
+   * @param c     被重复的字符
    * @param count 重复的数目，如果小于等于0则返回""
    * @return 重复字符字符串
    */
@@ -294,7 +299,8 @@ public class StrUtil {
    * 除去字符串头部的空白，如果字符串是<code>null</code>，则返回<code>null</code>。
    * 
    * <p>
-   * 注意，和<code>String.trim</code>不同，此方法使用<code>CharUtil.isBlankChar</code> 来判定空白， 因而可以除去英文字符集之外的其它空白，如中文空格。
+   * 注意，和<code>String.trim</code>不同，此方法使用<code>CharUtil.isBlankChar</code> 来判定空白，
+   * 因而可以除去英文字符集之外的其它空白，如中文空格。
    * 
    * <pre>
    * trimStart(null)         = null
@@ -307,7 +313,8 @@ public class StrUtil {
    * 
    * @param str 要处理的字符串
    * 
-   * @return 除去空白的字符串，如果原字串为<code>null</code>或结果字符串为<code>""</code>，则返回 <code>null</code>
+   * @return 除去空白的字符串，如果原字串为<code>null</code>或结果字符串为<code>""</code>，则返回
+   *         <code>null</code>
    */
   public static String trimStart(CharSequence str) {
     return trim(str, -1);
@@ -317,7 +324,8 @@ public class StrUtil {
    * 除去字符串尾部的空白，如果字符串是<code>null</code>，则返回<code>null</code>。
    * 
    * <p>
-   * 注意，和<code>String.trim</code>不同，此方法使用<code>CharUtil.isBlankChar</code> 来判定空白， 因而可以除去英文字符集之外的其它空白，如中文空格。
+   * 注意，和<code>String.trim</code>不同，此方法使用<code>CharUtil.isBlankChar</code> 来判定空白，
+   * 因而可以除去英文字符集之外的其它空白，如中文空格。
    * 
    * <pre>
    * trimEnd(null)       = null
@@ -330,7 +338,8 @@ public class StrUtil {
    * 
    * @param str 要处理的字符串
    * 
-   * @return 除去空白的字符串，如果原字串为<code>null</code>或结果字符串为<code>""</code>，则返回 <code>null</code>
+   * @return 除去空白的字符串，如果原字串为<code>null</code>或结果字符串为<code>""</code>，则返回
+   *         <code>null</code>
    */
   public static String trimEnd(CharSequence str) {
     return trim(str, 1);
@@ -339,8 +348,9 @@ public class StrUtil {
   /**
    * 除去字符串头尾部的空白符，如果字符串是<code>null</code>，依然返回<code>null</code>。
    * 
-   * @param str 要处理的字符串
-   * @param mode <code>-1</code>表示trimStart，<code>0</code>表示trim全部， <code>1</code>表示trimEnd
+   * @param str  要处理的字符串
+   * @param mode <code>-1</code>表示trimStart，<code>0</code>表示trim全部，
+   *             <code>1</code>表示trimEnd
    * 
    * @return 除去指定字符后的的字符串，如果原字串为<code>null</code>，则返回<code>null</code>
    */
@@ -405,7 +415,7 @@ public class StrUtil {
   /**
    * 指定范围内查找指定字符
    * 
-   * @param str 字符串
+   * @param str        字符串
    * @param searchChar 被查找的字符
    * @return 位置
    */
@@ -416,9 +426,9 @@ public class StrUtil {
   /**
    * 指定范围内查找指定字符
    * 
-   * @param str 字符串
+   * @param str        字符串
    * @param searchChar 被查找的字符
-   * @param start 起始位置，如果小于0，从0开始查找
+   * @param start      起始位置，如果小于0，从0开始查找
    * @return 位置
    */
   public static int indexOf(final CharSequence str, char searchChar, int start) {
@@ -432,10 +442,10 @@ public class StrUtil {
   /**
    * 指定范围内查找指定字符
    * 
-   * @param str 字符串
+   * @param str        字符串
    * @param searchChar 被查找的字符
-   * @param start 起始位置，如果小于0，从0开始查找
-   * @param end 终止位置，如果超过str.length()则默认查找到字符串末尾
+   * @param start      起始位置，如果小于0，从0开始查找
+   * @param end        终止位置，如果超过str.length()则默认查找到字符串末尾
    * @return 位置
    */
   public static int indexOf(final CharSequence str, char searchChar, int start, int end) {
@@ -471,7 +481,7 @@ public class StrUtil {
    * StrUtil.indexOfIgnoreCase("abc", "", 9)        = -1
    * </pre>
    * 
-   * @param str 字符串
+   * @param str       字符串
    * @param searchStr 需要查找位置的字符串
    * @return 位置
    * @since 3.2.1
@@ -497,7 +507,7 @@ public class StrUtil {
    * StrUtil.indexOfIgnoreCase("abc", "", 9)        = -1
    * </pre>
    * 
-   * @param str 字符串
+   * @param str       字符串
    * @param searchStr 需要查找位置的字符串
    * @param fromIndex 起始位置
    * @return 位置
@@ -510,9 +520,9 @@ public class StrUtil {
   /**
    * 指定范围内反向查找字符串
    * 
-   * @param str 字符串
-   * @param searchStr 需要查找位置的字符串
-   * @param fromIndex 起始位置
+   * @param str        字符串
+   * @param searchStr  需要查找位置的字符串
+   * @param fromIndex  起始位置
    * @param ignoreCase 是否忽略大小写
    * @return 位置
    * @since 3.2.1
@@ -549,7 +559,7 @@ public class StrUtil {
   /**
    * 指定范围内查找字符串，忽略大小写<br>
    * 
-   * @param str 字符串
+   * @param str       字符串
    * @param searchStr 需要查找位置的字符串
    * @return 位置
    * @since 3.2.1
@@ -561,7 +571,7 @@ public class StrUtil {
   /**
    * 指定范围内查找字符串，忽略大小写<br>
    * 
-   * @param str 字符串
+   * @param str       字符串
    * @param searchStr 需要查找位置的字符串
    * @param fromIndex 起始位置，从后往前计数
    * @return 位置
@@ -574,15 +584,14 @@ public class StrUtil {
   /**
    * 指定范围内查找字符串<br>
    * 
-   * @param str 字符串
-   * @param searchStr 需要查找位置的字符串
-   * @param fromIndex 起始位置，从后往前计数
+   * @param str        字符串
+   * @param searchStr  需要查找位置的字符串
+   * @param fromIndex  起始位置，从后往前计数
    * @param ignoreCase 是否忽略大小写
    * @return 位置
    * @since 3.2.1
    */
-  public static int lastIndexOf(final CharSequence str, final CharSequence searchStr, int fromIndex,
-      boolean ignoreCase) {
+  public static int lastIndexOf(final CharSequence str, final CharSequence searchStr, int fromIndex, boolean ignoreCase) {
     if (str == null || searchStr == null) {
       return INDEX_NOT_FOUND;
     }
@@ -612,17 +621,16 @@ public class StrUtil {
    * 截取两个字符串的不同部分（长度一致），判断截取的子串是否相同<br>
    * 任意一个字符串为null返回false
    * 
-   * @param str1 第一个字符串
-   * @param start1 第一个字符串开始的位置
-   * @param str2 第二个字符串
-   * @param start2 第二个字符串开始的位置
-   * @param length 截取长度
+   * @param str1       第一个字符串
+   * @param start1     第一个字符串开始的位置
+   * @param str2       第二个字符串
+   * @param start2     第二个字符串开始的位置
+   * @param length     截取长度
    * @param ignoreCase 是否忽略大小写
    * @return 子串是否相同
    * @since 3.2.1
    */
-  public static boolean isSubEquals(CharSequence str1, int start1, CharSequence str2, int start2, int length,
-      boolean ignoreCase) {
+  public static boolean isSubEquals(CharSequence str1, int start1, CharSequence str2, int start2, int length, boolean ignoreCase) {
     if (null == str1 || null == str2) {
       return false;
     }
@@ -634,7 +642,7 @@ public class StrUtil {
    * 字符串是否以给定字符开始
    * 
    * @param str 字符串
-   * @param c 字符
+   * @param c   字符
    * @return 是否开始
    */
   public static boolean startWith(CharSequence str, char c) {
@@ -644,7 +652,7 @@ public class StrUtil {
   /**
    * 是否以指定字符串开头
    * 
-   * @param str 被监测字符串
+   * @param str    被监测字符串
    * @param prefix 开头字符串
    * @return 是否以指定字符串开头
    */
@@ -656,7 +664,7 @@ public class StrUtil {
    * 字符串是否以给定字符结尾
    * 
    * @param str 字符串
-   * @param c 字符
+   * @param c   字符
    * @return 是否结尾
    */
   public static boolean endWith(CharSequence str, char c) {
@@ -667,8 +675,8 @@ public class StrUtil {
    * 是否以指定字符串结尾<br>
    * 如果给定的字符串和开头字符串都为null则返回true，否则任意一个值为null返回false
    * 
-   * @param str 被监测字符串
-   * @param suffix 结尾字符串
+   * @param str          被监测字符串
+   * @param suffix       结尾字符串
    * @param isIgnoreCase 是否忽略大小写
    * @return 是否以指定字符串结尾
    */
@@ -690,7 +698,7 @@ public class StrUtil {
   /**
    * 是否以指定字符串结尾
    * 
-   * @param str 被监测字符串
+   * @param str    被监测字符串
    * @param suffix 结尾字符串
    * @return 是否以指定字符串结尾
    */
@@ -701,7 +709,7 @@ public class StrUtil {
   /**
    * 是否以指定字符串结尾，忽略大小写
    * 
-   * @param str 被监测字符串
+   * @param str    被监测字符串
    * @param suffix 结尾字符串
    * @return 是否以指定字符串结尾
    */
@@ -712,7 +720,7 @@ public class StrUtil {
   /**
    * 指定字符是否在字符串中出现过
    * 
-   * @param str 字符串
+   * @param str        字符串
    * @param searchChar 被查找的字符
    * @return 是否包含
    * @since 3.1.2
@@ -724,7 +732,7 @@ public class StrUtil {
   /**
    * 是否包含特定字符，忽略大小写，如果给定两个参数都为<code>null</code>，返回true
    * 
-   * @param str 被检测字符串
+   * @param str     被检测字符串
    * @param testStr 被测试是否包含的字符串
    * @return 是否包含
    */
@@ -765,7 +773,7 @@ public class StrUtil {
    * 将对象转为字符串<br>
    * 1、Byte数组和ByteBuffer会被转换为对应字符串的数组 2、对象数组会调用Arrays.toString方法
    * 
-   * @param obj 对象
+   * @param obj         对象
    * @param charsetName 字符集
    * @return 字符串
    */
@@ -777,7 +785,7 @@ public class StrUtil {
    * 将对象转为字符串<br>
    * 1、Byte数组和ByteBuffer会被转换为对应字符串的数组 2、对象数组会调用Arrays.toString方法
    * 
-   * @param obj 对象
+   * @param obj     对象
    * @param charset 字符集
    * @return 字符串
    */
@@ -820,9 +828,9 @@ public class StrUtil {
    * abcdefgh 2 3 =》 c <br>
    * abcdefgh 2 -3 =》 cde <br>
    * 
-   * @param str String
+   * @param str       String
    * @param fromIndex 开始的index（包括）
-   * @param toIndex 结束的index（不包括）
+   * @param toIndex   结束的index（不包括）
    * @return 字串
    */
   public static String sub(CharSequence str, int fromIndex, int toIndex) {
@@ -865,8 +873,8 @@ public class StrUtil {
   /**
    * 截取部分字符串，这里一个汉字的长度认为是2
    *
-   * @param str 字符串
-   * @param len 切割的位置
+   * @param str    字符串
+   * @param len    切割的位置
    * @param suffix 切割后加上后缀
    * @return 切割后的字符串
    * @since 3.1.1
@@ -916,7 +924,7 @@ public class StrUtil {
   /**
    * 切割指定位置之前部分的字符串
    * 
-   * @param string 字符串
+   * @param string  字符串
    * @param toIndex 切割到的位置（不包括）
    * @return 切割后的剩余的前半部分字符串
    */
@@ -927,7 +935,7 @@ public class StrUtil {
   /**
    * 切割指定位置之后部分的字符串
    * 
-   * @param string 字符串
+   * @param string    字符串
    * @param fromIndex 切割开始的位置（包括）
    * @return 切割后后剩余的后半部分字符串
    */
@@ -970,9 +978,9 @@ public class StrUtil {
    * 截取字符串,从指定位置开始,截取指定长度的字符串<br>
    * author weibaohui
    * 
-   * @param input 原始字符串
+   * @param input     原始字符串
    * @param fromIndex 开始的index,包括
-   * @param length 要截取的长度
+   * @param length    要截取的长度
    * @return 截取后的字符串
    */
   public static String subWithLength(String input, int fromIndex, int length) {
@@ -997,8 +1005,8 @@ public class StrUtil {
    * StrUtil.subBefore("abc", null)  = "abc"
    * </pre>
    * 
-   * @param string 被查找的字符串
-   * @param separator 分隔字符串（不包括）
+   * @param string          被查找的字符串
+   * @param separator       分隔字符串（不包括）
    * @param isLastSeparator 是否查找最后一个分隔字符串（多次出现分隔字符串时选取最后一个），true为选取最后一个
    * @return 切割后的字符串
    * @since 3.1.1
@@ -1038,8 +1046,8 @@ public class StrUtil {
    * StrUtil.subAfter("abc", "")    = "abc"
    * </pre>
    *
-   * @param string 被查找的字符串
-   * @param separator 分隔字符串（不包括）
+   * @param string          被查找的字符串
+   * @param separator       分隔字符串（不包括）
    * @param isLastSeparator 是否查找最后一个分隔字符串（多次出现分隔字符串时选取最后一个），true为选取最后一个
    * @return 切割后的字符串
    * @since 3.1.1
@@ -1078,9 +1086,9 @@ public class StrUtil {
    * StrUtil.subBetween("yabczyabcz", "y", "z")   = "abc"
    * </pre>
    * 
-   * @param str 被切割的字符串
+   * @param str    被切割的字符串
    * @param before 截取开始的字符串标识
-   * @param after 截取到的字符串标识
+   * @param after  截取到的字符串标识
    * @return 截取后的字符串
    * @since 3.1.1
    */
@@ -1117,7 +1125,7 @@ public class StrUtil {
    * StrUtil.subBetween("tagabctag", "tag") = "abc"
    * </pre>
    * 
-   * @param str 被切割的字符串
+   * @param str            被切割的字符串
    * @param beforeAndAfter 截取开始和结束的字符串标识
    * @return 截取后的字符串
    * @since 3.1.1
@@ -1267,8 +1275,7 @@ public class StrUtil {
             ret[i] = false;
             continue;
           }
-          ret[i] = "1".equalsIgnoreCase(values[i]) || "true".equalsIgnoreCase(values[i])
-              || "yes".equalsIgnoreCase(values[i]);
+          ret[i] = "1".equalsIgnoreCase(values[i]) || "true".equalsIgnoreCase(values[i]) || "yes".equalsIgnoreCase(values[i]);
         }
         return ret;
       } else if (componentType == char.class) {
@@ -1295,7 +1302,7 @@ public class StrUtil {
   /**
    * 查找指定字符串是否包含指定字符串列表中的任意一个字符串
    * 
-   * @param str 指定字符串
+   * @param str      指定字符串
    * @param testStrs 需要检查的字符串数组
    * @return 是否包含任意一个字符串
    * @since 3.2.0
@@ -1307,7 +1314,7 @@ public class StrUtil {
   /**
    * 查找指定字符串是否包含指定字符串列表中的任意一个字符串，如果包含返回找到的第一个字符串
    * 
-   * @param str 指定字符串
+   * @param str      指定字符串
    * @param testStrs 需要检查的字符串数组
    * @return 被包含的第一个字符串
    * @since 3.2.0
@@ -1418,6 +1425,7 @@ public class StrUtil {
 
   /**
    * 首字母变小写
+   * 
    * @param str
    * @return
    */
