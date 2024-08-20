@@ -5,6 +5,9 @@ import java.util.Map;
 
 import com.litongjava.tio.utils.hutool.ResourceUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class EnvUtils {
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
@@ -112,6 +115,14 @@ public class EnvUtils {
     }
   }
 
+  public static String getEnv() {
+    return getStr("app.env");
+  }
+  
+  public static String env() {
+    return getStr("app.env");
+  }
+
   public static boolean isDev() {
     return "dev".equals(getStr("app.env"));
   }
@@ -155,6 +166,8 @@ public class EnvUtils {
     if (ResourceUtil.getResource(".env") != null) {
       PropUtils.append(".env");
     }
+    
+    log.info("app.env:{}", EnvUtils.env());
 
   }
 }

@@ -12,11 +12,18 @@ public class Telegram {
   private Telegram() {
   }
 
+  public static void clearBot() {
+    botMap.clear();
+  }
+
   public static void addBot(TelegramBot bot) {
-    if (bot == null)
+    if (bot == null) {
       throw new IllegalArgumentException("Bot can not be null");
-    if (botMap.containsKey(bot.getName()))
+    }
+
+    if (botMap.containsKey(bot.getName())) {
       throw new IllegalArgumentException("The bot name already exists");
+    }
 
     botMap.put(bot.getName(), bot);
     if (mainBot == null)
