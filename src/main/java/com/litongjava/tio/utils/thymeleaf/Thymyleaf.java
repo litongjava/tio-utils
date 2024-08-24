@@ -2,6 +2,8 @@ package com.litongjava.tio.utils.thymeleaf;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.thymeleaf.context.Context;
+
 public class Thymyleaf {
 
   private static final ConcurrentHashMap<String, ThymyleafEngine> cacheMap = new ConcurrentHashMap<>();
@@ -36,5 +38,9 @@ public class Thymyleaf {
 
   public static ThymyleafEngine use(String botName) {
     return cacheMap.get(botName);
+  }
+
+  public static String process(String template, Context context) {
+    return main.process(template, context);
   }
 }

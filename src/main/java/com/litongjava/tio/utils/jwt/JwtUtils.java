@@ -1,0 +1,202 @@
+package com.litongjava.tio.utils.jwt;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+public class JwtUtils {
+
+  public static String createToken(String key, Object userId) {
+    long tokenTimeout = (System.currentTimeMillis() + 3600000) / 1000;
+    Map<String, Object> payloadMap = new HashMap<>();
+    payloadMap.put("userId", userId);
+    payloadMap.put("exp", tokenTimeout); // 1小时过期时间
+    return createToken(key, payloadMap);
+  }
+
+  public static String createToken(String key, Object userId, long tokenTimeout) {
+    Map<String, Object> payloadMap = new HashMap<>();
+    payloadMap.put("userId", userId);
+    payloadMap.put("exp", tokenTimeout); // 1小时过期时间
+    return createToken(key, payloadMap);
+  }
+
+  /**
+   * 创建JWT Token
+   * 
+   * @param key        密钥
+   * @param payloadMap 载荷
+   * @return 生成的JWT Token
+   */
+  public static String createToken(String key, Map<String, Object> payloadMap) {
+    // 1. 创建header
+    String header = Base64.getUrlEncoder().encodeToString("{\"alg\":\"HS256\",\"typ\":\"JWT\"}".getBytes(StandardCharsets.UTF_8));
+
+    String payload = Base64.getUrlEncoder().encodeToString(toJson(payloadMap).getBytes(StandardCharsets.UTF_8));
+
+    // 3. 创建signature
+    String signature = hmacSha256(header + "." + payload, key);
+
+    // 4. 组合token
+    return header + "." + payload + "." + signature;
+  }
+
+  private static String toJson(Map<String, Object> payloadMap) {
+    StringBuilder json = new StringBuilder();
+    json.append("{");
+    int size = payloadMap.size();
+    int i = 0;
+
+    for (Map.Entry<String, Object> entry : payloadMap.entrySet()) {
+      json.append("\"").append(entry.getKey()).append("\":");
+
+      Object value = entry.getValue();
+      if (value instanceof String) {
+        json.append("\"").append(value).append("\"");
+      } else {
+        json.append(value);
+      }
+
+      if (i < size - 1) {
+        json.append(",");
+      }
+      i++;
+    }
+
+    json.append("}");
+    return json.toString();
+  }
+
+  /**
+   * 验证JWT Token
+   * 
+   * @param key   密钥
+   * @param token JWT Token
+   * @return 如果Token有效则返回true，否则返回false
+   */
+  public static boolean verify(String key, String token) {
+    String[] parts = token.split("\\.");
+    if (parts.length != 3) {
+      return false;
+    }
+
+    String header = parts[0];
+    String payload = parts[1];
+    String signature = parts[2];
+
+    // 重新计算签名并与传入的签名进行比较
+    String calculatedSignature = hmacSha256(header + "." + payload, key);
+
+    // 先解码payload
+    String decodedPayload = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+
+    return signature.equals(calculatedSignature) && !isTokenExpired(decodedPayload);
+  }
+
+  /**
+   * 获取JWT的payload中的数据
+   * 
+   * @param token JWT Token
+   * @return payload中的数据
+   */
+  public static Map<String, Object> getPayload(String token) {
+    String[] parts = token.split("\\.");
+    if (parts.length != 3) {
+      throw new IllegalArgumentException("Invalid JWT token");
+    }
+
+    String payload = parts[1];
+    String decodedPayload = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+
+    // 解析为Map
+    return parsePayload(decodedPayload);
+  }
+
+  /**
+   * 使用HMAC SHA256生成签名
+   * 
+   * @param data   要签名的数据
+   * @param secret 密钥
+   * @return 生成的签名
+   */
+  private static String hmacSha256(String data, String secret) {
+    try {
+      Mac mac = Mac.getInstance("HmacSHA256");
+      SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+      mac.init(secretKeySpec);
+      byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+      return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to calculate HMAC SHA256", e);
+    }
+  }
+
+  /**
+   * 检查JWT的payload部分是否过期
+   * 
+   * @param payload JWT的payload部分
+   * @return 如果Token已过期返回true，否则返回false
+   */
+  private static boolean isTokenExpired(String payload) {
+    Map<String, Object> payloadMap = parsePayload(payload);
+    long exp = (long) payloadMap.get("exp");
+
+    // 检查是否过期
+    return exp < (System.currentTimeMillis() / 1000);
+  }
+
+  /**
+   * 将payload字符串解析为Map
+   * 
+   * @param payload 载荷字符串
+   * @return 解析后的Map
+   */
+  private static Map<String, Object> parsePayload(String payload) {
+    Map<String, Object> payloadMap = new HashMap<>();
+
+    // 移除大括号
+    payload = payload.substring(1, payload.length() - 1);
+
+    String[] pairs = payload.split(",");
+    for (String pair : pairs) {
+      String[] keyValue = pair.split(":");
+      String key = keyValue[0].trim().replaceAll("\"", "");
+      Object value = keyValue[1].trim();
+
+      // 尝试将value转换为数字或字符串
+      try {
+        value = Long.parseLong((String) value);
+      } catch (NumberFormatException e) {
+        value = value.toString().replaceAll("\"", "");
+      }
+
+      payloadMap.put(key, value);
+    }
+
+    return payloadMap;
+  }
+
+  public static Long getPayloadUserIdLong(String token) {
+    Map<String, Object> payload = JwtUtils.getPayload(token);
+    return (Long) payload.get("userId");
+  }
+
+  public static String getPayloadUserIdString(String token) {
+    Map<String, Object> payload = JwtUtils.getPayload(token);
+    return (String) payload.get("userId");
+  }
+
+  public static Integer getPayloadUserIdInt(String token) {
+    Map<String, Object> payload = JwtUtils.getPayload(token);
+    return (Integer) payload.get("userId");
+  }
+
+  public static Object getPayloadUserId(String token) {
+    Map<String, Object> payload = JwtUtils.getPayload(token);
+    return payload.get("userId");
+  }
+}
