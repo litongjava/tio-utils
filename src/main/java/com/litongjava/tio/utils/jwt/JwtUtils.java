@@ -8,17 +8,29 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.litongjava.tio.utils.token.AuthToken;
+
 public class JwtUtils {
 
-  public static String createToken(String key, Object userId) {
+  public static AuthToken createToken(String key, AuthToken authToken) {
+    Map<String, Object> payloadMap = new HashMap<>();
+    payloadMap.put("userId", authToken.getUserId());
+    payloadMap.put("exp", authToken.getExpirationTime());
+    String createToken = createToken(key, payloadMap);
+    authToken.setToken(createToken);
+    return authToken;
+  }
+
+  public static String createTokenByUserId(String key, Object userId) {
+    // 1小时过期时间
     long tokenTimeout = (System.currentTimeMillis() + 3600000) / 1000;
     Map<String, Object> payloadMap = new HashMap<>();
     payloadMap.put("userId", userId);
-    payloadMap.put("exp", tokenTimeout); // 1小时过期时间
+    payloadMap.put("exp", tokenTimeout);
     return createToken(key, payloadMap);
   }
 
-  public static String createToken(String key, Object userId, long tokenTimeout) {
+  public static String createTokenByUserId(String key, Object userId, long tokenTimeout) {
     Map<String, Object> payloadMap = new HashMap<>();
     payloadMap.put("userId", userId);
     payloadMap.put("exp", tokenTimeout); // 1小时过期时间
@@ -144,7 +156,9 @@ public class JwtUtils {
   private static boolean isTokenExpired(String payload) {
     Map<String, Object> payloadMap = parsePayload(payload);
     long exp = (long) payloadMap.get("exp");
-
+    if (exp == -1) {
+      return false;
+    }
     // 检查是否过期
     return exp < (System.currentTimeMillis() / 1000);
   }
@@ -180,22 +194,59 @@ public class JwtUtils {
     return payloadMap;
   }
 
-  public static Long getPayloadUserIdLong(String token) {
+  public static AuthToken getAuthToken(String token) {
+    String[] parts = token.split("\\.");
+    if (parts.length != 3) {
+      throw new IllegalArgumentException("Invalid JWT token");
+    }
+
+    String payload = parts[1];
+    String decodedPayload = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
+
+    // 解析为authToken
+    AuthToken authToken = parseToAuthToken(decodedPayload);
+    authToken.setToken(token);
+    return authToken;
+  }
+
+  private static AuthToken parseToAuthToken(String payload) {
+    AuthToken authToken = new AuthToken();
+
+    // 移除大括号
+    payload = payload.substring(1, payload.length() - 1);
+
+    // 解析值
+    String[] pairs = payload.split(",");
+    for (String pair : pairs) {
+      String[] keyValue = pair.split(":");
+      String key = keyValue[0].trim().replaceAll("\"", "");
+      Object value = keyValue[1].trim();
+      if ("userId".equals(key)) {
+        authToken.setUserId(value);
+      } else if ("exp".equals(key)) {
+        Long exp = Long.parseLong((String) value);
+        authToken.setExpirationTime(exp);
+      }
+    }
+    return authToken;
+  }
+
+  public static Long parseUserIdLong(String token) {
     Map<String, Object> payload = JwtUtils.getPayload(token);
     return (Long) payload.get("userId");
   }
 
-  public static String getPayloadUserIdString(String token) {
+  public static String parseUserIdString(String token) {
     Map<String, Object> payload = JwtUtils.getPayload(token);
     return (String) payload.get("userId");
   }
 
-  public static Integer getPayloadUserIdInt(String token) {
+  public static Integer parseUserIdInt(String token) {
     Map<String, Object> payload = JwtUtils.getPayload(token);
     return (Integer) payload.get("userId");
   }
 
-  public static Object getPayloadUserId(String token) {
+  public static Object parseUserId(String token) {
     Map<String, Object> payload = JwtUtils.getPayload(token);
     return payload.get("userId");
   }
