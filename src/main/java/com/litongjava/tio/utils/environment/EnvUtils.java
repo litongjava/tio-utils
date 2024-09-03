@@ -12,6 +12,8 @@ public class EnvUtils {
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
   private static Map<String, String> appMap = new HashMap<>();
+  public static final String defaultFilename = "app.properties";
+  public static final String envKey = "app.env";
 
   public static String[] getArgs() {
     return args;
@@ -116,23 +118,23 @@ public class EnvUtils {
   }
 
   public static String getEnv() {
-    return getStr("app.env");
+    return getStr(envKey);
   }
   
   public static String env() {
-    return getStr("app.env");
+    return getStr(envKey);
   }
 
   public static boolean isDev() {
-    return "dev".equals(getStr("app.env"));
+    return "dev".equals(getStr(envKey));
   }
 
   public static boolean isTest() {
-    return "test".equals(getStr("app.env"));
+    return "test".equals(getStr(envKey));
   }
 
   public static boolean isProd() {
-    return "prod".equals(getStr("app.env"));
+    return "prod".equals(getStr(envKey));
   }
 
   public static void load(String fileName) {
@@ -148,8 +150,7 @@ public class EnvUtils {
   }
 
   public static void load() {
-    String env = EnvUtils.get("app.env");
-    String defaultFilename = "app.properties";
+    String env = get("app.env");
     if (ResourceUtil.getResource(defaultFilename) != null) {
       PropUtils.use(defaultFilename, env);
     } else {
