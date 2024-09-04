@@ -31,19 +31,22 @@ public class LarksuiteNotificationUtils {
     header.put("cache-control", "no-cache");
 
     // 调用群机器人
-    Response post;
-    post = HttpUtils.post(webHookUrl, header, reqBody);
-    return post;
+    return HttpUtils.post(webHookUrl, header, reqBody);
   }
 
   /**
-   * @param warningName   告警名称
-   * @param level 告警级别
-   * @param deviceId  设备信息
-   * @param content  告警内容
-   * @return 
+   * @param warningName 告警名称
+   * @param level       告警级别
+   * @param deviceId    设备信息
+   * @param content     告警内容
+   * @return
    */
   public static Response sendWarm(NotifactionWarmModel model) {
+    String webHookUrl = EnvUtils.get("notification.webhook.url");
+    return sendWarm(webHookUrl, model);
+  }
+
+  public static Response sendWarm(String webHookUrl, NotifactionWarmModel model) {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     String appGroupName = model.getAppGroupName();
@@ -57,9 +60,7 @@ public class LarksuiteNotificationUtils {
 
     String dateString = sdf.format(date);
 
-    String text = String.format(NotificationTemplate.alarmTemplate, dateString, appGroupName, appName, warningName,
-        level, deviceName, content);
-    String webHookUrl = EnvUtils.get("notification.webhook.url");
+    String text = String.format(NotificationTemplate.alarmTemplate, dateString, appGroupName, appName, warningName, level, deviceName, content);
 
     Map<String, Object> reqMap = getReqMap(text);
 
@@ -68,6 +69,7 @@ public class LarksuiteNotificationUtils {
 
   /**
    * 发送MarKDown消息
+   * 
    * @param msg 需要发送的消息
    * @return
    * @throws Exception
