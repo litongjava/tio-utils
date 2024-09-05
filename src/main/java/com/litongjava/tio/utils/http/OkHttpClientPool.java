@@ -26,7 +26,7 @@ public enum OkHttpClientPool {
     // 信任连接
     builder.sslSocketFactory(sslSocketFactory(), x509TrustManager());
     // 连接超时
-    builder.connectTimeout(120L, TimeUnit.SECONDS).readTimeout(120L, TimeUnit.SECONDS).build();
+    builder.connectTimeout(30L, TimeUnit.SECONDS).readTimeout(30L, TimeUnit.SECONDS).build();
 
   }
 
