@@ -1440,6 +1440,10 @@ public class StrUtil {
   }
 
   public static boolean isNotEmpty(String str) {
-    return false == isBlank(str);
+    return str != null && !str.isEmpty();
+  }
+
+  public static boolean notEmpty(String str) {
+    return str != null && !str.isEmpty();
   }
 }
