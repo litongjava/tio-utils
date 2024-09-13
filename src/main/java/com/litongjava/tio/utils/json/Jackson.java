@@ -1,11 +1,13 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.litongjava.tio.utils.date.TioTimeUtils;
@@ -13,15 +15,11 @@ import com.litongjava.tio.utils.date.TioTimeUtils;
 /**
  * Json 转换 jackson 实现.
  * <p>
- * json 到 java 类型转换规则: http://wiki.fasterxml.com/JacksonInFiveMinutes
- * JSON TYPE				JAVA TYPE
- * object					LinkedHashMap<String,Object>
- * array					ArrayList<Object>
- * string					String
- * number (no fraction)		Integer, Long or BigInteger (smallest applicable)
- * number (fraction)		Double (configurable to use BigDecimal)
- * true|false				Boolean
- * null						null
+ * json 到 java 类型转换规则: http://wiki.fasterxml.com/JacksonInFiveMinutes JSON TYPE
+ * JAVA TYPE object LinkedHashMap<String,Object> array ArrayList<Object> string
+ * String number (no fraction) Integer, Long or BigInteger (smallest applicable)
+ * number (fraction) Double (configurable to use BigDecimal) true|false Boolean
+ * null null
  */
 @SuppressWarnings("deprecation")
 public class Jackson extends Json {
@@ -167,6 +165,26 @@ public class Jackson extends Json {
   public Object parse(String stringValue) {
     try {
       return objectMapper.readValue(stringValue, Object.class);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public <T> T parse(String body, Type type) {
+    try {
+      JavaType javaType = objectMapper.getTypeFactory().constructType(type);
+      return objectMapper.readValue(body, javaType);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public <T> T parse(byte[] body, Type type) {
+    try {
+      JavaType javaType = objectMapper.getTypeFactory().constructType(type);
+      return objectMapper.readValue(body, javaType);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

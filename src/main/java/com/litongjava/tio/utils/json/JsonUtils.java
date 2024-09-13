@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +14,8 @@ public class JsonUtils {
     return Json.getJson().toJsonBytes(object);
   }
 
-  public static <T> T parse(String jsonString, Class<T> type) {
-    return Json.getJson().parse(jsonString, type);
+  public static <T> T parse(String body, Class<T> type) {
+    return Json.getJson().parse(body, type);
   }
 
   public static Object parseObject(String jsonString) {
@@ -35,5 +36,13 @@ public class JsonUtils {
 
   public static <K, V> List<Map<K, V>> parseToListMap(String json, Class<K> kType, Class<V> vType) {
     return Json.getJson().parseToListMap(json, kType, vType);
+  }
+
+  public static <T> T parse(String bodyString, Type type) {
+    return Json.getJson().parse(bodyString, type);
+  }
+
+  public static <T> T parse(byte[] body, Type type) {
+    return Json.getJson().parse(body, type);
   }
 }

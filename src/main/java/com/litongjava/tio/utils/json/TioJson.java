@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -7,13 +8,9 @@ import java.util.function.Function;
 /**
  * Json 转换 JFinal 实现.
  * 
- * json 到 java 类型转换规则:
- * string			java.lang.String
- * number			java.lang.Number
- * true|false		java.lang.Boolean
- * null				null
- * array			java.util.List
- * object			java.util.Map
+ * json 到 java 类型转换规则: string java.lang.String number java.lang.Number
+ * true|false java.lang.Boolean null null array java.util.List object
+ * java.util.Map
  */
 public class TioJson extends Json {
 
@@ -85,6 +82,7 @@ public class TioJson extends Json {
 
   /**
    * 添加 ToJson 转换接口实现类，自由定制任意类型数据的转换规则
+   * 
    * <pre>
    * 例子：
    *     ToJson<Timestamp> toJson = (value, depth, ret) -> {
@@ -126,11 +124,11 @@ public class TioJson extends Json {
   /**
    * 将 Model 当成 Bean 只对 getter 方法进行转换
    * 
-   * 默认值为 false，将使用 Model 内的 Map attrs 属性进行转换，不对 getter 方法进行转换
-   * 优点是可以转换 sql 关联查询产生的动态字段，还可以转换 Model.put(...) 进来的数据
+   * 默认值为 false，将使用 Model 内的 Map attrs 属性进行转换，不对 getter 方法进行转换 优点是可以转换 sql
+   * 关联查询产生的动态字段，还可以转换 Model.put(...) 进来的数据
    * 
-   * 配置为 true 时，将 Model 当成是传统的 java bean 对其 getter 方法进行转换，
-   * 使用生成器生成过 base model 的情况下才可以使用此配置
+   * 配置为 true 时，将 Model 当成是传统的 java bean 对其 getter 方法进行转换， 使用生成器生成过 base model
+   * 的情况下才可以使用此配置
    */
   public static void setTreatModelAsBean(boolean treatModelAsBean) {
     TioJsonKit.setTreatModelAsBean(treatModelAsBean);
@@ -198,8 +196,8 @@ public class TioJson extends Json {
   }
 
   /**
-   * 是否跳过 null 值的字段，配置为 true 值将跳过，默认值为 false
-   * 本配置作用于 Model、Record、Map、java bean(getter 方法对应的属性) 这四种类型
+   * 是否跳过 null 值的字段，配置为 true 值将跳过，默认值为 false 本配置作用于 Model、Record、Map、java
+   * bean(getter 方法对应的属性) 这四种类型
    */
   public static void setSkipNullValueField(boolean skipNullValueField) {
     TioJsonKit.setSkipNullValueField(skipNullValueField);
@@ -244,6 +242,16 @@ public class TioJson extends Json {
 
   @Override
   public Object parse(String stringValue) {
+    throw new RuntimeException(notSupportJsonToObjectMesage);
+  }
+
+  @Override
+  public <T> T parse(String body, Type type) {
+    throw new RuntimeException(notSupportJsonToObjectMesage);
+  }
+
+  @Override
+  public <T> T parse(byte[] body, Type type) {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
 

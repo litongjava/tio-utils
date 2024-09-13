@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,9 +14,8 @@ public abstract class Json {
   private static IJsonFactory defaultJsonFactory = new MixedJsonFactory();
 
   /**
-   * 当对象级的 datePattern 为 null 时使用 defaultDatePattern
-   * jfinal 2.1 版本暂定 defaultDatePattern 值为 null，即 jackson、fastjson
-   * 默认使用自己的 date 转换策略
+   * 当对象级的 datePattern 为 null 时使用 defaultDatePattern jfinal 2.1 版本暂定
+   * defaultDatePattern 值为 null，即 jackson、fastjson 默认使用自己的 date 转换策略
    */
   private static String defaultDatePattern = "yyyy-MM-dd HH:mm:ss"; // null;
   // protected String timestampPattern = "yyyy-MM-dd HH:mm:ss";
@@ -81,5 +81,9 @@ public abstract class Json {
   public abstract <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType);
 
   public abstract <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType);
+
+  public abstract <T> T parse(String body, Type type);
+
+  public abstract <T> T parse(byte[] body, Type type);
 
 }

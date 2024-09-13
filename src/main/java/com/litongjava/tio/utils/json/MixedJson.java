@@ -1,15 +1,13 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 /**
- * JFinalJson 与 FastJson 混合做 json 转换
- * toJson 用 JFinalJson，parse 用 FastJson
+ * JFinalJson 与 FastJson 混合做 json 转换 toJson 用 JFinalJson，parse 用 FastJson
  * <p>
- * 注意：
- * 1：需要添加 fastjson 相关 jar 包
- * 2：parse 方法转对象依赖于 setter 方法
+ * 注意： 1：需要添加 fastjson 相关 jar 包 2：parse 方法转对象依赖于 setter 方法
  */
 public class MixedJson extends Json {
 
@@ -102,5 +100,21 @@ public class MixedJson extends Json {
       fastJson = FastJson2.getJson();
     }
     return fastJson.toJsonBytes(object);
+  }
+
+  @Override
+  public <T> T parse(String body, Type type) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parse(body, type);
+  }
+
+  @Override
+  public <T> T parse(byte[] body, Type type) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parse(body, type);
   }
 }

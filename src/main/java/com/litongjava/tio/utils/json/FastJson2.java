@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.json;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,7 @@ public class FastJson2 extends Json {
   /**
    * 支持传入更多 SerializerFeature
    * <p>
-   * 例如：
-   * SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
+   * 例如： SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
    */
   public String toJson(Object object, JSONWriter.Feature... features) {
     return JSON.toJSONString(object, features);
@@ -83,5 +83,15 @@ public class FastJson2 extends Json {
   @Override
   public Object parse(String stringValue) {
     return JSON.parse(stringValue);
+  }
+
+  @Override
+  public <T> T parse(String body, Type type) {
+    return JSON.parseObject(body, type);
+  }
+
+  @Override
+  public <T> T parse(byte[] body, Type type) {
+    return JSON.parseObject(body, type);
   }
 }

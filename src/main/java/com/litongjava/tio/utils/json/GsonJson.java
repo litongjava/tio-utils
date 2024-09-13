@@ -82,4 +82,22 @@ public class GsonJson extends Json {
     return gson.fromJson(stringValue, Object.class);
   }
 
+  @Override
+  public <T> T parse(String body, Type type) {
+    try {
+      return gson.fromJson(body, type);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public <T> T parse(byte[] body, Type type) {
+    try {
+      String bodyString = new String(body);
+      return gson.fromJson(bodyString, type);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
