@@ -8,7 +8,7 @@ public class Resp implements java.io.Serializable {
   private static final long serialVersionUID = 7492427869347211588L;
 
   public static Resp fail() {
-    Resp resp = new Resp(RespResult.FAIL);
+    Resp resp = new Resp(RespCode.FAIL);
     return resp;
   }
 
@@ -25,7 +25,7 @@ public class Resp implements java.io.Serializable {
   }
 
   public static Resp ok() {
-    Resp resp = new Resp(RespResult.OK);
+    Resp resp = new Resp(RespCode.OK);
     return resp;
   }
 
@@ -40,7 +40,7 @@ public class Resp implements java.io.Serializable {
   /**
    * 结果：成功、失败或未知
    */
-  private RespResult result;
+  private RespCode result;
 
   /**
    * 消息，一般用于显示
@@ -61,7 +61,7 @@ public class Resp implements java.io.Serializable {
    *
    * @author tanyaowu
    */
-  private Resp(RespResult respCode) {
+  private Resp(RespCode respCode) {
     this.result = respCode;
   }
 
@@ -88,7 +88,7 @@ public class Resp implements java.io.Serializable {
   }
 
   public boolean isOk() {
-    return this.result == RespResult.OK;
+    return this.result == RespCode.OK;
   }
 
   public Resp msg(String msg) {

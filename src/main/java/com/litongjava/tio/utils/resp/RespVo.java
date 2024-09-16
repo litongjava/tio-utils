@@ -9,7 +9,7 @@ public class RespVo implements java.io.Serializable {
   // private static Logger log = LoggerFactory.getLogger(RespVo.class);
 
   public static RespVo fail() {
-    RespVo resp = new RespVo(RespResult.FAIL);
+    RespVo resp = new RespVo(RespCode.FAIL);
     resp.code = 0;
     return resp;
   }
@@ -19,7 +19,7 @@ public class RespVo implements java.io.Serializable {
   }
 
   public static RespVo ok() {
-    RespVo resp = new RespVo(RespResult.OK);
+    RespVo resp = new RespVo(RespCode.OK);
     resp.code = 1;
     return resp;
   }
@@ -31,7 +31,7 @@ public class RespVo implements java.io.Serializable {
   /**
    * 结果：成功、失败或未知
    */
-  private RespResult result;
+  private RespCode result;
 
   /**
    * 消息，一般用于显示
@@ -52,7 +52,7 @@ public class RespVo implements java.io.Serializable {
    *
    * @author tanyaowu
    */
-  private RespVo(RespResult respCode) {
+  private RespVo(RespCode respCode) {
     this.result = respCode;
   }
 
@@ -83,7 +83,7 @@ public class RespVo implements java.io.Serializable {
   // }
 
   public boolean isOk() {
-    return this.result == RespResult.OK;
+    return this.result == RespCode.OK;
   }
 
   public RespVo msg(String msg) {

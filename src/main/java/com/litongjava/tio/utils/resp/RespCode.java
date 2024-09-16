@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * @author tanyaowu
  * 2017年8月18日 下午3:56:02
  */
-public enum RespResult {
+public enum RespCode {
   /**
    * 成功的响应
    */
@@ -23,21 +23,21 @@ public enum RespResult {
    */
   UNKNOWN(3);
 
-  public static RespResult from(int value) {
-    RespResult[] values = RespResult.values();
-    for (RespResult v : values) {
+  public static RespCode from(int value) {
+    RespCode[] values = RespCode.values();
+    for (RespCode v : values) {
       if (Objects.equals(v.value, value)) {
         return v;
       }
     }
-    Logger log = LoggerFactory.getLogger(RespResult.class);
+    Logger log = LoggerFactory.getLogger(RespCode.class);
     log.error("can not find RespResult by " + value);
     return null;
   }
 
   int value;
 
-  private RespResult(int value) {
+  private RespCode(int value) {
     this.value = value;
   }
 }

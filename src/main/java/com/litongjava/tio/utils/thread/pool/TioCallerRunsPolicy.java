@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
  * @author tanyaowu
  */
 public class TioCallerRunsPolicy extends CallerRunsPolicy {
-	private static Logger log = LoggerFactory.getLogger(TioCallerRunsPolicy.class);
+  private static Logger log = LoggerFactory.getLogger(TioCallerRunsPolicy.class);
 
-	public TioCallerRunsPolicy() {
-	}
+  public TioCallerRunsPolicy() {
+  }
 
-	public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-		log.error(r.getClass().getSimpleName());
-		super.rejectedExecution(r, e);
-	}
+  public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+    log.error("{},{}", r.getClass().getSimpleName(), e);
+    super.rejectedExecution(r, e);
+  }
 
 }

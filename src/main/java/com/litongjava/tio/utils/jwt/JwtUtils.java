@@ -12,6 +12,9 @@ import com.litongjava.tio.utils.token.AuthToken;
 
 public class JwtUtils {
 
+  public static final String dot_delimiter = "\\.";
+  public static final String colon_delimiter = ":";
+
   public static AuthToken createToken(String key, AuthToken authToken) {
     Map<String, Object> payloadMap = new HashMap<>();
     payloadMap.put("userId", authToken.getUserId());
@@ -83,15 +86,8 @@ public class JwtUtils {
     return json.toString();
   }
 
-  /**
-   * 验证JWT Token
-   * 
-   * @param key   密钥
-   * @param token JWT Token
-   * @return 如果Token有效则返回true，否则返回false
-   */
-  public static boolean verify(String key, String token) {
-    String[] parts = token.split("\\.");
+  public static boolean verify(String key, String token, String delimiter) {
+    String[] parts = token.split(delimiter);
     if (parts.length != 3) {
       return false;
     }
@@ -100,8 +96,13 @@ public class JwtUtils {
     String payload = parts[1];
     String signature = parts[2];
 
+    String calculatedSignature = null;
     // 重新计算签名并与传入的签名进行比较
-    String calculatedSignature = hmacSha256(header + "." + payload, key);
+    if (colon_delimiter.equals(delimiter)) {
+      calculatedSignature = hmacSha256(header + ":" + payload, key);
+    } else {
+      calculatedSignature = hmacSha256(header + "." + payload, key);
+    }
 
     // 先解码payload
     String decodedPayload = new String(Base64.getUrlDecoder().decode(payload), StandardCharsets.UTF_8);
@@ -110,13 +111,18 @@ public class JwtUtils {
   }
 
   /**
-   * 获取JWT的payload中的数据
+   * 验证JWT Token
    * 
+   * @param key   密钥
    * @param token JWT Token
-   * @return payload中的数据
+   * @return 如果Token有效则返回true，否则返回false
    */
-  public static Map<String, Object> getPayload(String token) {
-    String[] parts = token.split("\\.");
+  public static boolean verify(String key, String token) {
+    return verify(key, token, dot_delimiter);
+  }
+
+  public static Map<String, Object> getPayload(String token, String delimiter) {
+    String[] parts = token.split(delimiter);
     if (parts.length != 3) {
       throw new IllegalArgumentException("Invalid JWT token");
     }
@@ -126,6 +132,16 @@ public class JwtUtils {
 
     // 解析为Map
     return parsePayload(decodedPayload);
+  }
+
+  /**
+   * 获取JWT的payload中的数据
+   * 
+   * @param token JWT Token
+   * @return payload中的数据
+   */
+  public static Map<String, Object> getPayload(String token) {
+    return getPayload(token, dot_delimiter);
   }
 
   /**
