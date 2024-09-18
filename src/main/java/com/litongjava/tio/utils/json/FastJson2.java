@@ -94,4 +94,9 @@ public class FastJson2 extends Json {
   public <T> T parse(byte[] body, Type type) {
     return JSON.parseObject(body, type);
   }
+
+  @Override
+  public <T> List<T> parseArray(String str, Class<T> elementType) {
+    return JSON.parseArray(str, elementType);
+  }
 }

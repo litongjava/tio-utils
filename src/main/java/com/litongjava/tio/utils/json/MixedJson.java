@@ -117,4 +117,12 @@ public class MixedJson extends Json {
     }
     return fastJson.parse(body, type);
   }
+
+  @Override
+  public <T> List<T> parseArray(String str, Class<T> elementType) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parseArray(str, elementType);
+  }
 }

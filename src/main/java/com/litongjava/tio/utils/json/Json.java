@@ -76,6 +76,8 @@ public abstract class Json {
 
   public abstract Object parseArray(String jsonString);
 
+  public abstract <T> List<T> parseArray(String str, Class<T> elementType);
+
   public abstract Map<?, ?> parseToMap(String json);
 
   public abstract <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType);

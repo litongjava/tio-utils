@@ -26,6 +26,10 @@ public class JsonUtils {
     return Json.getJson().parseArray(jsonString);
   }
 
+  public static <T> List<T> parseArray(String str, Class<T> elementType) {
+    return Json.getJson().parseArray(str, elementType);
+  }
+
   public static Map<?, ?> parseToMap(String json) {
     return Json.getJson().parseToMap(json);
   }
@@ -45,4 +49,5 @@ public class JsonUtils {
   public static <T> T parse(byte[] body, Type type) {
     return Json.getJson().parse(body, type);
   }
+
 }

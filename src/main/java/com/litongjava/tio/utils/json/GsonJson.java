@@ -63,6 +63,12 @@ public class GsonJson extends Json {
   }
 
   @Override
+  public <T> List<T> parseArray(String str, Class<T> elementType) {
+    Type type = TypeToken.getParameterized(List.class, elementType).getType();
+    return gson.fromJson(str, type);
+  }
+
+  @Override
   public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
     Type mapType = new TypeToken<Map<K, V>>() {
     }.getType();

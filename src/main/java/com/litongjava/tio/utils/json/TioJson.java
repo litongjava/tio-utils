@@ -255,4 +255,8 @@ public class TioJson extends Json {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
 
+  @Override
+  public <T> List<T> parseArray(String str, Class<T> elementType) {
+    throw new RuntimeException(notSupportJsonToObjectMesage);
+  }
 }

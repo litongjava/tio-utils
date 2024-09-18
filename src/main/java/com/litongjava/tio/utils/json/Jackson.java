@@ -151,6 +151,16 @@ public class Jackson extends Json {
   }
 
   @Override
+  public <T> List<T> parseArray(String str, Class<T> elementType) {
+    try {
+      return objectMapper.readValue(str, objectMapper.getTypeFactory().constructCollectionType(List.class, elementType));
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
   public <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {
     try {
       TypeReference<List<Map<K, V>>> typeReference = new TypeReference<List<Map<K, V>>>() {
