@@ -9,6 +9,8 @@ import com.litongjava.tio.utils.json.JsonUtils;
 
 public class TelegramBot {
 
+  public static final String SERVER_URL_PREFIX = "https://api.telegram.org/bot";
+
   private String botToken;
   private String name;
 
@@ -26,18 +28,32 @@ public class TelegramBot {
     return name;
   }
 
+  public TelegramBot withToken(String botToken) {
+    this.botToken = botToken;
+    return this;
+  }
+
   public ResponseVo sendMessage(String chatId, String message) {
-    String urlString = "https://api.telegram.org/bot" + botToken + "/sendMessage";
+    String urlString = SERVER_URL_PREFIX + botToken + "/sendMessage";
     Map<String, String> map = new HashMap<>();
     map.put("chat_id", chatId);
     map.put("text", message);
     String payload = JsonUtils.toJson(map);
-
     return Http.postJson(urlString, payload);
   }
 
-  public TelegramBot withToken(String botToken) {
-    this.botToken = botToken;
-    return this;
+  public ResponseVo setWebhook(String url) {
+    String urlString = SERVER_URL_PREFIX + botToken + "/setWebhook" + "?url=" + url;
+    return Http.get(urlString);
+  }
+
+  public ResponseVo getWebhookInfo() {
+    String urlString = SERVER_URL_PREFIX + botToken + "/getWebhookInfo";
+    return Http.get(urlString);
+  }
+
+  public ResponseVo deleteWebhook() {
+    String urlString = SERVER_URL_PREFIX + botToken + "/deleteWebhook";
+    return Http.get(urlString);
   }
 }
