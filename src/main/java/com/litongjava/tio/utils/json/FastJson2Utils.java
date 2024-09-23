@@ -22,11 +22,11 @@ public class FastJson2Utils {
   public static byte[] toJSONBytes(Object input) {
     return JSON.toJSONBytes(input);
   }
+
   /**
    * 支持传入更多 SerializerFeature
    * <p>
-   * 例如：
-   * SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
+   * 例如： SerializerFeature.WriteMapNullValue 支持对 null 值字段的转换
    */
   public static String toJson(Object input, JSONWriter.Feature... features) {
     return JSON.toJSONString(input, features);
@@ -66,6 +66,18 @@ public class FastJson2Utils {
 
   public static <T> List<T> parseArray(byte[] input, Class<T> clazz) {
     return JSON.parseArray(input, clazz);
+  }
+
+  public static Map<?, ?> parseToMap(String json) {
+    return JSON.parseObject(json, Map.class);
+  }
+
+  public static <K, V> Map<K, V> parseToMap(String json, Class<K> kType, Class<V> vType) {
+    TypeReference<Map<K, V>> typeReference = new TypeReference<Map<K, V>>() {
+    };
+
+    Map<K, V> map = JSON.parseObject(json, typeReference);
+    return map;
   }
 
   public static <K, V> List<Map<K, V>> parseToListMap(String stringValue, Class<K> kType, Class<V> vType) {

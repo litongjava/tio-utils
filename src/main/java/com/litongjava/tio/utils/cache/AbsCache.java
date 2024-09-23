@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.litongjava.model.cache.ICache;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 /**

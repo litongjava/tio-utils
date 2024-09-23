@@ -2,6 +2,11 @@ package com.litongjava.tio.utils.http.useragent;
 
 import java.util.regex.Pattern;
 
+import com.litongjava.model.http.useragent.Browser;
+import com.litongjava.model.http.useragent.Engine;
+import com.litongjava.model.http.useragent.OS;
+import com.litongjava.model.http.useragent.Platform;
+import com.litongjava.model.http.useragent.UserAgent;
 import com.litongjava.tio.utils.hutool.ReUtil;
 
 

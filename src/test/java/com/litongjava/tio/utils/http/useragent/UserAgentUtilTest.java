@@ -2,6 +2,7 @@ package com.litongjava.tio.utils.http.useragent;
 
 import org.junit.Test;
 
+import com.litongjava.model.http.useragent.UserAgent;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class UserAgentUtilTest {

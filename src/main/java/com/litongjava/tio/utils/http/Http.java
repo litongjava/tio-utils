@@ -4,10 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.litongjava.model.http.response.ResponseVo;
 
 public class Http {
 
@@ -16,9 +19,16 @@ public class Http {
   }
 
   public static ResponseVo postJson(String serverUrl, String payload, Map<String, String> headers) {
+    URL url = null;
     try {
-      URL url = new URL(serverUrl);
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      url = new URL(serverUrl);
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+
+    HttpURLConnection conn = null;
+    try {
+      conn = (HttpURLConnection) url.openConnection();
       conn.setDoOutput(true);
       conn.setRequestMethod("POST");
       conn.setRequestProperty("Content-Type", "application/json");
@@ -35,12 +45,30 @@ public class Http {
       }
 
       int responseCode = conn.getResponseCode();
-      String responseBody = new String(readInputStream(conn.getInputStream()), StandardCharsets.UTF_8);
 
-      return responseCode == HttpURLConnection.HTTP_OK ? ResponseVo.ok(responseCode, responseBody) : ResponseVo.fail(responseCode, responseBody);
-
+      if (responseCode == HttpURLConnection.HTTP_OK) {
+        String responseBody = null;
+        try (InputStream inputStream = conn.getInputStream()) {
+          byte[] readInputStream = readInputStream(inputStream);
+          responseBody = new String(readInputStream, StandardCharsets.UTF_8);
+        }
+        return ResponseVo.ok(responseCode, responseBody);
+      } else {
+        String errorBody = null;
+        try (InputStream errorStream = conn.getErrorStream()) {
+          if (errorStream != null) { // 有时候errorStream可能为空
+            byte[] readErrorStream = readInputStream(errorStream);
+            errorBody = new String(readErrorStream, StandardCharsets.UTF_8);
+          }
+        }
+        return ResponseVo.fail(responseCode, errorBody != null ? errorBody : "No error message");
+      }
     } catch (Exception e) {
       throw new RuntimeException(e);
+    } finally {
+      if (conn != null) {
+        conn.disconnect();
+      }
     }
   }
 

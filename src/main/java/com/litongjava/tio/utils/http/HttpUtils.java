@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 import okhttp3.Call;
@@ -89,8 +90,7 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  private static Response post(String url, Map<String, String> headerMap, MediaType mediaType, String bodyString,
-      Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) {
+  private static Response post(String url, Map<String, String> headerMap, MediaType mediaType, String bodyString, Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) {
     Request.Builder builder = new Request.Builder().url(url);
     if (headerMap != null) {
       Headers headers = Headers.of(headerMap);
@@ -142,8 +142,7 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames,
-      List<String> paramValues) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames, List<String> paramValues) throws Exception {
     return post(url, headerMap, (MediaType) null, null, null, paramNames, paramValues);
   }
 
@@ -155,8 +154,7 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap)
-      throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
     return post(url, headerMap, (MediaType) null, null, paramMap, null, null);
   }
 
@@ -193,6 +191,7 @@ public class HttpUtils {
     return post(url, null);
   }
 
+  
   public static ResponseVo call(Request request) {
     Call call = OkHttpClientPool.getHttpClient().newCall(request);
     try (Response response = call.execute()) {

@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.litongjava.tio.utils.token.AuthToken;
+import com.litongjava.model.token.AuthToken;
 
 public class JwtUtils {
 

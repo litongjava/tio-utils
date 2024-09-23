@@ -12,6 +12,13 @@
   <description>t-io is a aio framework for java</description>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.litongjava</groupId>
+      <artifactId>java-model</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -24,6 +31,7 @@
       <version>2.11.0</version>
       <scope>provided</scope>
     </dependency>
+
 
     <dependency>
       <groupId>com.alibaba.fastjson2</groupId>

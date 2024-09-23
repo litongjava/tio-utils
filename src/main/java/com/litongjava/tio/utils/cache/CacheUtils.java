@@ -82,6 +82,7 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.litongjava.model.cache.ICache;
 import com.litongjava.tio.utils.cache.caffeine.CaffeineCache;
 import com.litongjava.tio.utils.cache.caffeine.CaffeineCacheFactory;
 import com.litongjava.tio.utils.cache.caffeineredis.CaffeineRedisCache;
@@ -212,7 +213,7 @@ public abstract class CacheUtils {
         }
         if (ret1 == null) {
           if (putTempToCacheIfNull) {
-            cache.putTemporary(cacheKey, com.litongjava.tio.utils.cache.ICache.NULL_OBJ);
+            cache.putTemporary(cacheKey, ICache.NULL_OBJ);
           }
         } else {
           cache.put(cacheKey, ret1);

@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import javax.mail.MessagingException;
 import javax.mail.Service;
 
+import com.litongjava.model.sys.SysConst;
+
 /**
  * this class copied from org.apache.commons.io.IOUtils
  */
@@ -58,7 +60,7 @@ public class IoUtils {
       while ((length = inputStream.read(buffer)) != -1) {
         result.write(buffer, 0, length);
       }
-      return result.toString(com.litongjava.tio.utils.SysConst.DEFAULT_ENCODING);
+      return result.toString(SysConst.DEFAULT_ENCODING);
     } catch (Exception e) {
       return null;
     }

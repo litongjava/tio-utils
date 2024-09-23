@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.dsn;
 
+import com.litongjava.model.dsn.JdbcInfo;
+
 public class DbDSNParser {
 
   public JdbcInfo parse(String dsn) {

@@ -1,5 +1,7 @@
 package com.litongjava.tio.utils.http.useragent;
 
+import com.litongjava.model.http.useragent.UserAgent;
+
 /**
  * User-Agent工具类
  * 

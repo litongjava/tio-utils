@@ -7,6 +7,8 @@ import java.lang.management.MemoryUsage;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 
+import com.litongjava.model.sys.SystemInfo;
+
 public class SystemMonitorUtils {
 
   public static SystemInfo getSystemInfo() {

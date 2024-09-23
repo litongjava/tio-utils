@@ -3,8 +3,8 @@ package com.litongjava.tio.utils.telegram;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.litongjava.model.http.response.ResponseVo;
 import com.litongjava.tio.utils.http.Http;
-import com.litongjava.tio.utils.http.ResponseVo;
 import com.litongjava.tio.utils.json.JsonUtils;
 
 public class TelegramBot {
