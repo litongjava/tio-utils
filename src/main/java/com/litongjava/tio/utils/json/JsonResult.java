@@ -131,7 +131,7 @@ public class JsonResult {
     sb.append(b);
   }
 
-  public void addEnum(Enum en) {
+  public void addEnum(@SuppressWarnings("rawtypes") Enum en) {
     sb.append('\"').append(en.toString()).append('\"');
   }
 

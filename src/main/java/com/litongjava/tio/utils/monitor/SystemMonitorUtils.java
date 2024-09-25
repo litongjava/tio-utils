@@ -11,6 +11,7 @@ import com.litongjava.model.sys.SystemInfo;
 
 public class SystemMonitorUtils {
 
+  @SuppressWarnings("restriction")
   public static SystemInfo getSystemInfo() {
     SystemInfo info = new SystemInfo();
 
