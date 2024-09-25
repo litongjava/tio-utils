@@ -48,7 +48,7 @@ public class Threads {
     synchronized (Threads.class) {
       if (groupExecutor == null) {
         groupExecutor = newGroupExecutor();
-        log.info("new group thead pool:{}", groupExecutor);
+        //log.info("new group thead pool:{}", groupExecutor);
       }
     }
     return groupExecutor;

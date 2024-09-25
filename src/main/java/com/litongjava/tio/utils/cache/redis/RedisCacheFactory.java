@@ -12,11 +12,13 @@ import com.litongjava.tio.utils.cache.CacheFactory;
 import com.litongjava.tio.utils.cache.CacheName;
 import com.litongjava.tio.utils.cache.RemovalListenerWrapper;
 
+import redis.clients.jedis.Jedis;
+
 public enum RedisCacheFactory implements CacheFactory {
   INSTANCE;
 
   private Logger log = LoggerFactory.getLogger(RedisCacheFactory.class);
-  private Map<String, RedisCache> map = new HashMap<>();
+  private Map<String, TioRedisCache> map = new HashMap<>();
   private RedissonClient redisson;
   private Object lock = new Object();
 
@@ -37,15 +39,15 @@ public enum RedisCacheFactory implements CacheFactory {
    * @author tanyaowu
    */
   @Override
-  public RedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
+  public TioRedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds) {
     RedisExpireUpdateTask.start(this);
 
-    RedisCache redisCache = map.get(cacheName);
+    TioRedisCache redisCache = map.get(cacheName);
     if (redisCache == null) {
       synchronized (lock) {
         redisCache = map.get(cacheName);
         if (redisCache == null) {
-          redisCache = new RedisCache(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds);
+          redisCache = new TioRedisCache(redisson, cacheName, timeToLiveSeconds, timeToIdleSeconds);
 
           redisCache.setTimeToIdleSeconds(timeToIdleSeconds);
           redisCache.setTimeToLiveSeconds(timeToLiveSeconds);
@@ -57,15 +59,13 @@ public enum RedisCacheFactory implements CacheFactory {
   }
 
   @Override
-  public <T> RedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds,
-      RemovalListenerWrapper<T> removalListenerWrapper) {
-    // TODO Auto-generated method stub
+  public <T> TioRedisCache register(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds, RemovalListenerWrapper<T> removalListenerWrapper) {
     return null;
   }
 
   @Override
-  public RedisCache getCache(String cacheName, boolean skipNull) {
-    RedisCache redisCache = map.get(cacheName);
+  public TioRedisCache getCache(String cacheName, boolean skipNull) {
+    TioRedisCache redisCache = map.get(cacheName);
     if (redisCache == null) {
       log.error("cacheName[{}] is not yet registered, please register first.", cacheName);
     }
@@ -73,7 +73,7 @@ public enum RedisCacheFactory implements CacheFactory {
   }
 
   @Override
-  public RedisCache getCache(String cacheName) {
+  public TioRedisCache getCache(String cacheName) {
     return map.get(cacheName);
   }
 
@@ -83,8 +83,12 @@ public enum RedisCacheFactory implements CacheFactory {
   }
 
   @Override
-  public RedisCache register(CacheName cacheName) {
+  public TioRedisCache register(CacheName cacheName) {
     return this.register(cacheName.getName(), cacheName.getTimeToLiveSeconds(), cacheName.getTimeToIdleSeconds());
+  }
+
+  public void setJedis(Jedis jedis) {
+
   }
 
 }

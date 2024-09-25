@@ -12,7 +12,6 @@ import net.oschina.j2cache.CacheObject;
 /**
  * 红薯家的j2cache
  * @author tanyaowu
- *
  */
 public class J2Cache extends AbsCache {
   public J2Cache(String cacheName) {
@@ -75,11 +74,11 @@ public class J2Cache extends AbsCache {
 
   @Override
   public Map<String, Serializable> asMap() {
-//    Collection<String> keys = getChannel().keys(cacheName);
-//    Map<String, CacheObject> map = getChannel().get(cacheName, keys);
-//    return map;
+    //    Collection<String> keys = getChannel().keys(cacheName);
+    //    Map<String, CacheObject> map = getChannel().get(cacheName, keys);
+    //    return map;
     return null;
-    
+
   }
 
   @Override

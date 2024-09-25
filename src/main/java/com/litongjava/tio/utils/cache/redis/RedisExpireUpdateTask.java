@@ -57,7 +57,7 @@ public class RedisExpireUpdateTask {
               log.debug("更新缓存过期时间, cacheName:{}, key:{}, expire:{}", expireVo.getCacheName(), expireVo.getKey(),
                   expireVo.getTimeToIdleSeconds());
 
-              RedisCache redisCache = redisCacheFactory.getCache(expireVo.getCacheName());
+              TioRedisCache redisCache = redisCacheFactory.getCache(expireVo.getCacheName());
               RBucket<Serializable> bucket = redisCache.getBucket(expireVo.getKey());
               bucket.expireAsync(expireVo.getTimeToIdleSeconds(), TimeUnit.SECONDS);
             }

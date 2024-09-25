@@ -12,7 +12,7 @@ import com.litongjava.tio.utils.cache.AbsCache;
 import com.litongjava.tio.utils.cache.CacheChangeType;
 import com.litongjava.tio.utils.cache.CacheChangedVo;
 import com.litongjava.tio.utils.cache.caffeine.CaffeineCache;
-import com.litongjava.tio.utils.cache.redis.RedisCache;
+import com.litongjava.tio.utils.cache.redis.TioRedisCache;
 import com.litongjava.tio.utils.cache.redis.RedisExpireUpdateTask;
 import com.litongjava.tio.utils.hutool.StrUtil;
 import com.litongjava.tio.utils.lock.LockUtils;
@@ -26,7 +26,7 @@ public class CaffeineRedisCache extends AbsCache {
 
   private Logger log = LoggerFactory.getLogger(CaffeineRedisCache.class);
   CaffeineCache localCache = null;
-  RedisCache distCache = null;
+  TioRedisCache distCache = null;
   private RTopic topic;
 
   /**
@@ -34,7 +34,7 @@ public class CaffeineRedisCache extends AbsCache {
    * @param distCache
    * @author tanyaowu
    */
-  public CaffeineRedisCache(String cacheName, CaffeineCache caffeineCache, RedisCache redisCache) {
+  public CaffeineRedisCache(String cacheName, CaffeineCache caffeineCache, TioRedisCache redisCache) {
     super(cacheName);
     this.localCache = caffeineCache;
     this.distCache = redisCache;

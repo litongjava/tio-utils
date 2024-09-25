@@ -19,7 +19,7 @@ import com.litongjava.tio.utils.cache.CacheName;
 import com.litongjava.tio.utils.cache.RemovalListenerWrapper;
 import com.litongjava.tio.utils.cache.caffeine.CaffeineCache;
 import com.litongjava.tio.utils.cache.caffeine.CaffeineCacheFactory;
-import com.litongjava.tio.utils.cache.redis.RedisCache;
+import com.litongjava.tio.utils.cache.redis.TioRedisCache;
 import com.litongjava.tio.utils.cache.redis.RedisCacheFactory;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
@@ -92,7 +92,7 @@ public enum CaffeineRedisCacheFactory implements CacheFactory {
         caffeineRedisCache = map.get(cacheName);
         if (caffeineRedisCache == null) {
           RedisCacheFactory.INSTANCE.setRedisson(redisson);
-          RedisCache redisCache = RedisCacheFactory.INSTANCE.register(cacheName, timeToLiveSeconds, timeToIdleSeconds);
+          TioRedisCache redisCache = RedisCacheFactory.INSTANCE.register(cacheName, timeToLiveSeconds, timeToIdleSeconds);
 
           Long timeToLiveSecondsForCaffeine = timeToLiveSeconds;
           Long timeToIdleSecondsForCaffeine = timeToIdleSeconds;

@@ -86,7 +86,7 @@ import com.litongjava.tio.utils.cache.AbsCache;
 import com.litongjava.tio.utils.cache.CacheChangeType;
 import com.litongjava.tio.utils.cache.CacheChangedVo;
 import com.litongjava.tio.utils.cache.guava.GuavaCache;
-import com.litongjava.tio.utils.cache.redis.RedisCache;
+import com.litongjava.tio.utils.cache.redis.TioRedisCache;
 import com.litongjava.tio.utils.cache.redis.RedisExpireUpdateTask;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
@@ -102,14 +102,14 @@ public class GuavaRedisCache extends AbsCache {
 
   GuavaCache guavaCache;
 
-  RedisCache redisCache;
+  TioRedisCache redisCache;
 
   /**
    * @param guavaCache
    * @param distCache
    * @author tanyaowu
    */
-  public GuavaRedisCache(String cacheName, GuavaCache guavaCache, RedisCache redisCache) {
+  public GuavaRedisCache(String cacheName, GuavaCache guavaCache, TioRedisCache redisCache) {
     super(cacheName);
     this.guavaCache = guavaCache;
     this.redisCache = redisCache;
