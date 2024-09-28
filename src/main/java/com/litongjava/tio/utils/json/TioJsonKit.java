@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Function;
 
 import com.litongjava.tio.utils.hutool.StrUtil;
@@ -167,6 +168,10 @@ public class TioJsonKit {
       return new IterableToJson();
     }
 
+    if (value instanceof UUID) {
+      return new UUIDToJson();
+    }
+
     BeanToJson beanToJson = buildBeanToJson(value);
     if (beanToJson != null) {
       return beanToJson;
@@ -280,6 +285,12 @@ public class TioJsonKit {
   static class LocalTimeToJson implements TioToJson<LocalTime> {
     public void toJson(LocalTime value, int depth, JsonResult ret) {
       ret.addLocalTime(value);
+    }
+  }
+
+  static class UUIDToJson implements TioToJson<UUID> {
+    public void toJson(UUID value, int depth, JsonResult ret) {
+      escape(value.toString(), ret.sb);
     }
   }
 
@@ -586,8 +597,7 @@ public class TioJsonKit {
       // sb.append("\\/");
       // break;
       default:
-        if ((ch >= '\u0000' && ch <= '\u001F') || (ch >= '\u007F' && ch <= '\u009F')
-            || (ch >= '\u2000' && ch <= '\u20FF')) {
+        if ((ch >= '\u0000' && ch <= '\u001F') || (ch >= '\u007F' && ch <= '\u009F') || (ch >= '\u2000' && ch <= '\u20FF')) {
           String str = Integer.toHexString(ch);
           sb.append("\\u");
           for (int k = 0; k < 4 - str.length(); k++) {
