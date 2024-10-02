@@ -24,14 +24,14 @@ import com.litongjava.tio.utils.hutool.StrUtil;
  * 2017年9月19日 下午3:06:34
  */
 @SuppressWarnings("deprecation")
-public class Zk {
-  private static Logger log = LoggerFactory.getLogger(Zk.class);
+public class Zookeeper {
+  private static Logger log = LoggerFactory.getLogger(Zookeeper.class);
 
   /**
    * 
    * @author: tanyaowu
    */
-  public Zk() {
+  public Zookeeper() {
   }
 
   private static final String CHARSET = "utf-8";
@@ -92,7 +92,7 @@ public class Zk {
    * @author tanyaowu
    */
   public static void start() {
-    Zk.zkclient.start();
+    Zookeeper.zkclient.start();
   }
 
   /**
@@ -227,7 +227,7 @@ public class Zk {
    */
   public static void setData(String path, byte[] bs) throws Exception {
     if (bs != null) {
-      if (Zk.exists(path)) {
+      if (Zookeeper.exists(path)) {
         zkclient.setData().forPath(path, bs);
       } else {
         try {
