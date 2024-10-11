@@ -9,7 +9,7 @@ import com.litongjava.tio.utils.json.JsonUtils;
 
 public class TelegramBot {
 
-  public static final String SERVER_URL_PREFIX = "https://api.telegram.org/bot";
+  public static final String SERVER_URL = "https://api.telegram.org";
 
   private String botToken;
   private String name;
@@ -34,7 +34,7 @@ public class TelegramBot {
   }
 
   public ResponseVo sendMessage(String chatId, String message) {
-    String urlString = SERVER_URL_PREFIX + botToken + "/sendMessage";
+    String urlString = SERVER_URL + "/bot" + botToken + "/sendMessage";
     Map<String, String> map = new HashMap<>();
     map.put("chat_id", chatId);
     map.put("text", message);
@@ -43,17 +43,22 @@ public class TelegramBot {
   }
 
   public ResponseVo setWebhook(String url) {
-    String urlString = SERVER_URL_PREFIX + botToken + "/setWebhook" + "?url=" + url;
+    String urlString = SERVER_URL + "/bot" + botToken + "/setWebhook" + "?url=" + url;
     return Http.get(urlString);
   }
 
   public ResponseVo getWebhookInfo() {
-    String urlString = SERVER_URL_PREFIX + botToken + "/getWebhookInfo";
+    String urlString = SERVER_URL + "/bot" + botToken + "/getWebhookInfo";
     return Http.get(urlString);
   }
 
   public ResponseVo deleteWebhook() {
-    String urlString = SERVER_URL_PREFIX + botToken + "/deleteWebhook";
+    String urlString = SERVER_URL + "/bot" + botToken + "/deleteWebhook";
+    return Http.get(urlString);
+  }
+  
+  public ResponseVo getUpdates() {
+    String urlString = SERVER_URL + "/bot" + botToken + "/getUpdates";
     return Http.get(urlString);
   }
 }
