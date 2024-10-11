@@ -1,8 +1,12 @@
 package com.litongjava.tio.utils.notification;
 
-public interface NotificationTemplate {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-  String alarmTemplate = "- Alarm Time : %s\n"//
+public class NotificationTemplate {
+
+  public static final String alarmTemplate = "- Alarm Time : %s\n"//
+      + "- App Env : %s\n" //
       + "- App Group Name : %s\n" //
       + "- App Name : %s\n" //
       + "- Alarm name : %s\n" //
@@ -10,4 +14,26 @@ public interface NotificationTemplate {
       + "- Alarm Device : %s\n" //
       + "- Alarm Content : \n" //
       + "%s\n";
+
+  public static String format(NotifactionWarmModel model) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Date date = model.getTime();
+    String dateString = sdf.format(date);
+
+    String appEnv = model.getAppEnv();
+
+    String appGroupName = model.getAppGroupName();
+    String appName = model.getAppName();
+
+    String warningName = model.getWarningName();
+    String level = model.getLevel();
+    String deviceName = model.getDeviceName();
+    String content = model.getContent();
+
+    String text = String.format(NotificationTemplate.alarmTemplate, appEnv, dateString, appGroupName, appName,
+        //
+        warningName, level, deviceName, content);
+    return text;
+
+  }
 }

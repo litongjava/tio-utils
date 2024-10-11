@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotifactionWarmModel {
+  private Date time;
+  private String appEnv;
+
   private String appGroupName;
   private String appName;
   private String warningName;
   private String level;
   private String deviceName;
   private String content;
-  private Date time;
+
 }

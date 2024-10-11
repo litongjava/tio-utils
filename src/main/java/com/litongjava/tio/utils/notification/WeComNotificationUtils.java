@@ -1,7 +1,5 @@
 package com.litongjava.tio.utils.notification;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,22 +45,7 @@ public class WeComNotificationUtils {
   }
 
   public static Response sendWarm(String webHookUrl, NotifactionWarmModel model) {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    String appGroupName = model.getAppGroupName();
-    String appName = model.getAppName();
-
-    String warningName = model.getWarningName();
-    String level = model.getLevel();
-    String deviceName = model.getDeviceName();
-    String content = model.getContent();
-    Date date = model.getTime();
-
-    String dateString = sdf.format(date);
-
-    String text = String.format(NotificationTemplate.alarmTemplate, dateString, appGroupName, appName, warningName, level, deviceName, content);
-
-    Map<String, Object> reqMap = getReqMap(text);
+    Map<String, Object> reqMap = getReqMap(NotificationTemplate.format(model));
 
     return send(webHookUrl, reqMap);
   }
