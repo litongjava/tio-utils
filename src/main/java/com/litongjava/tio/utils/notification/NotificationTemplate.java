@@ -30,7 +30,7 @@ public class NotificationTemplate {
     String deviceName = model.getDeviceName();
     String content = model.getContent();
 
-    String text = String.format(NotificationTemplate.alarmTemplate, appEnv, dateString, appGroupName, appName,
+    String text = String.format(NotificationTemplate.alarmTemplate, dateString, appEnv, appGroupName, appName,
         //
         warningName, level, deviceName, content);
     return text;
