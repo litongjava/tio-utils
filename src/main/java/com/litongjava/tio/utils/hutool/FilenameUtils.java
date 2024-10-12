@@ -33,7 +33,7 @@ public class FilenameUtils {
   }
 
   /**
-   * 获取路径中的子路径，比如传入kb/document/md/1.md，返回kb/document/
+   * 获取路径中的子路径，比如传入kb/document/md/1.md，返回kb/document/md
    * 
    * @param path
    * @return 子路径
@@ -47,7 +47,7 @@ public class FilenameUtils {
       return "";
     }
     // 获取最后一个斜杠之前的路径
-    String subPath = path.substring(0, lastSlashIndex + 1);
+    String subPath = path.substring(0, lastSlashIndex);
     return subPath;
   }
 }
