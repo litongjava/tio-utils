@@ -18,20 +18,32 @@ import okhttp3.OkHttpClient;
 public enum OkHttpClientPool {
   INSTANCE;
 
-  static okhttp3.OkHttpClient.Builder builder;
+  static okhttp3.OkHttpClient.Builder builder30Second;
+  static okhttp3.OkHttpClient.Builder builder3600Second;
   static {
-    builder = new OkHttpClient().newBuilder();
+    builder30Second = new OkHttpClient().newBuilder();
     // 连接池
-    builder.connectionPool(pool());
+    builder30Second.connectionPool(pool());
     // 信任连接
-    builder.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+    builder30Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
     // 连接超时
-    builder.connectTimeout(30L, TimeUnit.SECONDS).readTimeout(30L, TimeUnit.SECONDS).build();
+    builder30Second.connectTimeout(30L, TimeUnit.SECONDS).readTimeout(30L, TimeUnit.SECONDS).build();
 
+    builder3600Second = new OkHttpClient().newBuilder();
+    // 连接池
+    builder3600Second.connectionPool(pool());
+    // 信任连接
+    builder3600Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+    // 连接超时
+    builder3600Second.connectTimeout(3600L, TimeUnit.SECONDS).readTimeout(3600L, TimeUnit.SECONDS).build();
   }
 
   public static OkHttpClient getHttpClient() {
-    return builder.build();
+    return builder30Second.build();
+  }
+
+  public static OkHttpClient get3600HttpClient() {
+    return builder3600Second.build();
   }
 
   private static ConnectionPool pool() {

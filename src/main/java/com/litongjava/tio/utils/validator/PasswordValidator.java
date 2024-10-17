@@ -10,7 +10,7 @@ public class PasswordValidator {
   private static final Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9]");
 
   public static boolean validate(String password) {
-    if (password.length() < 6) {
+    if (password == null || password.length() < 6) {
       return false;
     }
 
