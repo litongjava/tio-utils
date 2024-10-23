@@ -4,29 +4,30 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 
  * @author Tong Li
  *
  */
 public class TioThreadUtils {
   private static volatile ExecutorService fixedThreadPool;
 
-  public static String stackTrace() {
-    StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-    StringBuilder buf = new StringBuilder();
-    for (StackTraceElement element : elements) {
-      buf.append("\r\n\t").append(element.getClassName()).append(".").append(element.getMethodName()).append("(").append(element.getFileName()).append(":").append(element.getLineNumber()).append(")");
-    }
-    return buf.toString();
+  private static ThreadFactory namedThreadFactory(String baseName) {
+    AtomicInteger threadNumber = new AtomicInteger(1);
+    return r -> {
+      Thread thread = new Thread(r);
+      thread.setName(baseName + "-" + threadNumber.getAndIncrement());
+      return thread;
+    };
   }
 
-  private static ExecutorService getFixedThreadPool() {
+  public static ExecutorService getFixedThreadPool() {
     if (fixedThreadPool == null) {
       synchronized (TioThreadUtils.class) {
         if (fixedThreadPool == null) {
-          fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+          fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4, namedThreadFactory("TioThread"));
         }
       }
     }
