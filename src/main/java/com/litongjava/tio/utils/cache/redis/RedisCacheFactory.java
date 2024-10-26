@@ -86,9 +86,4 @@ public enum RedisCacheFactory implements CacheFactory {
   public TioRedisCache register(CacheName cacheName) {
     return this.register(cacheName.getName(), cacheName.getTimeToLiveSeconds(), cacheName.getTimeToIdleSeconds());
   }
-
-  public void setJedis(Jedis jedis) {
-
-  }
-
 }
