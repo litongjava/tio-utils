@@ -14,9 +14,7 @@ public class TioThreadUtils {
   private static volatile ExecutorService fixedThreadPool;
 
   static {
-    fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4,
-        //
-        namedThreadFactory("TioThread"));
+    start();
   }
 
   private static ThreadFactory namedThreadFactory(String baseName) {
@@ -42,6 +40,19 @@ public class TioThreadUtils {
 
   public static Future<?> submit(Runnable task) {
     return fixedThreadPool.submit(task);
+  }
+
+  public static void start() {
+    if (fixedThreadPool == null) {
+      fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4,
+          //
+          namedThreadFactory("TioThread"));
+    }
+  }
+
+  public static void restart() {
+    stop();
+    start();
   }
 
   public static void stop() {
