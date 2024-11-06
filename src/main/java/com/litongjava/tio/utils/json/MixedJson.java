@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.model.type.TioTypeReference;
+
 /**
  * JFinalJson 与 FastJson 混合做 json 转换 toJson 用 JFinalJson，parse 用 FastJson
  * <p>
@@ -124,5 +126,13 @@ public class MixedJson extends Json {
       fastJson = FastJson2.getJson();
     }
     return fastJson.parseArray(str, elementType);
+  }
+
+  @Override
+  public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
+    if (fastJson == null) {
+      fastJson = FastJson2.getJson();
+    }
+    return fastJson.parse(body, tioTypeReference);
   }
 }

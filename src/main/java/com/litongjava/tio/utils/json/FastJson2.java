@@ -9,6 +9,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.TypeReference;
+import com.litongjava.model.type.TioTypeReference;
 
 /**
  * Json 转换 fastjson 实现.
@@ -98,5 +99,10 @@ public class FastJson2 extends Json {
   @Override
   public <T> List<T> parseArray(String str, Class<T> elementType) {
     return JSON.parseArray(str, elementType);
+  }
+
+  @Override
+  public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
+    return JSON.parseObject(body, tioTypeReference.getType());
   }
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.litongjava.model.type.TioTypeReference;
+
 /**
  * Json 转换 JFinal 实现.
  * 
@@ -257,6 +259,11 @@ public class TioJson extends Json {
 
   @Override
   public <T> List<T> parseArray(String str, Class<T> elementType) {
+    throw new RuntimeException(notSupportJsonToObjectMesage);
+  }
+
+  @Override
+  public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
 }

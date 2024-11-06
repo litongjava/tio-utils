@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.litongjava.model.type.TioTypeReference;
+
 /**
  * json string 与 object 互转抽象
  */
@@ -87,5 +89,7 @@ public abstract class Json {
   public abstract <T> T parse(String body, Type type);
 
   public abstract <T> T parse(byte[] body, Type type);
+
+  public abstract <T> T parse(String body, TioTypeReference<T> tioTypeReference);
 
 }

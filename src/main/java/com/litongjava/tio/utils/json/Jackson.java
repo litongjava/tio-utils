@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.litongjava.model.type.TioTypeReference;
 import com.litongjava.tio.utils.date.TioTimeUtils;
 
 /**
@@ -192,8 +193,19 @@ public class Jackson extends Json {
 
   @Override
   public <T> T parse(byte[] body, Type type) {
+    JavaType javaType = objectMapper.getTypeFactory().constructType(type);
     try {
-      JavaType javaType = objectMapper.getTypeFactory().constructType(type);
+      return objectMapper.readValue(body, javaType);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
+    Type type = tioTypeReference.getType();
+    JavaType javaType = objectMapper.getTypeFactory().constructType(type);
+    try {
       return objectMapper.readValue(body, javaType);
     } catch (Exception e) {
       throw new RuntimeException(e);

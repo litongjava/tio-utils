@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import com.litongjava.model.type.TioTypeReference;
+
 public class JsonUtils {
 
   public static String toJson(Object object) {
@@ -50,4 +52,7 @@ public class JsonUtils {
     return Json.getJson().parse(body, type);
   }
 
+  public static <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
+    return Json.getJson().parse(body, tioTypeReference);
+  }
 }

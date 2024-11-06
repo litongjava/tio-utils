@@ -11,8 +11,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.litongjava.model.http.response.ResponseVo;
+import com.litongjava.tio.utils.json.JsonUtils;
 
 public class Http {
+
+  public static ResponseVo postJson(String url, Map<String, String> params) {
+    String payload = JsonUtils.toJson(params);
+    return postJson(url, payload, null);
+  }
 
   public static ResponseVo postJson(String serverUrl, String payload) {
     return postJson(serverUrl, payload, null);

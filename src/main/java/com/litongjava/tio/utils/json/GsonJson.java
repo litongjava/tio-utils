@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.litongjava.model.type.TioTypeReference;
 
 public class GsonJson extends Json {
 
@@ -90,20 +91,17 @@ public class GsonJson extends Json {
 
   @Override
   public <T> T parse(String body, Type type) {
-    try {
-      return gson.fromJson(body, type);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    return gson.fromJson(body, type);
   }
 
   @Override
   public <T> T parse(byte[] body, Type type) {
-    try {
-      String bodyString = new String(body);
-      return gson.fromJson(bodyString, type);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    String bodyString = new String(body);
+    return gson.fromJson(bodyString, type);
+  }
+
+  @Override
+  public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
+    return gson.fromJson(body, tioTypeReference.getType());
   }
 }
