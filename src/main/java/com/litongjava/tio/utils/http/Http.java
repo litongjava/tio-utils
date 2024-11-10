@@ -1,10 +1,12 @@
 package com.litongjava.tio.utils.http;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -118,25 +120,45 @@ public class Http {
   }
 
   public static ResponseVo get(String serverUrl, Map<String, String> headers) {
+    URL url = null;
     try {
-      URL url = new URL(serverUrl);
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-
-      if (headers != null) {
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-          conn.setRequestProperty(entry.getKey(), entry.getValue());
-        }
-      }
-
-      int responseCode = conn.getResponseCode();
-      String responseBody = new String(readInputStream(conn.getInputStream()), StandardCharsets.UTF_8);
-
-      return responseCode == HttpURLConnection.HTTP_OK ? ResponseVo.ok(responseCode, responseBody) : ResponseVo.fail(responseCode, responseBody);
-
-    } catch (Exception e) {
+      url = new URL(serverUrl);
+    } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+
+    HttpURLConnection conn = null;
+    try {
+      conn = (HttpURLConnection) url.openConnection();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    try {
+      conn.setRequestMethod("GET");
+    } catch (ProtocolException e) {
+      throw new RuntimeException(e);
+    }
+
+    if (headers != null) {
+      for (Map.Entry<String, String> entry : headers.entrySet()) {
+        conn.setRequestProperty(entry.getKey(), entry.getValue());
+      }
+    }
+    int responseCode = 0;
+    try {
+      responseCode = conn.getResponseCode();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    byte[] readInputStream = null;
+    try {
+      readInputStream = readInputStream(conn.getInputStream());
+    } catch (Exception e) {
+      throw new RuntimeException("fetch " + url + ",code:" + responseCode, e);
+    }
+    String responseBody = new String(readInputStream, StandardCharsets.UTF_8);
+    return responseCode == HttpURLConnection.HTTP_OK ? ResponseVo.ok(responseCode, responseBody) : ResponseVo.fail(responseCode, responseBody);
+
   }
 
   private static byte[] readInputStream(InputStream inputStream) throws Exception {
