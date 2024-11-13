@@ -19,6 +19,9 @@ public enum OkHttpClientPool {
   INSTANCE;
 
   static okhttp3.OkHttpClient.Builder builder30Second;
+  static okhttp3.OkHttpClient.Builder builder60Second;
+  static okhttp3.OkHttpClient.Builder builder120Second;
+  static okhttp3.OkHttpClient.Builder builder300Second;
   static okhttp3.OkHttpClient.Builder builder3600Second;
   static {
     builder30Second = new OkHttpClient().newBuilder();
@@ -28,6 +31,30 @@ public enum OkHttpClientPool {
     builder30Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
     // 连接超时
     builder30Second.connectTimeout(30L, TimeUnit.SECONDS).readTimeout(30L, TimeUnit.SECONDS).build();
+
+    builder60Second = new OkHttpClient().newBuilder();
+    // 连接池
+    builder60Second.connectionPool(pool());
+    // 信任连接
+    builder60Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+    // 连接超时
+    builder60Second.connectTimeout(60L, TimeUnit.SECONDS).readTimeout(60L, TimeUnit.SECONDS).build();
+
+    builder120Second = new OkHttpClient().newBuilder();
+    // 连接池
+    builder120Second.connectionPool(pool());
+    // 信任连接
+    builder120Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+    // 连接超时
+    builder120Second.connectTimeout(120L, TimeUnit.SECONDS).readTimeout(120L, TimeUnit.SECONDS).build();
+
+    builder300Second = new OkHttpClient().newBuilder();
+    // 连接池
+    builder300Second.connectionPool(pool());
+    // 信任连接
+    builder300Second.sslSocketFactory(sslSocketFactory(), x509TrustManager());
+    // 连接超时
+    builder300Second.connectTimeout(300L, TimeUnit.SECONDS).readTimeout(300L, TimeUnit.SECONDS).build();
 
     builder3600Second = new OkHttpClient().newBuilder();
     // 连接池
@@ -40,6 +67,18 @@ public enum OkHttpClientPool {
 
   public static OkHttpClient getHttpClient() {
     return builder30Second.build();
+  }
+
+  public static OkHttpClient get60HttpClient() {
+    return builder60Second.build();
+  }
+
+  public static OkHttpClient get120HttpClient() {
+    return builder120Second.build();
+  }
+
+  public static OkHttpClient get300HttpClient() {
+    return builder300Second.build();
   }
 
   public static OkHttpClient get3600HttpClient() {
