@@ -12,8 +12,6 @@ import com.litongjava.tio.utils.cache.CacheFactory;
 import com.litongjava.tio.utils.cache.CacheName;
 import com.litongjava.tio.utils.cache.RemovalListenerWrapper;
 
-import redis.clients.jedis.Jedis;
-
 public enum RedisCacheFactory implements CacheFactory {
   INSTANCE;
 
