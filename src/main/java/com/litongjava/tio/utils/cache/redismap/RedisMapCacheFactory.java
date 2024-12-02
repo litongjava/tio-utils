@@ -11,8 +11,6 @@ import com.litongjava.tio.utils.cache.CacheName;
 import com.litongjava.tio.utils.cache.CacheRemovalListener;
 import com.litongjava.tio.utils.cache.RemovalListenerWrapper;
 
-import redis.clients.jedis.JedisPool;
-
 /**
  * Factory for creating and managing Redis-based caches.
  */
@@ -20,13 +18,8 @@ public enum RedisMapCacheFactory implements CacheFactory {
   INSTANCE;
 
   private final Map<String, RedisMapCache> map = new ConcurrentHashMap<>();
-  private JedisPool jedisPool;
 
   private RedisMapCacheFactory() {
-  }
-
-  public void setJedisPool(JedisPool jedisPool) {
-    this.jedisPool = jedisPool;
   }
 
   @Override
@@ -43,7 +36,7 @@ public enum RedisMapCacheFactory implements CacheFactory {
     }
     CacheRemovalListener<String, Serializable> thatListener = listener;
     Function<? super String, ? extends RedisMapCache> mappingFunction = k -> {
-      RedisMapCache redisMapCache = new RedisMapCache(k, timeToLiveSeconds, timeToIdleSeconds, thatListener, jedisPool);
+      RedisMapCache redisMapCache = new RedisMapCache(k, timeToLiveSeconds, timeToIdleSeconds, thatListener);
       return redisMapCache;
     };
 

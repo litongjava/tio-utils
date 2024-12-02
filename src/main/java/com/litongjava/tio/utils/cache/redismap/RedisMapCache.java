@@ -17,22 +17,19 @@ import com.litongjava.tio.utils.cache.CacheRemovalListener;
 import com.litongjava.tio.utils.cache.RemovalCause;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.params.SetParams;
 
 public class RedisMapCache extends AbsCache {
   private CacheRemovalListener<String, Serializable> removalListener;
-  private final JedisPool jedisPool;
   private final String namespace;
   private static final String KEYSPACE_EXPIRED_CHANNEL = "__keyevent@0__:expired"; // Adjust the DB index if needed
 
   public RedisMapCache(String cacheName, Long timeToLiveSeconds, Long timeToIdleSeconds,
       //
-      CacheRemovalListener<String, Serializable> removalListener, JedisPool jedisPool) {
+      CacheRemovalListener<String, Serializable> removalListener) {
     super(cacheName, timeToLiveSeconds, timeToIdleSeconds);
     this.removalListener = removalListener;
-    this.jedisPool = jedisPool;
     this.namespace = "tio_cache:" + cacheName + ":";
     if (removalListener != null) {
       // Start a listener for key expirations
@@ -46,7 +43,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public void clear() {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       Set<String> keys = jedis.keys(namespace + "*");
       if (!keys.isEmpty()) {
         jedis.del(keys.toArray(new String[0]));
@@ -56,7 +53,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public Serializable _get(String key) {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       String redisKey = getRedisKey(key);
       byte[] data = jedis.get(redisKey.getBytes());
       if (data != null) {
@@ -73,7 +70,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public Iterable<String> keys() {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       Set<String> keys = jedis.keys(namespace + "*");
       // Remove namespace prefix
       return keys.stream().map(k -> k.substring(namespace.length())).collect(Collectors.toList());
@@ -82,7 +79,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public Collection<String> keysCollection() {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       Set<String> keys = jedis.keys(namespace + "*");
       // Remove namespace prefix
       return keys.stream().map(k -> k.substring(namespace.length())).collect(Collectors.toList());
@@ -99,7 +96,7 @@ public class RedisMapCache extends AbsCache {
   }
 
   public void put(String key, Serializable value, Long ttlSeconds) {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       String redisKey = getRedisKey(key);
       byte[] serializedValue = serialize(value);
       SetParams params = new SetParams();
@@ -121,7 +118,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public void remove(String key) {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       String redisKey = getRedisKey(key);
       byte[] data = jedis.get(redisKey.getBytes());
       if (data != null) {
@@ -142,7 +139,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public long ttl(String key) {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       String redisKey = getRedisKey(key);
       Long ttl = jedis.ttl(redisKey);
       return ttl != null && ttl > 0 ? ttl : -1;
@@ -152,7 +149,7 @@ public class RedisMapCache extends AbsCache {
   @Override
   public Map<String, Serializable> asMap() {
     // Not efficient for large datasets. Use with caution.
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       Set<String> keys = jedis.keys(namespace + "*");
       Map<String, Serializable> map = new HashMap<>();
       for (String redisKey : keys) {
@@ -169,7 +166,7 @@ public class RedisMapCache extends AbsCache {
 
   @Override
   public long size() {
-    try (Jedis jedis = jedisPool.getResource()) {
+    try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
       Set<String> keys = jedis.keys(namespace + "*");
       return keys.size();
     }
@@ -197,7 +194,7 @@ public class RedisMapCache extends AbsCache {
   private class ExpiredKeyListener implements Runnable {
     @Override
     public void run() {
-      try (Jedis jedis = jedisPool.getResource()) {
+      try (Jedis jedis = JedisPoolCan.jedisPool.getResource()) {
         jedis.psubscribe(new JedisPubSub() {
           @Override
           public void onPMessage(String pattern, String channel, String message) {
