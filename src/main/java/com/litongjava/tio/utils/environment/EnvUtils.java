@@ -3,6 +3,7 @@ package com.litongjava.tio.utils.environment;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.litongjava.constants.ServerConfigKeys;
 import com.litongjava.tio.utils.hutool.ResourceUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -120,7 +121,7 @@ public class EnvUtils {
   public static String getEnv() {
     return getStr(envKey);
   }
-  
+
   public static String env() {
     return getStr(envKey);
   }
@@ -167,8 +168,9 @@ public class EnvUtils {
     if (ResourceUtil.getResource(".env") != null) {
       PropUtils.append(".env");
     }
-    
+
     log.info("app.env:{}", EnvUtils.env());
+    log.info("app.name:{}", EnvUtils.get(ServerConfigKeys.APP_NAME));
 
   }
 }
