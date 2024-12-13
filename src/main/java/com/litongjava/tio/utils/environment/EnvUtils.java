@@ -81,7 +81,7 @@ public class EnvUtils {
   public static String get(String key) {
     return getStr(key);
   }
-  
+
   /**
    * 
    * @param key
@@ -102,7 +102,36 @@ public class EnvUtils {
    * @param key
    * @return
    */
-  public static Integer getInt(String key) {
+  public static int getInt(String key) {
+    String value = getStr(key);
+    if (value != null) {
+      return Integer.valueOf(value);
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * 
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public static int getInt(String key, int defaultValue) {
+    String value = get(key);
+    if (value != null) {
+      return Integer.valueOf(value);
+    } else {
+      return defaultValue;
+    }
+  }
+
+  /**
+   * 
+   * @param key
+   * @return
+   */
+  public static Integer getInteger(String key) {
     String value = getStr(key);
     if (value != null) {
       return Integer.valueOf(value);
@@ -117,7 +146,7 @@ public class EnvUtils {
    * @param defaultValue
    * @return
    */
-  public static Integer getInt(String key, Integer defaultValue) {
+  public static Integer getInteger(String key, Integer defaultValue) {
     String value = get(key);
     if (value != null) {
       return Integer.valueOf(value);
@@ -139,7 +168,7 @@ public class EnvUtils {
       return null;
     }
   }
-  
+
   /**
    * 
    * @param key
@@ -154,7 +183,6 @@ public class EnvUtils {
       return defaultValue;
     }
   }
-
 
   public static boolean getBoolean(String key) {
     return Boolean.parseBoolean(get(key));
