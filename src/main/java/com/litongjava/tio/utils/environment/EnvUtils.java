@@ -73,29 +73,21 @@ public class EnvUtils {
     return value;
   }
 
+  /**
+   * 
+   * @param key
+   * @return
+   */
   public static String get(String key) {
     return getStr(key);
   }
-
-  public static Integer getInt(String key) {
-    String value = getStr(key);
-    if (value != null) {
-      return Integer.valueOf(value);
-    } else {
-      return null;
-    }
-
-  }
-
-  public static int getInt(String key, int defaultValue) {
-    String value = get(key);
-    if (value != null) {
-      return Integer.parseInt(value);
-    } else {
-      return defaultValue;
-    }
-  }
-
+  
+  /**
+   * 
+   * @param key
+   * @param defaultValue
+   * @return
+   */
   public static String get(String key, String defaultValue) {
     String value = get(key);
     if (value != null) {
@@ -104,6 +96,65 @@ public class EnvUtils {
       return defaultValue;
     }
   }
+
+  /**
+   * 
+   * @param key
+   * @return
+   */
+  public static Integer getInt(String key) {
+    String value = getStr(key);
+    if (value != null) {
+      return Integer.valueOf(value);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * 
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public static Integer getInt(String key, Integer defaultValue) {
+    String value = get(key);
+    if (value != null) {
+      return Integer.valueOf(value);
+    } else {
+      return defaultValue;
+    }
+  }
+
+  /**
+   * 
+   * @param key
+   * @return
+   */
+  public static Long getLong(String key) {
+    String value = getStr(key);
+    if (value != null) {
+      return Long.valueOf(value);
+    } else {
+      return null;
+    }
+  }
+  
+  /**
+   * 
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public static Long getInt(String key, Long defaultValue) {
+    String value = get(key);
+    if (value != null) {
+      return Long.valueOf(value);
+    } else {
+      return defaultValue;
+    }
+  }
+
 
   public static boolean getBoolean(String key) {
     return Boolean.parseBoolean(get(key));
