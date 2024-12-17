@@ -175,7 +175,7 @@ public class EnvUtils {
    * @param defaultValue
    * @return
    */
-  public static Long getInt(String key, Long defaultValue) {
+  public static Long getLong(String key, Long defaultValue) {
     String value = get(key);
     if (value != null) {
       return Long.valueOf(value);
