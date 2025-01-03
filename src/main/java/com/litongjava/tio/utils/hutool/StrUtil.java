@@ -1446,4 +1446,13 @@ public class StrUtil {
   public static boolean notEmpty(String str) {
     return str != null && !str.isEmpty();
   }
+
+  public static String getOrDefault(String str) {
+    return str != null ? str : "";
+
+  }
+
+  public static String getOrElse(String str, String defaultValue) {
+    return str != null ? str : defaultValue;
+  }
 }

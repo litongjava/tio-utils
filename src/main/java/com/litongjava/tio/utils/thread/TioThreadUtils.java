@@ -42,6 +42,10 @@ public class TioThreadUtils {
     return fixedThreadPool.submit(task);
   }
 
+  public static void execute(Runnable runable) {
+    fixedThreadPool.execute(runable);
+  }
+
   public static void start() {
     if (fixedThreadPool == null) {
       fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4,
