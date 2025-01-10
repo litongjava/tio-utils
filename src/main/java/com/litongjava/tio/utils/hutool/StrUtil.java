@@ -1447,12 +1447,12 @@ public class StrUtil {
     return str != null && !str.isEmpty();
   }
 
-  public static String getOrDefault(String str) {
+  public static String ifNull(String str) {
     return str != null ? str : "";
 
   }
 
-  public static String getOrElse(String str, String defaultValue) {
+  public static String ifNull(String str, String defaultValue) {
     return str != null ? str : defaultValue;
   }
 }
