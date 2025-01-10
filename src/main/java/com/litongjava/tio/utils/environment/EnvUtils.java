@@ -209,12 +209,36 @@ public class EnvUtils {
     return "dev".equals(getStr(envKey));
   }
 
+  public static boolean isLocal() {
+    return "local".equals(getStr(envKey));
+  }
+
   public static boolean isTest() {
     return "test".equals(getStr(envKey));
   }
 
   public static boolean isProd() {
     return "prod".equals(getStr(envKey));
+  }
+
+  public static void use(String envName) {
+    set(envKey, envName);
+  }
+
+  public static void useDev() {
+    set(envKey, "dev");
+  }
+
+  public static void useLocal() {
+    set(envKey, "local");
+  }
+
+  public static void useTest() {
+    set(envKey, "test");
+  }
+
+  public static void useProd() {
+    set(envKey, "prod");
   }
 
   public static void load(String fileName) {
@@ -252,4 +276,5 @@ public class EnvUtils {
     log.info("app.name:{}", EnvUtils.get(ServerConfigKeys.APP_NAME));
 
   }
+
 }
