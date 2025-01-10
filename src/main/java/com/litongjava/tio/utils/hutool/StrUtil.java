@@ -1455,4 +1455,22 @@ public class StrUtil {
   public static String ifNull(String str, String defaultValue) {
     return str != null ? str : defaultValue;
   }
+
+  public static boolean in(String str, String... array) {
+    for (int i = 0; i < array.length; i++) {
+      if (array[i].equals(str)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean notIn(String str, String... array) {
+    for (int i = 0; i < array.length; i++) {
+      if (array[i].equals(str)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
