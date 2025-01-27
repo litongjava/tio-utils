@@ -51,15 +51,33 @@ public class MapWithLockPropSupport implements IPropSupport {
     return props.getObj().get(key);
   }
 
-  // private void initProps() {
-  // if (props == null) {
-  // synchronized (this) {
-  // if (props == null) {
-  // props = new MapWithLock<>(new HashMap<String, Object>(10));
-  // }
-  // }
-  // }
-  // }
+  @Override
+  public String getString(String key) {
+    Object value = props.getObj().get(key);
+    if (value == null) {
+      return null;
+    }
+    return (String) value;
+
+  }
+
+  @Override
+  public Long getLong(String key) {
+    Object value = props.getObj().get(key);
+    if (value == null) {
+      return null;
+    }
+    return (Long) value;
+  }
+
+  @Override
+  public Integer getInteger(String key) {
+    Object value = props.getObj().get(key);
+    if (value == null) {
+      return null;
+    }
+    return (Integer) value;
+  }
 
   /**
    * @param key
@@ -97,4 +115,5 @@ public class MapWithLockPropSupport implements IPropSupport {
   public void set(String key, Object value) {
     props.put(key, value);
   }
+
 }

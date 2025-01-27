@@ -82,6 +82,10 @@ public class EnvUtils {
     return getStr(key);
   }
 
+  
+  public static String getStr(String key, String defaultValue) {
+    return get(key,defaultValue);
+  }
   /**
    * 
    * @param key
