@@ -15,4 +15,9 @@ public class GsonFactory implements IJsonFactory {
   public Json getJson() {
     return new GsonJson();
   }
+
+  @Override
+  public Json getSkipNullJson() {
+    return null;
+  }
 }

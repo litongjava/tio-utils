@@ -14,21 +14,35 @@ import com.litongjava.model.type.TioTypeReference;
 public class MixedJson extends Json {
 
   private TioJson tioJson;
+  private TioJson SkipNullTioJson;
   private FastJson2 fastJson;
+  private boolean skipNullValueField;
+
+  public MixedJson() {
+
+  }
+
+  public MixedJson(boolean skipNullValueField) {
+    this.skipNullValueField = skipNullValueField;
+  }
 
   public static MixedJson getJson() {
     return new MixedJson();
   }
 
   public String toJson(Object object) {
-    return getJFinalJson().toJson(object);
+    if(skipNullValueField) {
+      return getSkipNullTioJson().toJson(object);
+    }else {
+      return getTioJson().toJson(object);
+    }
   }
 
   public <T> T parse(String jsonString, Class<T> type) {
     return getFastJson().parse(jsonString, type);
   }
 
-  private TioJson getJFinalJson() {
+  private TioJson getTioJson() {
     if (tioJson == null) {
       tioJson = TioJson.getJson();
     }
@@ -36,6 +50,16 @@ public class MixedJson extends Json {
       tioJson.setDatePattern(datePattern);
     }
     return tioJson;
+  }
+
+  public TioJson getSkipNullTioJson() {
+    if (SkipNullTioJson == null) {
+      SkipNullTioJson = TioJson.getSkipNullTioJson();
+    }
+    if (datePattern != null) {
+      SkipNullTioJson.setDatePattern(datePattern);
+    }
+    return SkipNullTioJson;
   }
 
   private FastJson2 getFastJson() {

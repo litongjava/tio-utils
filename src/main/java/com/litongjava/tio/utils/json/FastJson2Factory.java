@@ -20,4 +20,9 @@ public class FastJson2Factory implements IJsonFactory {
     return new FastJson2();
   }
 
+  @Override
+  public Json getSkipNullJson() {
+    return null;
+  }
+
 }

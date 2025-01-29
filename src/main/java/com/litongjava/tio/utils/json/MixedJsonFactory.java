@@ -23,4 +23,9 @@ public class MixedJsonFactory implements IJsonFactory {
   public Json getJson() {
     return new MixedJson();
   }
+
+  @Override
+  public Json getSkipNullJson() {
+    return new MixedJson(true);
+  }
 }

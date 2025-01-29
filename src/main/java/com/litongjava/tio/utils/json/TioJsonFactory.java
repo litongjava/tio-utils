@@ -14,4 +14,9 @@ public class TioJsonFactory implements IJsonFactory {
   public Json getJson() {
     return new TioJson();
   }
+
+  @Override
+  public Json getSkipNullJson() {
+    return new TioJson(false);
+  }
 }

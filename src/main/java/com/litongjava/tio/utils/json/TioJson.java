@@ -26,8 +26,22 @@ public class TioJson extends Json {
 
   protected int convertDepth = defaultConvertDepth;
 
+  // 是否跳过 null 值的字段，不对其进行转换
+  protected boolean skipNullValueField;
+
+  public TioJson() {
+  }
+
+  public TioJson(boolean skipNullValueField) {
+    this.skipNullValueField = skipNullValueField;
+  }
+
   public static TioJson getJson() {
     return new TioJson();
+  }
+
+  public static TioJson getSkipNullTioJson() {
+    return new TioJson(true);
   }
 
   @Override
@@ -48,7 +62,7 @@ public class TioJson extends Json {
       // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
       String dp = datePattern != null ? datePattern : getDefaultDatePattern();
       ret.init(dp, getTimestampPattern(), getLongToString());
-      TioToJson toJson = kit.getToJson(object);
+      TioToJson toJson = kit.getToJson(object, skipNullValueField);
       toJson.toJson(object, convertDepth, ret);
       return ret.toBytes();
     } finally {
@@ -74,7 +88,9 @@ public class TioJson extends Json {
       // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
       String dp = datePattern != null ? datePattern : getDefaultDatePattern();
       ret.init(dp, getTimestampPattern(), getLongToString());
-      TioToJson toJson = kit.getToJson(object);
+
+      TioToJson toJson = kit.getToJson(object, skipNullValueField);
+
       toJson.toJson(object, convertDepth, ret);
       return ret.toString();
     } finally {
@@ -201,8 +217,8 @@ public class TioJson extends Json {
    * 是否跳过 null 值的字段，配置为 true 值将跳过，默认值为 false 本配置作用于 Model、Record、Map、java
    * bean(getter 方法对应的属性) 这四种类型
    */
-  public static void setSkipNullValueField(boolean skipNullValueField) {
-    TioJsonKit.setSkipNullValueField(skipNullValueField);
+  public void setSkipNullValueField(boolean skipNullValueField) {
+    this.skipNullValueField = skipNullValueField;
   }
 
   public static void setLongToString(boolean b) {
@@ -266,4 +282,5 @@ public class TioJson extends Json {
   public <T> T parse(String body, TioTypeReference<T> tioTypeReference) {
     throw new RuntimeException(notSupportJsonToObjectMesage);
   }
+
 }

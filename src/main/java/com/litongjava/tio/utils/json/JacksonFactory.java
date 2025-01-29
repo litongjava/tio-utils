@@ -14,4 +14,9 @@ public class JacksonFactory implements IJsonFactory {
   public Json getJson() {
     return new Jackson();
   }
+
+  @Override
+  public Json getSkipNullJson() {
+    return null;
+  }
 }

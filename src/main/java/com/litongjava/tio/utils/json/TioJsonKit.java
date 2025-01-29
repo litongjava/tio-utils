@@ -40,9 +40,6 @@ public class TioJsonKit {
   // 将 Model 当成 Bean 只对 getter 方法进行转换
   protected static boolean treatModelAsBean = false;
 
-  // 是否跳过 null 值的字段，不对其进行转换
-  protected static boolean skipNullValueField = false;
-
   // long to string
   protected static boolean longToString = true;
 
@@ -51,7 +48,10 @@ public class TioJsonKit {
 
   protected static Function<Object, TioToJson<?>> toJsonFactory = null;
 
-  public TioToJson<?> getToJson(Object object) {
+  protected boolean skipNullValueField;
+
+  public TioToJson getToJson(Object object, boolean skipNullValueField) {
+    this.skipNullValueField = skipNullValueField;
     TioToJson<?> ret = cache.get(object.getClass());
     if (ret == null) {
       ret = createToJson(object);
@@ -149,23 +149,23 @@ public class TioJsonKit {
     }
 
     if (value instanceof Collection) {
-      return new CollectionToJson();
+      return new CollectionToJson(skipNullValueField);
     }
 
     if (value.getClass().isArray()) {
-      return new ArrayToJson();
+      return new ArrayToJson(skipNullValueField);
     }
 
     if (value instanceof Enumeration) {
-      return new EnumerationToJson();
+      return new EnumerationToJson(skipNullValueField);
     }
 
     if (value instanceof Iterator) {
-      return new IteratorToJson();
+      return new IteratorToJson(skipNullValueField);
     }
 
     if (value instanceof Iterable) {
-      return new IterableToJson();
+      return new IterableToJson(skipNullValueField);
     }
 
     if (value instanceof UUID) {
@@ -205,6 +205,7 @@ public class TioJsonKit {
     public void toJson(Integer value, int depth, JsonResult ret) {
       ret.addInt(value);
     }
+
   }
 
   static class LongToJson implements TioToJson<Long> {
@@ -294,7 +295,7 @@ public class TioJsonKit {
     }
   }
 
-  public static void modelAndRecordToJson(Map<String, Object> map, int depth, JsonResult ret) {
+  public void modelAndRecordToJson(Map<String, Object> map, int depth, JsonResult ret) {
     Iterator iter = map.entrySet().iterator();
     boolean first = true;
     ret.addChar('{');
@@ -321,7 +322,7 @@ public class TioJsonKit {
       ret.addChar(':');
 
       if (value != null) {
-        TioToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value, skipNullValueField);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -331,16 +332,26 @@ public class TioJsonKit {
   }
 
   static class MapToJson implements TioToJson<Map<?, ?>> {
+    boolean skipNullValueField;
+
+    public MapToJson() {
+
+    }
+
+    public MapToJson(boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Map<?, ?> map, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
-      mapToJson(map, depth, ret);
+      mapToJson(map, depth, ret, skipNullValueField);
     }
   }
 
-  public static void mapToJson(Map<?, ?> map, int depth, JsonResult ret) {
+  public static void mapToJson(Map<?, ?> map, int depth, JsonResult ret, boolean skipNullValueField) {
     Iterator iter = map.entrySet().iterator();
     boolean first = true;
     ret.addChar('{');
@@ -363,7 +374,7 @@ public class TioJsonKit {
       ret.addChar(':');
 
       if (value != null) {
-        TioToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value, skipNullValueField);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -373,22 +384,34 @@ public class TioJsonKit {
   }
 
   static class CollectionToJson implements TioToJson<Collection> {
+    boolean skipNullValueField;
+
+    public CollectionToJson(Boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Collection c, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
-      iteratorToJson(c.iterator(), depth, ret);
+      iteratorToJson(c.iterator(), depth, ret, skipNullValueField);
     }
   }
 
   static class ArrayToJson implements TioToJson<Object> {
+    boolean skipNullValueField;
+
+    public ArrayToJson(Boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Object object, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
-      iteratorToJson(new ArrayIterator(object), depth, ret);
+      iteratorToJson(new ArrayIterator(object), depth, ret, skipNullValueField);
     }
   }
 
@@ -413,27 +436,41 @@ public class TioJsonKit {
   }
 
   static class EnumerationToJson implements TioToJson<Enumeration> {
+
+    boolean skipNullValueField;
+
+    public EnumerationToJson(Boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Enumeration en, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
       ArrayList list = Collections.list(en);
-      iteratorToJson(list.iterator(), depth, ret);
+      iteratorToJson(list.iterator(), depth, ret, skipNullValueField);
     }
   }
 
   static class IteratorToJson implements TioToJson<Iterator> {
+
+    boolean skipNullValueField;
+
+    public IteratorToJson(Boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Iterator it, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
-      iteratorToJson(it, depth, ret);
+      iteratorToJson(it, depth, ret, skipNullValueField);
     }
   }
 
-  public static void iteratorToJson(Iterator it, int depth, JsonResult ret) {
+  public static void iteratorToJson(Iterator it, int depth, JsonResult ret, boolean skipNullValueField) {
     boolean first = true;
     ret.addChar('[');
     while (it.hasNext()) {
@@ -445,7 +482,7 @@ public class TioJsonKit {
 
       Object value = it.next();
       if (value != null) {
-        TioToJson tj = me.getToJson(value);
+        TioToJson tj = me.getToJson(value, skipNullValueField);
         tj.toJson(value, depth, ret);
       } else {
         ret.addNull();
@@ -455,12 +492,18 @@ public class TioJsonKit {
   }
 
   static class IterableToJson implements TioToJson<Iterable> {
+    boolean skipNullValueField;
+
+    public IterableToJson(Boolean skipNullValueField) {
+      this.skipNullValueField = skipNullValueField;
+    }
+
     public void toJson(Iterable iterable, int depth, JsonResult ret) {
       if (checkDepth(depth--, ret)) {
         return;
       }
 
-      iteratorToJson(iterable.iterator(), depth, ret);
+      iteratorToJson(iterable.iterator(), depth, ret, skipNullValueField);
     }
   }
 
@@ -468,14 +511,16 @@ public class TioJsonKit {
     private static final Object[] NULL_ARGS = new Object[0];
     private String[] fields;
     private Method[] methods;
+    private boolean skipNullValueField;
 
-    public BeanToJson(String[] fields, Method[] methods) {
+    public BeanToJson(String[] fields, Method[] methods, boolean skipNullValueField) {
       if (fields.length != methods.length) {
         throw new IllegalArgumentException("fields 与 methods 长度必须相同");
       }
 
       this.fields = fields;
       this.methods = methods;
+      this.skipNullValueField = skipNullValueField;
     }
 
     public void toJson(Object bean, int depth, JsonResult ret) {
@@ -504,7 +549,7 @@ public class TioJsonKit {
           ret.addChar(':');
 
           if (value != null) {
-            TioToJson tj = me.getToJson(value);
+            TioToJson tj = me.getToJson(value, skipNullValueField);
             tj.toJson(value, depth, ret);
           } else {
             ret.addNull();
@@ -520,7 +565,7 @@ public class TioJsonKit {
   /**
    * 存在 getter/is 方法返回 BeanToJson，否则返回 null
    */
-  public static BeanToJson buildBeanToJson(Object bean) {
+  public BeanToJson buildBeanToJson(Object bean) {
     List<String> fields = new ArrayList<>();
     List<Method> methods = new ArrayList<>();
 
@@ -550,7 +595,7 @@ public class TioJsonKit {
 
     int size = fields.size();
     if (size > 0) {
-      return new BeanToJson(fields.toArray(new String[size]), methods.toArray(new Method[size]));
+      return new BeanToJson(fields.toArray(new String[size]), methods.toArray(new Method[size]), skipNullValueField);
     } else {
       return null;
     }
@@ -681,10 +726,6 @@ public class TioJsonKit {
     TioJsonKit.toJsonFactory = toJsonFactory;
   }
 
-  public static void setSkipNullValueField(boolean skipNullValueField) {
-    TioJsonKit.skipNullValueField = skipNullValueField;
-  }
-
   public static void setLongToString(boolean b) {
     TioJsonKit.longToString = b;
 
@@ -693,4 +734,5 @@ public class TioJsonKit {
   public static boolean getLongToString() {
     return TioJsonKit.longToString;
   }
+
 }

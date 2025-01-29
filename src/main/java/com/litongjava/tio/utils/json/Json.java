@@ -58,6 +58,10 @@ public abstract class Json {
     return defaultJsonFactory.getJson();
   }
 
+  public static Json getSkipNullJson() {
+    return defaultJsonFactory.getSkipNullJson();
+  }
+
   public static void setTimestampPattern(String timestampPattern) {
     Json.timestampPattern = timestampPattern;
   }
