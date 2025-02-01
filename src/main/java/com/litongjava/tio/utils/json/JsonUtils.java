@@ -12,6 +12,10 @@ public class JsonUtils {
     return Json.getJson().toJson(object);
   }
 
+  public static String toSkipNullJson(Object object) {
+    return Json.getSkipNullJson().toJson(object);
+  }
+
   public static byte[] toJsonBytes(Object object) {
     return Json.getJson().toJsonBytes(object);
   }
