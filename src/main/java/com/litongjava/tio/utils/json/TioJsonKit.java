@@ -34,6 +34,8 @@ public class TioJsonKit {
   // 缓存 ToJson 对象
   protected static SyncWriteMap<Class<?>, TioToJson<?>> cache = new SyncWriteMap<>(512, 0.25F);
 
+  protected static SyncWriteMap<Class<?>, TioToJson<?>> cacheSkipNull = new SyncWriteMap<>(512, 0.25F);
+
   // StringBuilder 最大缓冲区大小
   protected static int maxBufferSize = 1024 * 512;
 
@@ -52,11 +54,22 @@ public class TioJsonKit {
 
   public TioToJson getToJson(Object object, boolean skipNullValueField) {
     this.skipNullValueField = skipNullValueField;
-    TioToJson<?> ret = cache.get(object.getClass());
-    if (ret == null) {
-      ret = createToJson(object);
-      cache.putIfAbsent(object.getClass(), ret);
+    TioToJson<?> ret = null;
+    if (skipNullValueField) {
+      ret = cacheSkipNull.get(object.getClass());
+      if (ret == null) {
+        ret = createToJson(object, skipNullValueField);
+        cacheSkipNull.putIfAbsent(object.getClass(), ret);
+      }
+
+    } else {
+      ret = cache.get(object.getClass());
+      if (ret == null) {
+        ret = createToJson(object, false);
+        cache.putIfAbsent(object.getClass(), ret);
+      }
     }
+
     return ret;
   }
 
@@ -80,7 +93,7 @@ public class TioJsonKit {
     cache.put(type, toJson);
   }
 
-  protected TioToJson<?> createToJson(Object value) {
+  protected TioToJson<?> createToJson(Object value, boolean skipNullValueField) {
     // 优先使用 toJsonFactory 创建 ToJson 实例，方便用户优先接管 ToJson 转换器的创建
     if (toJsonFactory != null) {
       TioToJson<?> tj = toJsonFactory.apply(value);
@@ -145,7 +158,7 @@ public class TioJsonKit {
     }
 
     if (value instanceof Map) {
-      return new MapToJson();
+      return new MapToJson(skipNullValueField);
     }
 
     if (value instanceof Collection) {
@@ -172,7 +185,7 @@ public class TioJsonKit {
       return new UUIDToJson();
     }
 
-    BeanToJson beanToJson = buildBeanToJson(value);
+    BeanToJson beanToJson = buildBeanToJson(value, skipNullValueField);
     if (beanToJson != null) {
       return beanToJson;
     }
@@ -565,7 +578,7 @@ public class TioJsonKit {
   /**
    * 存在 getter/is 方法返回 BeanToJson，否则返回 null
    */
-  public BeanToJson buildBeanToJson(Object bean) {
+  public BeanToJson buildBeanToJson(Object bean,boolean skipNullValueField) {
     List<String> fields = new ArrayList<>();
     List<Method> methods = new ArrayList<>();
 
