@@ -17,9 +17,9 @@ public class NotifactionWarmModel {
   private String warningName;
   private String level;
   private String deviceName;
-  private String requestId;
   private String userIp;
   private String userId;
+  private String requestId;
   private String host;
   private String requestLine;
   private String requestBody;
