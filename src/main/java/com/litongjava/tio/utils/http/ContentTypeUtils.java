@@ -1,6 +1,5 @@
 package com.litongjava.tio.utils.http;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +81,6 @@ public class ContentTypeUtils {
     map.put("drw", "application/x-drw");
     map.put("dtd", "text/xml");
     map.put("dwf", "Model/vnd.dwf");
-    map.put("dwf", "application/x-dwf");
     map.put("dwg", "application/x-dwg");
     map.put("dxb", "application/x-dxb");
     map.put("dxf", "application/x-dxf");
@@ -92,7 +90,6 @@ public class ContentTypeUtils {
     map.put("ent", "text/xml");
     map.put("epi", "application/x-epi");
     map.put("eps", "application/x-ps");
-    map.put("eps", "application/postscript");
     map.put("etd", "application/x-ebx");
     map.put("exe", "application/x-msdownload");
     map.put("fax", "image/fax");
@@ -119,7 +116,6 @@ public class ContentTypeUtils {
     map.put("htx", "text/html");
     map.put("icb", "application/x-icb");
     map.put("ico", "image/x-icon");
-    map.put("ico", "application/x-ico");
     map.put("iff", "application/x-iff");
     map.put("ig4", "application/x-g4");
     map.put("igs", "application/x-igs");
@@ -131,10 +127,8 @@ public class ContentTypeUtils {
     map.put("java", "java/*");
     map.put("jfif", "image/jpeg");
     map.put("jpe", "image/jpeg");
-    map.put("jpe", "application/x-jpe");
     map.put("jpeg", "image/jpeg");
     map.put("jpg", "image/jpeg");
-    map.put("jpg", "application/x-jpg");
     map.put("js", "application/x-javascript");
     map.put("jsp", "text/html");
     map.put("la1", "audio/x-liquid-file");
@@ -153,7 +147,6 @@ public class ContentTypeUtils {
     map.put("man", "application/x-troff-man");
     map.put("math", "text/xml");
     map.put("mdb", "application/msaccess");
-    map.put("mdb", "application/x-mdb");
     map.put("mfp", "application/x-shockwave-flash");
     map.put("mht", "message/rfc822");
     map.put("mhtml", "message/rfc822");
@@ -203,7 +196,6 @@ public class ContentTypeUtils {
     map.put("pcl", "application/x-pcl");
     map.put("pcx", "application/x-pcx");
     map.put("pdf", "application/pdf");
-    map.put("pdf", "application/pdf");
     map.put("pdx", "application/vnd.adobe.pdx");
     map.put("pfx", "application/x-pkcs12");
     map.put("pgl", "application/x-pgl");
@@ -219,13 +211,11 @@ public class ContentTypeUtils {
     map.put("ppm", "application/x-ppm");
     map.put("pps", "application/vnd.ms-powerpoint");
     map.put("ppt", "application/vnd.ms-powerpoint");
-    map.put("ppt", "application/x-ppt");
     map.put("pr", "application/x-pr");
     map.put("prf", "application/pics-rules");
     map.put("prn", "application/x-prn");
     map.put("prt", "application/x-prt");
     map.put("ps", "application/x-ps");
-    map.put("ps", "application/postscript");
     map.put("ptn", "application/x-ptn");
     map.put("pwz", "application/vnd.ms-powerpoint");
     map.put("r3t", "text/vnd.rn-realtext3d");
@@ -286,7 +276,6 @@ public class ContentTypeUtils {
     map.put("tg4", "application/x-tg4");
     map.put("tga", "application/x-tga");
     map.put("tif", "image/tiff");
-    map.put("tif", "application/x-tif");
     map.put("tiff", "image/tiff");
     map.put("tld", "text/xml");
     map.put("top", "drawing/x-top");
@@ -304,7 +293,6 @@ public class ContentTypeUtils {
     map.put("vsd", "application/x-vsd");
     map.put("vss", "application/vnd.visio");
     map.put("vst", "application/vnd.visio");
-    map.put("vst", "application/x-vst");
     map.put("vsw", "application/vnd.visio");
     map.put("vsx", "application/vnd.visio");
     map.put("vtx", "application/vnd.visio");
@@ -347,7 +335,6 @@ public class ContentTypeUtils {
     map.put("xfdf", "application/vnd.adobe.xfdf");
     map.put("xhtml", "text/html");
     map.put("xls", "application/vnd.ms-excel");
-    map.put("xls", "application/x-xls");
     map.put("xlw", "application/x-xlw");
     map.put("xml", "text/xml");
     map.put("xpl", "audio/scpls");
