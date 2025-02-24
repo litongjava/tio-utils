@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class NotifactionWarmModel {
   private Date time;
   private String appEnv;
-
   private String appGroupName;
   private String appName;
   private String warningName;
