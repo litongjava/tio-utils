@@ -191,7 +191,6 @@ public class HttpUtils {
     return post(url, null);
   }
 
-  
   public static ResponseVo call(Request request) {
     Call call = OkHttpClientPool.getHttpClient().newCall(request);
     try (Response response = call.execute()) {
@@ -205,6 +204,40 @@ public class HttpUtils {
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public static ResponseVo get(String url, String key) {
+    OkHttpClient client = OkHttpClientPool.get60HttpClient();
+    Request request = new Request.Builder()
+        //
+        .get().url(url)
+        //
+        .addHeader("Authorization", "Bearer " + key).build();
+    try (Response response = client.newCall(request).execute()) {
+      int code = response.code();
+      String string = response.body().string();
+      return new ResponseVo(true, code, string);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + url, e);
+    }
+  }
+
+  public static ResponseVo postJson(String url, String key, String payload) {
+    OkHttpClient client = OkHttpClientPool.get60HttpClient();
+    MediaType mediaType = MediaType.parse("application/json");
+    RequestBody body = RequestBody.create(payload, mediaType);
+    Request request = new Request.Builder()
+        //
+        .url(url).post(body)
+        //
+        .addHeader("Authorization", "Bearer " + key).build();
+    try (Response response = client.newCall(request).execute()) {
+      int code = response.code();
+      String string = response.body().string();
+      return new ResponseVo(true, code, string);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + url, e);
     }
   }
 }
