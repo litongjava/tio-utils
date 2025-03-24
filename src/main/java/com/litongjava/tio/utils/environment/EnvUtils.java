@@ -261,24 +261,32 @@ public class EnvUtils {
   public static void load() {
     String env = get("app.env");
     if (ResourceUtil.getResource(defaultFilename) != null) {
+      // 主文件会自动加载从文件
       PropUtils.use(defaultFilename, env);
+      log.info("load:{}", defaultFilename);
     } else {
+      //直接加载从文件
       if (env != null) {
         String fileName = "app-" + env + ".properties";
+        log.info("load:{}", fileName);
         PropUtils.use(fileName);
       } else {
         // crate file
         PropUtils.use(defaultFilename);
+        log.info("load:{}", defaultFilename);
 
       }
     }
 
     if (ResourceUtil.getResource(".env") != null) {
+      log.info("load from classpath:{}", ".env");
       PropUtils.append(".env");
     }
+
     File file = new File(".env");
     if (file.exists()) {
       PropUtils.append(file);
+      log.info("load from path:{}", ".env");
     }
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
