@@ -60,14 +60,14 @@ public class HttpUtils {
     return call(request);
   }
 
-  public static ResponseVo uploadImage(String url, File imageFile) {
+  public static ResponseVo upload(String url, File file) {
     // Create the request body with file and image media type
-    @SuppressWarnings("deprecation")
-    RequestBody fileBody = RequestBody.create(MediaType.parse("image"), imageFile);
+    String contentType = ContentTypeUtils.getContentType(file.getName());
+    RequestBody fileBody = RequestBody.create(file, MediaType.parse(contentType));
 
     // Create MultipartBody
     okhttp3.MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-    builder.addFormDataPart("file", imageFile.getName(), fileBody);
+    builder.addFormDataPart("file", file.getName(), fileBody);
 
     RequestBody requestBody = builder.build();
 

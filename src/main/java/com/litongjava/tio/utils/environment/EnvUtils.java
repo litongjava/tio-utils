@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.environment;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,10 +83,10 @@ public class EnvUtils {
     return getStr(key);
   }
 
-  
   public static String getStr(String key, String defaultValue) {
-    return get(key,defaultValue);
+    return get(key, defaultValue);
   }
+
   /**
    * 
    * @param key
@@ -275,10 +276,11 @@ public class EnvUtils {
     if (ResourceUtil.getResource(".env") != null) {
       PropUtils.append(".env");
     }
-
-    log.info("app.env:{}", EnvUtils.env());
-    log.info("app.name:{}", EnvUtils.get(ServerConfigKeys.APP_NAME));
-
+    File file = new File(".env");
+    if (file.exists()) {
+      PropUtils.append(file);
+    }
+    log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 
 }
