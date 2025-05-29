@@ -48,9 +48,8 @@ public class TioThreadUtils {
 
   public static void start() {
     if (fixedThreadPool == null) {
-      fixedThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4,
-          //
-          namedThreadFactory("TioThread"));
+      int nThreads = Integer.max(16, Runtime.getRuntime().availableProcessors() * 4);
+      fixedThreadPool = Executors.newFixedThreadPool(nThreads, namedThreadFactory("tio-thread-utils"));
     }
   }
 
