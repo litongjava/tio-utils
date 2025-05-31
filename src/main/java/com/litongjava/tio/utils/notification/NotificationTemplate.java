@@ -65,6 +65,10 @@ public class NotificationTemplate {
     if (model.getRequestBody() != null) {
       sb.append(String.format("- Request Body : %s\n", model.getRequestBody()));
     }
+
+    if (model.getExceptionId() != null) {
+      sb.append(String.format("- Exception Id : %s\n", model.getExceptionId()));
+    }
     // Stack Trace
     if (model.getStackTrace() != null) {
       sb.append(String.format("- Stack Trace : %s\n", model.getStackTrace()));

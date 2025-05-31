@@ -1,6 +1,7 @@
 package com.litongjava.tio.utils.environment;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,14 @@ public class EnvUtils {
 
   public Map<String, String> getCmdArgsMap() {
     return cmdArgsMap;
+  }
+
+  public static boolean isDevMode() {
+    URL resource = EnvUtils.class.getClassLoader().getResource("");
+    if (resource != null && resource.toString().endsWith("/target/classes/")) {
+      return true;
+    }
+    return false;
   }
 
   public static Map<String, String> buildCmdArgsMap(String[] args) {

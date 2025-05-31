@@ -23,6 +23,7 @@ public class NotifactionWarmModel {
   private String host;
   private String requestLine;
   private String requestBody;
+  private String exceptionId;
   private String stackTrace;
   private String content;
 
