@@ -6,9 +6,7 @@ import java.security.SignatureException;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
- *
  * @author tanyaowu
- *
  */
 public class Md5Utils {
 
@@ -19,7 +17,7 @@ public class Md5Utils {
    * @throws SignatureException
    * @throws UnsupportedEncodingException
    */
-  private static byte[] getContentBytes(String content, String charset) {
+  private static byte[] toBytes(String content, String charset) {
     if (charset == null || "".equals(charset)) {
       return content.getBytes();
     }
@@ -30,8 +28,11 @@ public class Md5Utils {
     }
   }
 
-  public static String getMD5(String input) {
+  public static String md5Hex(String input) {
     return sign(input, "", "utf-8");
+  }
+  public static String md5Hex(byte[] fileContent) {
+    return DigestUtils.md5Hex(fileContent);
   }
 
   /**
@@ -43,7 +44,7 @@ public class Md5Utils {
    */
   public static String sign(String text, String key, String input_charset) {
     text = text + key;
-    return DigestUtils.md5Hex(getContentBytes(text, input_charset));
+    return DigestUtils.md5Hex(toBytes(text, input_charset));
   }
 
   /**
@@ -56,7 +57,7 @@ public class Md5Utils {
    */
   public static boolean verify(String text, String sign, String key, String input_charset) {
     text = text + key;
-    String mysign = DigestUtils.md5Hex(getContentBytes(text, input_charset));
+    String mysign = DigestUtils.md5Hex(toBytes(text, input_charset));
     if (mysign.equals(sign)) {
       return true;
     } else {
@@ -64,7 +65,5 @@ public class Md5Utils {
     }
   }
 
-  public static String digestHex(byte[] fileContent) {
-    return DigestUtils.md5Hex(fileContent);
-  }
+
 }
