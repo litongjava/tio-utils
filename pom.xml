@@ -3,13 +3,19 @@
   <parent>
     <groupId>com.litongjava</groupId>
     <artifactId>t-io</artifactId>
-    <version>3.7.3.v20240130-RELEASE</version>
+    <version>3.7.3.v20250601-RELEASE</version>
   </parent>
   <artifactId>tio-utils</artifactId>
   <version>3.7.3.v20250601-RELEASE</version>
   <name>${project.artifactId}</name>
   <url>http://maven.apache.org</url>
   <description>t-io is a aio framework for java</description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>com.litongjava</groupId>
@@ -152,7 +158,7 @@
       <artifactId>okhttp</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp-brotli</artifactId>
