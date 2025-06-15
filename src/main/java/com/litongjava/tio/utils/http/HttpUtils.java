@@ -240,4 +240,34 @@ public class HttpUtils {
       throw new RuntimeException("Failed to request:" + url, e);
     }
   }
+
+  /**
+   * downlaod.
+   * @param url
+   * @return
+   */
+  public static ResponseVo download(String url) {
+    Request request = new Request.Builder().url(url).get().build();
+
+    try (Response response = OkHttpClientPool.getHttpClient().newCall(request).execute()) {
+      Headers headers = response.headers();
+
+      int code = response.code();
+      if (response.isSuccessful()) {
+        byte[] bytes = response.body().bytes();
+        ResponseVo responseVo = ResponseVo.ok(headers, bytes);
+        responseVo.setCode(code);
+        return responseVo;
+      } else {
+        //not  2xx
+        String bodyString = response.body() != null ? response.body().string() : "";
+        ResponseVo responseVo = ResponseVo.fail(headers, bodyString);
+        responseVo.setCode(code);
+        return responseVo;
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to download content from " + url, e);
+    }
+  }
+
 }
