@@ -21,12 +21,20 @@ public class FastJson2 extends Json {
   }
 
   public String toJson(Object object) {
-    return JSON.toJSONString(object);
+    if (Json.isLongToString()) {
+      return JSON.toJSONString(object, JSONWriter.Feature.WriteLongAsString);
+    } else {
+      return JSON.toJSONString(object);
+    }
   }
 
   @Override
-  public byte[] toJsonBytes(Object object) {
-    return JSON.toJSONBytes(object);
+  public byte[] toJsonBytes(Object input) {
+    if (Json.isLongToString()) {
+      return JSON.toJSONBytes(input, JSONWriter.Feature.WriteLongAsString);
+    }else {
+      return JSON.toJSONBytes(input);
+    }
   }
 
   /**

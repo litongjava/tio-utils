@@ -16,21 +16,11 @@ import com.alibaba.fastjson2.TypeReference;
 public class FastJson2Utils {
 
   public static String toJson(Object object) {
-    if (Json.isLongToString()) {
-      return JSON.toJSONString(object, JSONWriter.Feature.WriteLongAsString);
-    } else {
-      return JSON.toJSONString(object);
-    }
-
+    return JSON.toJSONString(object);
   }
 
   public static byte[] toJSONBytes(Object input) {
-    if (Json.isLongToString()) {
-      return JSON.toJSONBytes(input, JSONWriter.Feature.WriteLongAsString);
-    }else {
-      return JSON.toJSONBytes(input);
-    }
-    
+    return JSON.toJSONBytes(input);
   }
 
   /**
