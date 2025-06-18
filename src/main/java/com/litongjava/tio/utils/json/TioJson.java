@@ -61,7 +61,7 @@ public class TioJson extends Json {
 
       // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
       String dp = datePattern != null ? datePattern : getDefaultDatePattern();
-      ret.init(dp, getTimestampPattern(), getLongToString());
+      ret.init(dp, getTimestampPattern(), Json.isLongToString());
       TioToJson toJson = kit.getToJson(object, skipNullValueField);
       toJson.toJson(object, convertDepth, ret);
       return ret.toBytes();
@@ -87,7 +87,7 @@ public class TioJson extends Json {
 
       // 优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
       String dp = datePattern != null ? datePattern : getDefaultDatePattern();
-      ret.init(dp, getTimestampPattern(), getLongToString());
+      ret.init(dp, getTimestampPattern(), Json.isLongToString());
 
       TioToJson toJson = kit.getToJson(object, skipNullValueField);
 
@@ -221,13 +221,6 @@ public class TioJson extends Json {
     this.skipNullValueField = skipNullValueField;
   }
 
-  public static void setLongToString(boolean b) {
-    TioJsonKit.setLongToString(b);
-  }
-
-  public static boolean getLongToString() {
-    return TioJsonKit.getLongToString();
-  }
 
   public <T> T parse(String jsonString, Class<T> type) {
     throw new RuntimeException(notSupportJsonToObjectMesage);

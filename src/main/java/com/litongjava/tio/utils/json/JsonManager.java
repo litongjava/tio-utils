@@ -21,4 +21,5 @@ public class JsonManager {
   public void setDefaultDatePattern(String defaultDatePattern) {
     Json.setDefaultDatePattern(defaultDatePattern);
   }
+
 }

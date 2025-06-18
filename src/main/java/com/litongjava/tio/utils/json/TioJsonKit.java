@@ -42,8 +42,6 @@ public class TioJsonKit {
   // 将 Model 当成 Bean 只对 getter 方法进行转换
   protected static boolean treatModelAsBean = false;
 
-  // long to string
-  protected static boolean longToString = true;
 
   // 对 Model 和 Record 的字段名进行转换的函数。例如转成驼峰形式对 oracle 支持更友好
   protected static Function<String, String> modelAndRecordFieldNameConverter = null;
@@ -737,15 +735,6 @@ public class TioJsonKit {
 
   public static void setToJsonFactory(Function<Object, TioToJson<?>> toJsonFactory) {
     TioJsonKit.toJsonFactory = toJsonFactory;
-  }
-
-  public static void setLongToString(boolean b) {
-    TioJsonKit.longToString = b;
-
-  }
-
-  public static boolean getLongToString() {
-    return TioJsonKit.longToString;
   }
 
 }

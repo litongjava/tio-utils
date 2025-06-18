@@ -27,6 +27,9 @@ public abstract class Json {
    * Json 继承类优先使用对象级的属性 datePattern, 然后才是全局性的 defaultDatePattern
    */
   protected String datePattern = null;
+  
+  //long to string
+  private static boolean longToString = true;
 
   public static void setDefaultJsonFactory(IJsonFactory defaultJsonFactory) {
     Objects.requireNonNull(defaultJsonFactory, "defaultJsonFactory can not be null");
@@ -68,6 +71,14 @@ public abstract class Json {
 
   public static String getTimestampPattern() {
     return timestampPattern;
+  }
+
+  public static boolean isLongToString() {
+    return longToString;
+  }
+
+  public static void setLongToString(boolean longToString) {
+    Json.longToString = longToString;
   }
 
   public abstract String toJson(Object object);
