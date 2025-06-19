@@ -11,14 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CommandLineUtils {
 
-  public static CommandLineResult execute(File scriptDir, ProcessBuilder pb) throws IOException, InterruptedException {
-    if (scriptDir != null && !scriptDir.exists()) {
-      scriptDir.mkdirs();
+  public static CommandLineResult execute(File outDir, ProcessBuilder pb) throws IOException, InterruptedException {
+    if (outDir != null && !outDir.exists()) {
+      outDir.mkdirs();
     }
     
     // 定义日志文件路径，存放在与 scriptPath 相同的目录
-    File stdoutFile = new File(scriptDir, "stdout.log");
-    File stderrFile = new File(scriptDir, "stderr.log");
+    File stdoutFile = new File(outDir, "stdout.log");
+    File stderrFile = new File(outDir, "stderr.log");
 
     // 将输出和错误流重定向到对应的日志文件
     pb.redirectOutput(stdoutFile);
