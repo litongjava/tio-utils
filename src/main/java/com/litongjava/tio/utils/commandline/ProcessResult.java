@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommandLineResult {
+public class ProcessResult {
   private int exitCode;
   private String stdOut;
   private String stdErr;
@@ -32,20 +32,20 @@ public class CommandLineResult {
   private List<String> images;
   private List<String> videos;
 
-  public CommandLineResult(String output) {
+  public ProcessResult(String output) {
     this.output = output;
   }
 
-  public CommandLineResult(String output, boolean cached) {
+  public ProcessResult(String output, boolean cached) {
     this.output = output;
     this.cached = cached;
   }
 
-  public CommandLineResult(File file) {
+  public ProcessResult(File file) {
     this.file = file;
   }
 
-  public CommandLineResult(File file, boolean cached) {
+  public ProcessResult(File file, boolean cached) {
     this.file = file;
     this.cached = cached;
   }

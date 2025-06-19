@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CommandLineUtils {
+public class ProcessUtils {
 
-  public static CommandLineResult execute(File outDir, ProcessBuilder pb) throws IOException, InterruptedException {
+  public static ProcessResult execute(File outDir, ProcessBuilder pb) throws IOException, InterruptedException {
     if (outDir != null && !outDir.exists()) {
       outDir.mkdirs();
     }
@@ -32,14 +32,14 @@ public class CommandLineUtils {
     String stdoutContent = new String(Files.readAllBytes(stdoutFile.toPath()), StandardCharsets.UTF_8);
     String stderrContent = new String(Files.readAllBytes(stderrFile.toPath()), StandardCharsets.UTF_8);
 
-    CommandLineResult result = new CommandLineResult();
+    ProcessResult result = new ProcessResult();
     result.setExitCode(exitCode);
     result.setStdOut(stdoutContent);
     result.setStdErr(stderrContent);
     return result;
   }
   
-  public static CommandLineResult execute(File outDir, ProcessBuilder pb, int timeout) throws IOException, InterruptedException {
+  public static ProcessResult execute(File outDir, ProcessBuilder pb, int timeout) throws IOException, InterruptedException {
     if (outDir != null && !outDir.exists()) {
       outDir.mkdirs();
     }
@@ -68,7 +68,7 @@ public class CommandLineUtils {
     String stdoutContent = new String(Files.readAllBytes(stdoutFile.toPath()), StandardCharsets.UTF_8);
     String stderrContent = new String(Files.readAllBytes(stderrFile.toPath()), StandardCharsets.UTF_8);
 
-    CommandLineResult result = new CommandLineResult();
+    ProcessResult result = new ProcessResult();
     result.setExitCode(exitCode);
     result.setStdOut(stdoutContent);
     result.setStdErr(stderrContent);
