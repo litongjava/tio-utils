@@ -15,7 +15,7 @@ public class CommandLineUtils {
     if (outDir != null && !outDir.exists()) {
       outDir.mkdirs();
     }
-    
+
     // 定义日志文件路径，存放在与 scriptPath 相同的目录
     File stdoutFile = new File(outDir, "stdout.log");
     File stderrFile = new File(outDir, "stderr.log");
@@ -26,8 +26,35 @@ public class CommandLineUtils {
 
     Process process = pb.start();
 
-    // 等待40秒，如果超过40秒仍未响应，则强制终止进程
-    boolean finished = process.waitFor(120, TimeUnit.SECONDS);
+    int exitCode = process.waitFor();
+
+    // 读取日志文件内容，返回给客户端（如果需要实时返回，可用其他方案监控文件变化）
+    String stdoutContent = new String(Files.readAllBytes(stdoutFile.toPath()), StandardCharsets.UTF_8);
+    String stderrContent = new String(Files.readAllBytes(stderrFile.toPath()), StandardCharsets.UTF_8);
+
+    CommandLineResult result = new CommandLineResult();
+    result.setExitCode(exitCode);
+    result.setStdOut(stdoutContent);
+    result.setStdErr(stderrContent);
+    return result;
+  }
+  
+  public static CommandLineResult execute(File outDir, ProcessBuilder pb, int timeout) throws IOException, InterruptedException {
+    if (outDir != null && !outDir.exists()) {
+      outDir.mkdirs();
+    }
+
+    // 定义日志文件路径，存放在与 scriptPath 相同的目录
+    File stdoutFile = new File(outDir, "stdout.log");
+    File stderrFile = new File(outDir, "stderr.log");
+
+    // 将输出和错误流重定向到对应的日志文件
+    pb.redirectOutput(stdoutFile);
+    pb.redirectError(stderrFile);
+
+    Process process = pb.start();
+
+    boolean finished = process.waitFor(timeout, TimeUnit.SECONDS);
     int exitCode;
     if (!finished) {
       log.error("process did not respond within 120 seconds. Forcibly terminating...");

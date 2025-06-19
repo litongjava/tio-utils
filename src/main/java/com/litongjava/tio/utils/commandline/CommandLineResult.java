@@ -15,6 +15,8 @@ public class CommandLineResult {
   private String stdOut;
   private String stdErr;
 
+  private boolean cached;
+
   private long sessionIdPrt;
   private long sessionId;
   private long taskId;
@@ -29,4 +31,22 @@ public class CommandLineResult {
   private double viode_length;
   private List<String> images;
   private List<String> videos;
+
+  public CommandLineResult(String output) {
+    this.output = output;
+  }
+
+  public CommandLineResult(String output, boolean cached) {
+    this.output = output;
+    this.cached = cached;
+  }
+
+  public CommandLineResult(File file) {
+    this.file = file;
+  }
+
+  public CommandLineResult(File file, boolean cached) {
+    this.file = file;
+    this.cached = cached;
+  }
 }
