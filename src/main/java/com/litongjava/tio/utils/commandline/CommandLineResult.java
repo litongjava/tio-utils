@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.commandline;
 
+import java.io.File;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -10,14 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommandLineResult {
+  private int exitCode;
+  private String stdOut;
+  private String stdErr;
+
   private long sessionIdPrt;
   private long sessionId;
   private long taskId;
-  private int exitCode;
+
   private String executeCode;
-  private String stdOut;
-  private String stdErr;
+
   private String output;
+  private File file;
   private String text;
   private String imeage;
   private String video;
