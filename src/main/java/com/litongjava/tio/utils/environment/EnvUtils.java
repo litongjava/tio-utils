@@ -297,6 +297,13 @@ public class EnvUtils {
       PropUtils.append(file);
       log.info("load from path:{}", ".env");
     }
+    
+    File secretsFile = new File("secrets.txt");
+    if (secretsFile.exists()) {
+      PropUtils.append(secretsFile);
+      log.info("load from path:{}", "secrets.txt");
+    }
+    
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 
