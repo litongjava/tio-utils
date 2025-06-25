@@ -1,7 +1,7 @@
 package com.litongjava.tio.utils;
 
 /**
- * hash工具类，仅供tio内部使用，外部请勿使用
+ * hash工具类
  * @author tanyaowu
  */
 public class HashUtils {

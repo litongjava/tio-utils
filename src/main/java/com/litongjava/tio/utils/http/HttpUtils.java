@@ -233,9 +233,14 @@ public class HttpUtils {
         //
         .addHeader("Authorization", "Bearer " + key).build();
     try (Response response = client.newCall(request).execute()) {
-      int code = response.code();
       String string = response.body().string();
-      return new ResponseVo(true, code, string);
+      int code = response.code();
+      if(response.isSuccessful()) {
+        return new ResponseVo(true, code, string);
+      }else {
+        return new ResponseVo(false, code, string);
+      }
+      
     } catch (IOException e) {
       throw new RuntimeException("Failed to request:" + url, e);
     }

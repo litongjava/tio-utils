@@ -1,4 +1,6 @@
-package com.litongjava.tio.utils.encoder;
+package com.litongjava.tio.utils.base64;
+
+import com.litongjava.tio.utils.encoder.ImageVo;
 
 public class Base64Utils {
 

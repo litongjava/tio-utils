@@ -1,4 +1,4 @@
-package com.litongjava.tio.utils.encoder;
+package com.litongjava.tio.utils.digest;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
