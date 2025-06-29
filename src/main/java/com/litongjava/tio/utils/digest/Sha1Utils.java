@@ -8,7 +8,7 @@ public class Sha1Utils {
 	
 	private final static String ALGORITHM = "SHA-1";
 	
-	public static byte[] SHA1(byte[] decript) {
+	public static byte[] digest(byte[] decript) {
 		try {
 			MessageDigest digest = java.security.MessageDigest.getInstance(ALGORITHM);
 			digest.update(decript);
@@ -18,12 +18,12 @@ public class Sha1Utils {
 		}
 	}
 	
-	public static byte[] SHA1(String decript) {
-		return SHA1(decript.getBytes());
+	public static byte[] digest(String decript) {
+		return digest(decript.getBytes());
 	}
 
-	public static String SHA1(String decript, Charset encoding) {
-		byte[] array = SHA1(decript);
+	public static String digest(String decript, Charset encoding) {
+		byte[] array = digest(decript);
 		return new String(array, encoding);
 	}
 }
