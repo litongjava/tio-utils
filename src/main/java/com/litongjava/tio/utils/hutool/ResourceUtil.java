@@ -2,18 +2,18 @@ package com.litongjava.tio.utils.hutool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 import jodd.util.ClassLoaderUtil;
@@ -113,13 +113,12 @@ public class ResourceUtil {
    * @param fileExtension 文件扩展名，例如 ".sql"
    * @return 资源路径列表
    */
-  public static List<String> listResources(String dirPath, String fileExtension) {
-    List<String> result = new ArrayList<>();
+  public static List<URL> listResources(String dirPath, String fileExtension) {
+    List<URL> result = new ArrayList<>();
     Enumeration<URL> dirUrls;
     try {
       dirUrls = Thread.currentThread().getContextClassLoader().getResources(dirPath);
     } catch (IOException e) {
-      // 在类加载阶段，如果目录扫描失败，这通常是致命的配置错误
       throw new RuntimeException("Failed to get resources for directory: " + dirPath, e);
     }
 
@@ -128,44 +127,51 @@ public class ResourceUtil {
       String protocol = dirUrl.getProtocol();
 
       if ("file".equals(protocol)) {
-        // 在文件系统中运行
-        try {
-          // === 问题修复点在这里 ===
-          String urlPath = dirUrl.getPath();
-          // 在Windows上，url.getPath() 可能会返回 /C:/... 这样的路径，需要去掉开头的'/'
-          if (System.getProperty("os.name").toLowerCase().contains("win") && urlPath.startsWith("/")) {
-            urlPath = urlPath.substring(1);
-          }
-
-          Path dirPathObj = Paths.get(urlPath);
-          // =======================
-
-          try (Stream<Path> stream = Files.walk(dirPathObj)) {
-            stream.filter(path -> path.toString().endsWith(fileExtension)).forEach(path -> {
-              // 将文件系统路径转换回类路径资源路径
-              String relativePath = dirPathObj.relativize(path).toString().replace("\\", "/");
-              result.add(dirPath + "/" + relativePath);
-            });
-          }
+        // —— 不变 —— 扫“file:” 文件夹
+        String urlPath = dirUrl.getPath();
+        if (System.getProperty("os.name").toLowerCase().contains("win") && urlPath.startsWith("/")) {
+          urlPath = urlPath.substring(1);
+        }
+        Path dirPathObj = Paths.get(urlPath);
+        try (Stream<Path> stream = Files.walk(dirPathObj)) {
+          stream.filter(p -> p.toString().endsWith(fileExtension)).forEach(p -> {
+            result.add(dirUrl);
+          });
         } catch (IOException e) {
           throw new RuntimeException("Failed to walk file tree for: " + dirUrl, e);
         }
+
       } else if ("jar".equals(protocol)) {
-        // 在JAR包中运行
-        // jar:file:/path/to/your.jar!/sql-templates
-        String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
-        try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name()))) {
-          Enumeration<JarEntry> entries = jar.entries();
-          while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName();
-            // 确保条目在指定目录下，并且是所需类型的文件
-            if (name.startsWith(dirPath + "/") && name.endsWith(fileExtension) && !entry.isDirectory()) {
-              result.add(name);
+        // —— 新增：支持嵌套 JAR —— 
+        try {
+          // 1) 先拿到 JarURLConnection
+          JarURLConnection conn = (JarURLConnection) dirUrl.openConnection();
+          java.util.jar.JarFile outerJar = conn.getJarFile();
+          String entryName = conn.getEntryName();
+          // entryName 举例: "BOOT-INF/lib/tio-mail-wing-1.0.0.jar!/sql-templates"
+
+          if (entryName != null && entryName.contains(".jar!/")) {
+            // 2) 内嵌 Jar 的前半段（BOOT-INF/lib/tio-mail-wing-1.0.0.jar）
+            String nestedJarEntry = entryName.substring(0, entryName.indexOf("!/"));
+            JarEntry nested = outerJar.getJarEntry(nestedJarEntry);
+
+            // 3) 抽取到临时文件
+            try (InputStream is = outerJar.getInputStream(nested)) {
+              Path tmp = Files.createTempFile("nested-", ".jar");
+              Files.copy(is, tmp, StandardCopyOption.REPLACE_EXISTING);
+              // 4) 用标准 JarFile 扫描内部 JAR
+              try (java.util.jar.JarFile innerJar = new java.util.jar.JarFile(tmp.toFile())) {
+                scanJar(innerJar, dirPath, fileExtension, result);
+              } finally {
+                Files.deleteIfExists(tmp);
+              }
             }
+          } else {
+            // 5) 普通单层 JAR
+            scanJar(outerJar, dirPath, fileExtension, result);
           }
         } catch (IOException e) {
-          throw new RuntimeException("Failed to read JAR file: " + jarPath, e);
+          throw new RuntimeException("Failed to read JAR resources for: " + dirUrl, e);
         }
       }
     }
@@ -173,68 +179,33 @@ public class ResourceUtil {
   }
 
   /**
-   * 列出类路径下指定目录中的所有资源。
-   * @param dirPath 目录路径，例如 "sql-templates"
-   * @param fileExtension 文件扩展名，例如 ".sql"
-   * @return 资源路径列表
+   * 抽取出的公用方法：扫描一个 JarFile，把满足 dirPath/*.fileExtension 的 entry 加入 result
    */
-  public static List<String> listResources(String dirPath) {
-    List<String> result = new ArrayList<>();
-    Enumeration<URL> dirUrls;
-    try {
-      dirUrls = Thread.currentThread().getContextClassLoader().getResources(dirPath);
-    } catch (IOException e) {
-      // 在类加载阶段，如果目录扫描失败，这通常是致命的配置错误
-      throw new RuntimeException("Failed to get resources for directory: " + dirPath, e);
-    }
+  public static void scanJar(java.util.jar.JarFile jar, String dirPath, String fileExtension, List<URL> result) {
 
-    while (dirUrls.hasMoreElements()) {
-      URL dirUrl = dirUrls.nextElement();
-      String protocol = dirUrl.getProtocol();
+    // 先拿到这个 JarFile 对应的 “jar:file:...!/" 前缀
+    // jar.getName() 返回的是底层文件系统路径，比如 "D:\...\tio-mail-wing-1.0.0.jar"
+    String jarFilePath = Paths.get(jar.getName()).toUri().toString();
+    // 例： "file:/D:/.../tio-mail-wing-1.0.0.jar"
+    String jarUrlPrefix = "jar:" + jarFilePath + "!/";
 
-      if ("file".equals(protocol)) {
-        // 在文件系统中运行
+    Enumeration<JarEntry> entries = jar.entries();
+    while (entries.hasMoreElements()) {
+      JarEntry entry = entries.nextElement();
+      String name = entry.getName();
+      if (name.startsWith(dirPath + "/") && name.endsWith(fileExtension) && !entry.isDirectory()) {
+
+        // 拼成一个标准的 jar URL
+        URL resourceUrl;
         try {
-          // === 问题修复点在这里 ===
-          String urlPath = dirUrl.getPath();
-          // 在Windows上，url.getPath() 可能会返回 /C:/... 这样的路径，需要去掉开头的'/'
-          if (System.getProperty("os.name").toLowerCase().contains("win") && urlPath.startsWith("/")) {
-            urlPath = urlPath.substring(1);
-          }
-
-          Path dirPathObj = Paths.get(urlPath);
-          // =======================
-
-          try (Stream<Path> stream = Files.walk(dirPathObj)) {
-            stream.forEach(path -> {
-              // 将文件系统路径转换回类路径资源路径
-              String relativePath = dirPathObj.relativize(path).toString().replace("\\", "/");
-              result.add(dirPath + "/" + relativePath);
-            });
-          }
-        } catch (IOException e) {
-          throw new RuntimeException("Failed to walk file tree for: " + dirUrl, e);
+          resourceUrl = new URL(jarUrlPrefix + name);
+          result.add(resourceUrl);
+        } catch (MalformedURLException e) {
+          e.printStackTrace();
         }
-      } else if ("jar".equals(protocol)) {
-        // 在JAR包中运行
-        // jar:file:/path/to/your.jar!/sql-templates
-        String jarPath = dirUrl.getPath().substring(5, dirUrl.getPath().indexOf("!"));
-        try (JarFile jar = new JarFile(URLDecoder.decode(jarPath, StandardCharsets.UTF_8.name()))) {
-          Enumeration<JarEntry> entries = jar.entries();
-          while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName();
-            // 确保条目在指定目录下，并且是所需类型的文件
-            if (name.startsWith(dirPath + "/") && !entry.isDirectory()) {
-              result.add(name);
-            }
-          }
-        } catch (IOException e) {
-          throw new RuntimeException("Failed to read JAR file: " + jarPath, e);
-        }
+
       }
     }
-    return result;
   }
 
 }
