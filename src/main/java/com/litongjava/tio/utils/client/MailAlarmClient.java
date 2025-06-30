@@ -28,9 +28,9 @@ public class MailAlarmClient {
         //
         .addHeader("Authorization", "Bearer " + apiKey)
         //
-        .addHeader("mail_from_user", fromUser).addHeader("mail_to_user", toUser)
+        .addHeader("mail-from-user", fromUser).addHeader("mail-to-user", toUser)
         //
-        .addHeader("mail_to_mailbox", mailBox).addHeader("mail_subject", subject)
+        .addHeader("mail-to-mailbox", mailBox).addHeader("mail-subject", subject)
         //
         .build();
     return HttpUtils.call(request);
