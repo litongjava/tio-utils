@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 import jodd.util.ClassLoaderUtil;
@@ -176,6 +177,97 @@ public class ResourceUtil {
       }
     }
     return result;
+  }
+
+  public static List<URL> listResources(String dirPath) {
+    List<URL> result = new ArrayList<>();
+    Enumeration<URL> dirUrls;
+    try {
+      dirUrls = Thread.currentThread().getContextClassLoader().getResources(dirPath);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to get resources for directory: " + dirPath, e);
+    }
+
+    while (dirUrls.hasMoreElements()) {
+      URL dirUrl = dirUrls.nextElement();
+      String protocol = dirUrl.getProtocol();
+
+      if ("file".equals(protocol)) {
+        // —— 不变 —— 扫“file:” 文件夹
+        String urlPath = dirUrl.getPath();
+        if (System.getProperty("os.name").toLowerCase().contains("win") && urlPath.startsWith("/")) {
+          urlPath = urlPath.substring(1);
+        }
+        Path dirPathObj = Paths.get(urlPath);
+        try (Stream<Path> stream = Files.walk(dirPathObj)) {
+          stream.forEach(p -> {
+            result.add(dirUrl);
+          });
+        } catch (IOException e) {
+          throw new RuntimeException("Failed to walk file tree for: " + dirUrl, e);
+        }
+
+      } else if ("jar".equals(protocol)) {
+        // —— 新增：支持嵌套 JAR —— 
+        try {
+          // 1) 先拿到 JarURLConnection
+          JarURLConnection conn = (JarURLConnection) dirUrl.openConnection();
+          java.util.jar.JarFile outerJar = conn.getJarFile();
+          String entryName = conn.getEntryName();
+          // entryName 举例: "BOOT-INF/lib/tio-mail-wing-1.0.0.jar!/sql-templates"
+
+          if (entryName != null && entryName.contains(".jar!/")) {
+            // 2) 内嵌 Jar 的前半段（BOOT-INF/lib/tio-mail-wing-1.0.0.jar）
+            String nestedJarEntry = entryName.substring(0, entryName.indexOf("!/"));
+            JarEntry nested = outerJar.getJarEntry(nestedJarEntry);
+
+            // 3) 抽取到临时文件
+            try (InputStream is = outerJar.getInputStream(nested)) {
+              Path tmp = Files.createTempFile("nested-", ".jar");
+              Files.copy(is, tmp, StandardCopyOption.REPLACE_EXISTING);
+              // 4) 用标准 JarFile 扫描内部 JAR
+              try (java.util.jar.JarFile innerJar = new java.util.jar.JarFile(tmp.toFile())) {
+                scanJar(innerJar, dirPath, result);
+              } finally {
+                Files.deleteIfExists(tmp);
+              }
+            }
+          } else {
+            // 5) 普通单层 JAR
+            scanJar(outerJar, dirPath, result);
+          }
+        } catch (IOException e) {
+          throw new RuntimeException("Failed to read JAR resources for: " + dirUrl, e);
+        }
+      }
+    }
+    return result;
+  }
+  
+  public static void scanJar(JarFile jar, String dirPath, List<URL> result) {
+    // 先拿到这个 JarFile 对应的 “jar:file:...!/" 前缀
+    // jar.getName() 返回的是底层文件系统路径，比如 "D:\...\tio-mail-wing-1.0.0.jar"
+    String jarFilePath = Paths.get(jar.getName()).toUri().toString();
+    // 例： "file:/D:/.../tio-mail-wing-1.0.0.jar"
+    String jarUrlPrefix = "jar:" + jarFilePath + "!/";
+
+    Enumeration<JarEntry> entries = jar.entries();
+    while (entries.hasMoreElements()) {
+      JarEntry entry = entries.nextElement();
+      String name = entry.getName();
+      if (name.startsWith(dirPath + "/") && !entry.isDirectory()) {
+
+        // 拼成一个标准的 jar URL
+        URL resourceUrl;
+        try {
+          resourceUrl = new URL(jarUrlPrefix + name);
+          result.add(resourceUrl);
+        } catch (MalformedURLException e) {
+          e.printStackTrace();
+        }
+
+      }
+    }
   }
 
   /**
