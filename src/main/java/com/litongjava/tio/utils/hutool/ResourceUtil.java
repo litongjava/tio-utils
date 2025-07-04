@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -128,16 +129,19 @@ public class ResourceUtil {
       String protocol = dirUrl.getProtocol();
 
       if ("file".equals(protocol)) {
-        // —— 不变 —— 扫“file:” 文件夹
         String urlPath = dirUrl.getPath();
         if (System.getProperty("os.name").toLowerCase().contains("win") && urlPath.startsWith("/")) {
           urlPath = urlPath.substring(1);
         }
         Path dirPathObj = Paths.get(urlPath);
         try (Stream<Path> stream = Files.walk(dirPathObj)) {
-          stream.filter(p -> p.toString().endsWith(fileExtension)).forEach(p -> {
-            result.add(dirUrl);
-          });
+          Iterator<Path> it = stream.iterator();
+          while (it.hasNext()) {
+            Path p = it.next();
+            if (p.toString().endsWith(fileExtension)) {
+              result.add(p.toUri().toURL());
+            }
+          }
         } catch (IOException e) {
           throw new RuntimeException("Failed to walk file tree for: " + dirUrl, e);
         }
@@ -243,7 +247,7 @@ public class ResourceUtil {
     }
     return result;
   }
-  
+
   public static void scanJar(JarFile jar, String dirPath, List<URL> result) {
     // 先拿到这个 JarFile 对应的 “jar:file:...!/" 前缀
     // jar.getName() 返回的是底层文件系统路径，比如 "D:\...\tio-mail-wing-1.0.0.jar"
