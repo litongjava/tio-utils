@@ -60,13 +60,18 @@ public class Prop {
       } else {
         File file = new File(fileName);
         if (!file.exists()) {
-          if (file.createNewFile()) {
-            log.info("file created successful：" + fileName);
-            inputStream = new FileInputStream(file);
-            properties.load(new InputStreamReader(inputStream, encoding));
-          } else {
-            log.info("failed to create file" + fileName);
+          try {
+            if (file.createNewFile()) {
+              log.info("file created successful：" + fileName);
+              inputStream = new FileInputStream(file);
+              properties.load(new InputStreamReader(inputStream, encoding));
+            } else {
+              log.info("failed to create file" + fileName);
+            }
+          } catch (Exception e) {
+            log.warn("failed to create file" + fileName + e.getMessage());
           }
+
         } else {
           log.info("load file：" + fileName);
           inputStream = new FileInputStream(file);
