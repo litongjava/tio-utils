@@ -28,9 +28,10 @@ public class ProcessResult {
   private String text;
   private String imeage;
   private String video;
-  private double video_length;
+  private Double video_length;
   private List<String> images;
   private List<String> videos;
+  private Object data;
 
   public ProcessResult(String output) {
     this.output = output;
