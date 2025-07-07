@@ -46,10 +46,14 @@ public class HttpDownloadUtils {
     }
   }
 
-  public static ByteArrayOutputStream download(String remoteURL, Map<String, String> headers) {
+  public static ByteArrayOutputStream download(String remoteUrl) {
+    return download(remoteUrl, null);
+  }
+
+  public static ByteArrayOutputStream download(String remoteUrl, Map<String, String> headers) {
     URL httpURL;
     try {
-      httpURL = new URL(remoteURL);
+      httpURL = new URL(remoteUrl);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -76,8 +80,7 @@ public class HttpDownloadUtils {
     httpConnection.setDoInput(true);
     httpConnection.setDoOutput(true);
 
-    try (InputStream inputStream = httpConnection.getInputStream();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+    try (InputStream inputStream = httpConnection.getInputStream(); ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 
       int length;
       byte[] buffer = new byte[1024 * 1024 * 2]; // 一次读取2M
