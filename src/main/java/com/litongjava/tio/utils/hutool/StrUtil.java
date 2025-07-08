@@ -102,6 +102,20 @@ public class StrUtil {
   }
 
   /**
+   * 判断字符串是否为空（null）或只包含空白字符
+   */
+  public static boolean isBlank(String str) {
+    return str == null || str.trim().isEmpty();
+  }
+
+  /**
+   * 如果 input 为 null、空或全是空白，则返回 defaultStr，否则返回 input 本身
+   */
+  public static String defaultIfBlank(String input, String defaultStr) {
+    return isBlank(input) ? defaultStr : input;
+  }
+
+  /**
    * 数组或集合转String
    * 
    * @param obj 集合或数组对象
@@ -1473,4 +1487,5 @@ public class StrUtil {
     }
     return true;
   }
+
 }
