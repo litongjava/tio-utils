@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class NotificationTemplate {
 
   // yyyy-MM-dd HH:mm:ssXXX  -> e.g. 2025-07-08 10:30:00+08:00
-  public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssXXX");
+  public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss XXX");
 
   public static String format(NotifactionWarmModel model) {
     StringBuilder sb = new StringBuilder();
