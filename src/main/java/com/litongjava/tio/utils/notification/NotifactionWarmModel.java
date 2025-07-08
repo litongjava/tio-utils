@@ -1,6 +1,6 @@
 package com.litongjava.tio.utils.notification;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotifactionWarmModel {
-  private Date time;
+  private ZonedDateTime time;
   private String appEnv;
   private String appGroupName;
   private String appName;
@@ -27,7 +27,7 @@ public class NotifactionWarmModel {
   private String stackTrace;
   private String content;
 
-  public NotifactionWarmModel(Date time, String env, String appGroupName, String appName, String warningName, String level, String deviceName, String content) {
+  public NotifactionWarmModel(ZonedDateTime time, String env, String appGroupName, String appName, String warningName, String level, String deviceName, String content) {
     this.time = time;
     this.appEnv = env;
     this.appGroupName = appGroupName;

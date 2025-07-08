@@ -1,18 +1,19 @@
 package com.litongjava.tio.utils.notification;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class NotificationTemplate {
 
+  // yyyy-MM-dd HH:mm:ssXXX  -> e.g. 2025-07-08 10:30:00+08:00
+  public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssXXX");
+
   public static String format(NotifactionWarmModel model) {
     StringBuilder sb = new StringBuilder();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     // Alarm Time
-    Date time = model.getTime();
+    ZonedDateTime time = model.getTime();
     if (time != null) {
-      sb.append(String.format("- Alarm Time : %s\n", sdf.format(time)));
+      sb.append(String.format("- Alarm Time : %s\n", time.format(dateTimeFormatter)));
     }
     // App Env
     if (model.getAppEnv() != null) {
