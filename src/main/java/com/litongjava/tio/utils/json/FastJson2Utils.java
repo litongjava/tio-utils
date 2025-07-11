@@ -7,6 +7,7 @@ import java.util.Map;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.TypeReference;
 
@@ -37,11 +38,11 @@ public class FastJson2Utils {
   }
 
   public static <T> T parse(String jsonString, Class<T> type) {
-    return JSON.parseObject(jsonString, type);
+    return JSON.parseObject(jsonString, type, JSONReader.Feature.SupportSmartMatch);
   }
 
   public static <T> T parse(byte[] input, Class<T> type) {
-    return JSON.parseObject(input, type);
+    return JSON.parseObject(input, type, JSONReader.Feature.SupportSmartMatch);
   }
 
   public static JSONObject parseObject(String bodyString) {
