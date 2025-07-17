@@ -128,7 +128,7 @@ public class NotifactionWarmModel {
 
  // Request Body
     if (this.getStatusCode() != null) {
-      sb.append(String.format("- StatusCode : %d\n", this.getStatusCode()));
+      sb.append(String.format("- Status Code : %d\n", this.getStatusCode()));
     }
     
     if (this.getExceptionId() != null) {
