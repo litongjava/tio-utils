@@ -45,7 +45,7 @@ public class WeComNotificationUtils {
   }
 
   public static Response sendWarm(String webHookUrl, NotifactionWarmModel model) {
-    Map<String, Object> reqMap = getReqMap(NotificationTemplate.format(model));
+    Map<String, Object> reqMap = getReqMap(model.format());
 
     return send(webHookUrl, reqMap);
   }
