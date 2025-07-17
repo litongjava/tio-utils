@@ -34,6 +34,7 @@ public class NotifactionWarmModel {
   private String userAgent;
   private String requestLine;
   private String requestBody;
+  private Integer statusCode;
   private String exceptionId;
   private String stackTrace;
   private String content;
@@ -125,6 +126,11 @@ public class NotifactionWarmModel {
       sb.append(String.format("- Request Body : %s\n", this.getRequestBody()));
     }
 
+ // Request Body
+    if (this.getStatusCode() != null) {
+      sb.append(String.format("- StatusCode : %d\n", this.getStatusCode()));
+    }
+    
     if (this.getExceptionId() != null) {
       sb.append(String.format("- Exception Id : %s\n", this.getExceptionId()));
     }
