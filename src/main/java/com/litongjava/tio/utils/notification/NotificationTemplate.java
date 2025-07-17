@@ -58,6 +58,14 @@ public class NotificationTemplate {
     if (model.getHost() != null) {
       sb.append(String.format("- Host : %s\n", model.getHost()));
     }
+    // Refer
+    if(model.getReferer()!=null) {
+      sb.append(String.format("- Referer : %s\n", model.getReferer()));
+    }
+    //
+    if(model.getUserAgent()!=null) {
+      sb.append(String.format("- UserAgent : %s\n", model.getUserAgent()));
+    }
     // Request Line
     if (model.getRequestLine() != null) {
       sb.append(String.format("- Request Line : %s\n", model.getRequestLine()));

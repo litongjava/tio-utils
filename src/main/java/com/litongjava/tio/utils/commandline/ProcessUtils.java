@@ -38,7 +38,15 @@ public class ProcessUtils {
     result.setStdErr(stderrContent);
     return result;
   }
-  
+  /**
+   * 
+   * @param outDir
+   * @param pb
+   * @param timeout unit second
+   * @return
+   * @throws IOException
+   * @throws InterruptedException
+   */
   public static ProcessResult execute(File outDir, ProcessBuilder pb, int timeout) throws IOException, InterruptedException {
     if (outDir != null && !outDir.exists()) {
       outDir.mkdirs();

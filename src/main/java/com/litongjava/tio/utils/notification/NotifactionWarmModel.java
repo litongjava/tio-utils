@@ -23,6 +23,8 @@ public class NotifactionWarmModel {
   private String userId;
   private String requestId;
   private String host;
+  private String referer;
+  private String userAgent;
   private String requestLine;
   private String requestBody;
   private String exceptionId;
