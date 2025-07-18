@@ -292,11 +292,21 @@ public class FileUtil {
    * @param path
    * @param charset
    * @author tanyaowu
-   * @throws IOException 
+   * @throws UnsupportedEncodingException 
    */
-  public static void writeString(String content, String path, String charset) throws IOException {
+  public static void writeString(String content, String path, String charset) throws UnsupportedEncodingException {
     byte[] data = content.getBytes(charset);
     File file = new File(path);
+    writeBytes(data, file);
+  }
+
+  public static void writeString(String content, String path) {
+    File file = new File(path);
+    writeString(content, file);
+  }
+
+  public static void writeString(String content, File file) {
+    byte[] data = content.getBytes();
     writeBytes(data, file);
   }
 
