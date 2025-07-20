@@ -465,7 +465,7 @@ public class FileUtil {
     return new File(path);
   }
 
-  public static StringBuilder readURLAsString(URL resource) {
+  public static String readString(URL resource) {
     if (resource == null) {
       throw new RuntimeException();
     }
@@ -482,10 +482,10 @@ public class FileUtil {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return text;
+    return text.toString();
   }
 
-  public static byte[] readUrlAsBytes(URL resource) {
+  public static byte[] readBytes(URL resource) {
     if (resource == null) {
       throw new RuntimeException("Resource not found");
     }
