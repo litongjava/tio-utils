@@ -26,10 +26,13 @@ public class ProcessResult {
   private String output;
   private File file;
   private String text;
-  private String imeage;
+  private String image;
+  private String audio;
   private String video;
   private Double video_length;
+  private List<String> texts;
   private List<String> images;
+  private List<String> audios;
   private List<String> videos;
   private Object data;
 

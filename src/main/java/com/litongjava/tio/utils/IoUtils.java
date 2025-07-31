@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.mail.MessagingException;
-import javax.mail.Service;
+
 
 import com.litongjava.model.sys.SysConst;
 
@@ -74,16 +73,5 @@ public class IoUtils {
         e.printStackTrace();
       }
     }
-  }
-
-  public static void closeQuietly(Service closeable) {
-    if (closeable != null) {
-      try {
-        closeable.close();
-      } catch (MessagingException e) {
-        e.printStackTrace();
-      }
-    }
-
   }
 }

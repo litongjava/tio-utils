@@ -8,8 +8,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.litongjava.tio.utils.IoUtils;
-
 public class EMailSendUtils {
 
   public static void send(String to, String subject, String content, boolean isDebug, String mailHost, Integer smtpPort,
@@ -36,7 +34,7 @@ public class EMailSendUtils {
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      IoUtils.closeQuietly(ts);
+      MailIOUtils.closeQuietly(ts);
     }
   }
 
