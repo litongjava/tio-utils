@@ -90,7 +90,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  private static Response post(String url, Map<String, String> headerMap, MediaType mediaType, String bodyString, Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) {
+  private static Response post(String url, Map<String, String> headerMap, MediaType mediaType, String bodyString,
+      Map<String, String> paramMap, List<String> paramNames, List<String> paramValues) {
     Request.Builder builder = new Request.Builder().url(url);
     if (headerMap != null) {
       Headers headers = Headers.of(headerMap);
@@ -142,7 +143,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames, List<String> paramValues) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames,
+      List<String> paramValues) throws Exception {
     return post(url, headerMap, (MediaType) null, null, null, paramNames, paramValues);
   }
 
@@ -154,7 +156,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap)
+      throws Exception {
     return post(url, headerMap, (MediaType) null, null, paramMap, null, null);
   }
 
@@ -195,12 +198,13 @@ public class HttpUtils {
     Call call = OkHttpClientPool.getHttpClient().newCall(request);
     try (Response response = call.execute()) {
       Headers headers = response.headers();
+      int code = response.code();
       String body = response.body().string();
 
       if (response.isSuccessful()) {
-        return ResponseVo.ok(headers, body);
+        return ResponseVo.ok(code, headers, body);
       } else {
-        return ResponseVo.fail(headers, body);
+        return ResponseVo.fail(code, headers, body);
       }
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -235,12 +239,12 @@ public class HttpUtils {
     try (Response response = client.newCall(request).execute()) {
       String string = response.body().string();
       int code = response.code();
-      if(response.isSuccessful()) {
+      if (response.isSuccessful()) {
         return new ResponseVo(true, code, string);
-      }else {
+      } else {
         return new ResponseVo(false, code, string);
       }
-      
+
     } catch (IOException e) {
       throw new RuntimeException("Failed to request:" + url, e);
     }
@@ -248,6 +252,7 @@ public class HttpUtils {
 
   /**
    * downlaod.
+   * 
    * @param url
    * @return
    */
@@ -264,7 +269,7 @@ public class HttpUtils {
         responseVo.setCode(code);
         return responseVo;
       } else {
-        //not  2xx
+        // not 2xx
         String bodyString = response.body() != null ? response.body().string() : "";
         ResponseVo responseVo = ResponseVo.fail(headers, bodyString);
         responseVo.setCode(code);
