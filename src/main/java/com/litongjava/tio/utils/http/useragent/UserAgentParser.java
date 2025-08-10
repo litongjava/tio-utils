@@ -2,11 +2,11 @@ package com.litongjava.tio.utils.http.useragent;
 
 import java.util.regex.Pattern;
 
-import com.litongjava.model.http.useragent.Browser;
-import com.litongjava.model.http.useragent.Engine;
-import com.litongjava.model.http.useragent.OS;
-import com.litongjava.model.http.useragent.Platform;
 import com.litongjava.model.http.useragent.UserAgent;
+import com.litongjava.model.http.useragent.UserAgentBrowser;
+import com.litongjava.model.http.useragent.UserAgentEngine;
+import com.litongjava.model.http.useragent.UserAgentOS;
+import com.litongjava.model.http.useragent.UserAgentPlatform;
 import com.litongjava.tio.utils.hutool.ReUtil;
 
 
@@ -27,17 +27,17 @@ public class UserAgentParser {
 	public static UserAgent parse(String userAgentString) {
 		final UserAgent userAgent = new UserAgent();
 		
-		final Browser browser = parseBrowser(userAgentString);
+		final UserAgentBrowser browser = parseBrowser(userAgentString);
 		userAgent.setBrowser(parseBrowser(userAgentString));
 		userAgent.setVersion(browser.getVersion(userAgentString));
 		
-		final Engine engine = parseEngine(userAgentString);
+		final UserAgentEngine engine = parseEngine(userAgentString);
 		userAgent.setEngine(engine);
 		if (false == engine.isUnknown()) {
 			userAgent.setEngineVersion(parseEngineVersion(engine, userAgentString));
 		}
 		userAgent.setOs(parseOS(userAgentString));
-		final Platform platform = parsePlatform(userAgentString);
+		final UserAgentPlatform platform = parsePlatform(userAgentString);
 		userAgent.setPlatform(platform);
 		userAgent.setMobile(platform.isMobile() || browser.isMobile());
 		
@@ -51,13 +51,13 @@ public class UserAgentParser {
 	 * @param userAgentString User-Agent字符串
 	 * @return 浏览器类型
 	 */
-	private static Browser parseBrowser(String userAgentString) {
-		for (Browser brower : Browser.browers) {
+	private static UserAgentBrowser parseBrowser(String userAgentString) {
+		for (UserAgentBrowser brower : UserAgentBrowser.browers) {
 			if (brower.isMatch(userAgentString)) {
 				return brower;
 			}
 		}
-		return Browser.Unknown;
+		return UserAgentBrowser.Unknown;
 	}
 	
 	/**
@@ -66,13 +66,13 @@ public class UserAgentParser {
 	 * @param userAgentString User-Agent字符串
 	 * @return 引擎类型
 	 */
-	private static Engine parseEngine(String userAgentString) {
-		for (Engine engine : Engine.engines) {
+	private static UserAgentEngine parseEngine(String userAgentString) {
+		for (UserAgentEngine engine : UserAgentEngine.engines) {
 			if (engine.isMatch(userAgentString)) {
 				return engine;
 			}
 		}
-		return Engine.Unknown;
+		return UserAgentEngine.Unknown;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class UserAgentParser {
 	 * @param userAgentString User-Agent字符串
 	 * @return 引擎版本
 	 */
-	private static String parseEngineVersion(Engine engine, String userAgentString) {
+	private static String parseEngineVersion(UserAgentEngine engine, String userAgentString) {
 		final String regexp = engine.getName() + "[\\/\\- ]([\\d\\w\\.\\-]+)";
 		final Pattern pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
 		return ReUtil.getGroup1(pattern, userAgentString);
@@ -94,13 +94,13 @@ public class UserAgentParser {
 	 * @param userAgentString User-Agent字符串
 	 * @return 系统类型
 	 */
-	private static OS parseOS(String userAgentString) {
-		for (OS os : OS.oses) {
+	private static UserAgentOS parseOS(String userAgentString) {
+		for (UserAgentOS os : UserAgentOS.oses) {
 			if (os.isMatch(userAgentString)) {
 				return os;
 			}
 		}
-		return OS.Unknown;
+		return UserAgentOS.Unknown;
 	}
 
 	/**
@@ -109,12 +109,12 @@ public class UserAgentParser {
 	 * @param userAgentString User-Agent字符串
 	 * @return 平台类型
 	 */
-	private static Platform parsePlatform(String userAgentString) {
-		for (Platform platform : Platform.platforms) {
+	private static UserAgentPlatform parsePlatform(String userAgentString) {
+		for (UserAgentPlatform platform : UserAgentPlatform.platforms) {
 			if (platform.isMatch(userAgentString)) {
 				return platform;
 			}
 		}
-		return Platform.Unknown;
+		return UserAgentPlatform.Unknown;
 	}
 }
