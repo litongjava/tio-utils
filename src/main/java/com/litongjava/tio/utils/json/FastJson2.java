@@ -31,8 +31,8 @@ public class FastJson2 extends Json {
   @Override
   public byte[] toJsonBytes(Object input) {
     if (Json.isLongToString()) {
-      return JSON.toJSONBytes(input, JSONWriter.Feature.WriteLongAsString);
-    }else {
+      return JSON.toJSONBytes(input, JSONWriter.Feature.WriteLongAsString, JSONWriter.Feature.WriteNulls);
+    } else {
       return JSON.toJSONBytes(input);
     }
   }
