@@ -52,6 +52,28 @@ public class FilenameUtils {
     return subPath;
   }
 
+  /**
+   * 获取路径中的文件夹名称，比如传入kb/document/123456/1.md，返回123456
+   * 
+   * @param path
+   * @return
+   */
+  public static String getParentFolderName(String path) {
+    if (path == null || path.isEmpty()) {
+      return "";
+    }
+    int lastSlashIndex = path.lastIndexOf('/');
+    if (lastSlashIndex == -1) {
+      return "";
+    }
+    String subPath = path.substring(0, lastSlashIndex);
+    int parentSlashIndex = subPath.lastIndexOf('/');
+    if (parentSlashIndex == -1) {
+      return subPath;
+    }
+    return subPath.substring(parentSlashIndex + 1);
+  }
+
   public static String getFilename(String path) {
     if (path == null || path.isEmpty()) {
       return "";
