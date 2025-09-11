@@ -268,13 +268,13 @@ public class EnvUtils {
   }
 
   public static void load() {
-    String env = get("app.env");
+    String env = env();
     if (ResourceUtil.getResource(defaultFilename) != null) {
       // 主文件会自动加载从文件
       PropUtils.use(defaultFilename, env);
       log.info("load:{}", defaultFilename);
     } else {
-      //直接加载从文件
+      // 直接加载从文件
       if (env != null) {
         String fileName = "app-" + env + ".properties";
         log.info("load:{}", fileName);
@@ -297,13 +297,13 @@ public class EnvUtils {
       PropUtils.append(file);
       log.info("load from path:{}", ".env");
     }
-    
+
     File secretsFile = new File("secrets.txt");
     if (secretsFile.exists()) {
       PropUtils.append(secretsFile);
       log.info("load from path:{}", "secrets.txt");
     }
-    
+
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 

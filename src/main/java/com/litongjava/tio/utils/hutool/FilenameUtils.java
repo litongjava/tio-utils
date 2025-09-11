@@ -17,6 +17,7 @@ public class FilenameUtils {
 
   /**
    * 获取文件名，不包含路径
+   * 
    * @param filename
    * @return
    */
@@ -48,6 +49,18 @@ public class FilenameUtils {
     }
     // 获取最后一个斜杠之前的路径
     String subPath = path.substring(0, lastSlashIndex);
+    return subPath;
+  }
+
+  public static String getFilename(String path) {
+    if (path == null || path.isEmpty()) {
+      return "";
+    }
+    int lastSlashIndex = path.lastIndexOf('/');
+    if (lastSlashIndex == -1) {
+      return path;
+    }
+    String subPath = path.substring(lastSlashIndex + 1);
     return subPath;
   }
 }
