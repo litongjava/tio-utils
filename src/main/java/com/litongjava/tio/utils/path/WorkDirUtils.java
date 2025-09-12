@@ -4,12 +4,12 @@ import java.io.File;
 
 public class WorkDirUtils {
 
-  public static final String workingDir = new File(".").getAbsolutePath();
-  public static final String workingDataDir = new File("data").getAbsolutePath();
-  public static final String workingCacheDir = new File("cache").getAbsolutePath();
-  public static final String workingResourcesDir = new File("resources").getAbsolutePath();
-  public static final String workingPagesDir = new File("pages").getAbsolutePath();
-  public static final String workingScriptsDir = new File("scripts").getAbsolutePath();
+  public static final String workingDir = ".";
+  public static final String workingDataDir = "data";
+  public static final String workingCacheDir = "cache";
+  public static final String workingResourcesDir = "resources";
+  public static final String workingPagesDir = "pages";
+  public static final String workingScriptsDir = "scripts";
 
   public static String getWorkingDir(String subPath) {
     File file = new File(subPath);
@@ -20,7 +20,7 @@ public class WorkDirUtils {
   }
 
   public static String getWorkingDir() {
-    File file = new File(".");
+    File file = new File(workingDir);
     if (!file.exists()) {
       file.mkdirs();
     }
@@ -28,7 +28,7 @@ public class WorkDirUtils {
   }
 
   public static String workingDataDir() {
-    File file = new File("data");
+    File file = new File(workingDataDir);
     if (!file.exists()) {
       file.mkdirs();
     }
@@ -36,7 +36,7 @@ public class WorkDirUtils {
   }
 
   public static String workingResourcesDir() {
-    File file = new File("resources");
+    File file = new File(workingResourcesDir);
     if (!file.exists()) {
       file.mkdirs();
     }
@@ -44,7 +44,7 @@ public class WorkDirUtils {
   }
 
   public static String workingPagesDir() {
-    File file = new File("pages");
+    File file = new File(workingPagesDir);
     if (!file.exists()) {
       file.mkdirs();
     }
@@ -52,7 +52,7 @@ public class WorkDirUtils {
   }
 
   public static String workingScriptsDir() {
-    File file = new File("scripts");
+    File file = new File(workingScriptsDir);
     if (!file.exists()) {
       file.mkdirs();
     }
