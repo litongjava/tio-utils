@@ -32,7 +32,7 @@ public class Threads {
   public static final String GROUP_THREAD_NAME = "tio-group";
   public static final String WORKER_THREAD_NAME = "tio-worker";
   // private static final int QUEUE_CAPACITY = 1000000;
-  private static ExecutorService groupExecutor = null;
+  private static ExecutorService readExecutor = null;
   private static SynThreadPoolExecutor tioExecutor = null;
 
   /**
@@ -40,18 +40,18 @@ public class Threads {
    *
    * @return The group executor.
    */
-  public static ExecutorService getGroupExecutor() {
-    if (groupExecutor != null) {
-      return groupExecutor;
+  public static ExecutorService getReadExecutor() {
+    if (readExecutor != null) {
+      return readExecutor;
     }
 
     synchronized (Threads.class) {
-      if (groupExecutor == null) {
-        groupExecutor = newGroupExecutor();
+      if (readExecutor == null) {
+        readExecutor = newReadExecutor();
         //log.info("new group thead pool:{}", groupExecutor);
       }
     }
-    return groupExecutor;
+    return readExecutor;
   }
 
   /**
@@ -72,7 +72,7 @@ public class Threads {
 //    return executor;
 //  }
   
-  private static ExecutorService newGroupExecutor() {
+  private static ExecutorService newReadExecutor() {
     return Executors.newCachedThreadPool(DefaultThreadFactory.getInstance(GROUP_THREAD_NAME, Thread.MAX_PRIORITY));
   }
 
@@ -167,15 +167,15 @@ public class Threads {
    */
   public static boolean close() {
     boolean ret = true;
-    if (groupExecutor != null) {
-      groupExecutor.shutdown();
+    if (readExecutor != null) {
+      readExecutor.shutdown();
       try {
-        ret = groupExecutor.awaitTermination(6000, TimeUnit.SECONDS);
+        ret = readExecutor.awaitTermination(6000, TimeUnit.SECONDS);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-      log.info("shutdown group thead pool:{}", groupExecutor);
-      groupExecutor = null;
+      log.info("shutdown group thead pool:{}", readExecutor);
+      readExecutor = null;
     }
 
     if (tioExecutor != null) {

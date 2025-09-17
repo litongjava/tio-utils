@@ -14,6 +14,7 @@ public class ProcessResult {
   private int exitCode;
   private String stdOut;
   private String stdErr;
+  private long elapsed;
 
   private boolean cached;
 
