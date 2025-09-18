@@ -38,6 +38,7 @@ public class ProcessUtils {
     result.setStdErr(stderrContent);
     return result;
   }
+
   /**
    * 
    * @param outDir
@@ -47,14 +48,14 @@ public class ProcessUtils {
    * @throws IOException
    * @throws InterruptedException
    */
-  public static ProcessResult execute(File outDir, ProcessBuilder pb, int timeout) throws IOException, InterruptedException {
+  public static ProcessResult execute(File outDir, Long id, ProcessBuilder pb, int timeout)
+      throws IOException, InterruptedException {
     if (outDir != null && !outDir.exists()) {
       outDir.mkdirs();
     }
-
     // 定义日志文件路径，存放在与 scriptPath 相同的目录
-    File stdoutFile = new File(outDir, "stdout.log");
-    File stderrFile = new File(outDir, "stderr.log");
+    File stdoutFile = new File(outDir, id + "_stdout.log");
+    File stderrFile = new File(outDir, id + "_stderr.log");
 
     // 将输出和错误流重定向到对应的日志文件
     pb.redirectOutput(stdoutFile);
