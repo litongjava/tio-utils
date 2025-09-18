@@ -10,6 +10,7 @@ public class WorkDirUtils {
   public static final String workingResourcesDir = "resources";
   public static final String workingPagesDir = "pages";
   public static final String workingScriptsDir = "scripts";
+  public static final String workingMediaDir = "media";
 
   public static String getWorkingDir(String subPath) {
     File file = new File(subPath);
