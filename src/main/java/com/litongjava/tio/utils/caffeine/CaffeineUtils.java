@@ -104,8 +104,8 @@ public class CaffeineUtils {
 
   @SuppressWarnings("unchecked")
   public static <K, V> LoadingCache<K, V> getCache(String name) {
-    Long timeToLiveSeconds = 10 * 60L; // 写缓存后N秒过期
-    Long timeToIdleSeconds = 10 * 60L; // 读缓存后N秒过期
+    Long timeToLiveSeconds = 5 * 60L; // 写缓存后N秒过期
+    Long timeToIdleSeconds = 5 * 60L; // 读缓存后N秒过期
     Integer initialCapacity = 500; // 初始容量
     Integer maximumSize = Integer.MAX_VALUE; // 最大容量
     boolean recordStats = true; // 记录缓存命中率
