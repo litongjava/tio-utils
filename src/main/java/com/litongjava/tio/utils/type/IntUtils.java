@@ -1,6 +1,6 @@
 package com.litongjava.tio.utils.type;
 
-import com.litongjava.db.OkResult;
+import com.litongjava.result.OkResult;
 
 public class IntUtils {
 
