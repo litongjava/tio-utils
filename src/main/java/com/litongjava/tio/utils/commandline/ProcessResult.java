@@ -16,13 +16,13 @@ public class ProcessResult {
   private int exitCode;
   private String stdOut;
   private String stdErr;
-  private long elapsed;
+  private Long elapsed;
 
-  private boolean cached;
+  private Boolean cached;
 
-  private long sessionIdPrt;
-  private long sessionId;
-  private long taskId;
+  private Long sessionIdPrt;
+  private Long sessionId;
+  private Long taskId;
 
   private String executeCode;
 
