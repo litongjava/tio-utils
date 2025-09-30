@@ -24,6 +24,7 @@ public class ProcessUtils {
     pb.redirectOutput(stdoutFile);
     pb.redirectError(stderrFile);
 
+    long start = System.currentTimeMillis();
     Process process = pb.start();
 
     boolean finished = process.waitFor(10 * 60, TimeUnit.SECONDS);
@@ -40,10 +41,12 @@ public class ProcessUtils {
     String stdoutContent = new String(Files.readAllBytes(stdoutFile.toPath()), StandardCharsets.UTF_8);
     String stderrContent = new String(Files.readAllBytes(stderrFile.toPath()), StandardCharsets.UTF_8);
 
+    long end = System.currentTimeMillis();
     ProcessResult result = new ProcessResult();
     result.setExitCode(exitCode);
     result.setStdOut(stdoutContent);
     result.setStdErr(stderrContent);
+    result.setElapsed(end - start);
     return result;
   }
 
