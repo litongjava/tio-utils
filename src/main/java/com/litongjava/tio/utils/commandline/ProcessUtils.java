@@ -26,7 +26,15 @@ public class ProcessUtils {
 
     Process process = pb.start();
 
-    int exitCode = process.waitFor();
+    boolean finished = process.waitFor(10 * 60, TimeUnit.SECONDS);
+    int exitCode;
+    if (!finished) {
+      log.error("process did not respond within 120 seconds. Forcibly terminating...");
+      process.destroyForcibly();
+      exitCode = -1; // 特殊退出码表示超时
+    } else {
+      exitCode = process.exitValue();
+    }
 
     // 读取日志文件内容，返回给客户端（如果需要实时返回，可用其他方案监控文件变化）
     String stdoutContent = new String(Files.readAllBytes(stdoutFile.toPath()), StandardCharsets.UTF_8);

@@ -6,10 +6,12 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class ProcessResult {
   private int exitCode;
   private String stdOut;
@@ -25,6 +27,7 @@ public class ProcessResult {
   private String executeCode;
 
   private String output;
+  private String message;
   private File file;
   private String text;
   private String image;
@@ -53,5 +56,9 @@ public class ProcessResult {
   public ProcessResult(File file, boolean cached) {
     this.file = file;
     this.cached = cached;
+  }
+
+  public static ProcessResult buildMessage(String message) {
+    return new ProcessResult().setMessage(message);
   }
 }
