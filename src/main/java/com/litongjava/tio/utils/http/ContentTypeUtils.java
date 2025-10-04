@@ -354,5 +354,6 @@ public class ContentTypeUtils {
     MIME_TYPES.put("ipa", "application/vnd.iphone");
     MIME_TYPES.put("apk", "application/vnd.android.package-archive");
     MIME_TYPES.put("xap", "application/x-silverlight-app");
+    MIME_TYPES.put("vtt", "text/vtt");
   }
 }
