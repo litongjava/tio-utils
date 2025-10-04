@@ -30,6 +30,7 @@ public class ProcessResult {
   private String message;
   private File file;
   private String text;
+  private String subtitle;
   private String image;
   private String audio;
   private String video;
