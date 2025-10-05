@@ -6,9 +6,12 @@ import java.util.Map;
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
+import com.litongjava.tio.utils.thread.TioThreadUtils;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 
+@Slf4j
 public class LarksuiteNotificationUtils {
 
   public static Response send(Map<String, Object> reqMap) {
@@ -79,6 +82,15 @@ public class LarksuiteNotificationUtils {
     return send(url, req);
   }
 
+  public static void sendAsync(String url, String msg) {
+    TioThreadUtils.execute(() -> {
+      try (Response response = send(url, msg)) {
+      } catch (Exception e) {
+        log.error(e.getMessage(), e);
+      }
+    });
+  }
+
   /**
    * 发送文字消息
    *
@@ -90,5 +102,4 @@ public class LarksuiteNotificationUtils {
     String webHookUrl = EnvUtils.get("notification.webhook.url");
     return send(webHookUrl, msg);
   }
-
 }
