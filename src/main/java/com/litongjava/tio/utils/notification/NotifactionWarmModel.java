@@ -58,7 +58,7 @@ public class NotifactionWarmModel {
     // Alarm Time
     ZonedDateTime time = this.getTime();
     if (time != null) {
-      sb.append(String.format("- Alarm Time : %s\n", time.format(dateTimeFormatter)));
+      sb.append(String.format("- Time : %s\n", time.format(dateTimeFormatter)));
     }
     // App Env
     if (this.getAppEnv() != null) {
@@ -74,15 +74,15 @@ public class NotifactionWarmModel {
     }
     // Alarm Name (Warning Name)
     if (this.getWarningName() != null) {
-      sb.append(String.format("- Alarm Name : %s\n", this.getWarningName()));
+      sb.append(String.format("- Name : %s\n", this.getWarningName()));
     }
     // Alarm Level
     if (this.getLevel() != null) {
-      sb.append(String.format("- Alarm Level : %s\n", this.getLevel()));
+      sb.append(String.format("- Level : %s\n", this.getLevel()));
     }
     // Alarm Device
     if (this.getDeviceName() != null) {
-      sb.append(String.format("- Alarm Device : %s\n", this.getDeviceName()));
+      sb.append(String.format("- Device : %s\n", this.getDeviceName()));
     }
     // User Ip
     if (this.getUserIp() != null) {
