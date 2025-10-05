@@ -69,6 +69,16 @@ public class LarksuiteNotificationUtils {
 
   }
 
+  public static Response send(String url, String msg) {
+    Map<String, Object> textMap = new HashMap<>();
+    textMap.put("text", msg);
+
+    Map<String, Object> req = new HashMap<>();
+    req.put("msg_type", "text");
+    req.put("content", textMap);
+    return send(url, req);
+  }
+
   /**
    * 发送文字消息
    *
@@ -77,16 +87,8 @@ public class LarksuiteNotificationUtils {
    * @throws Exception
    */
   public static Response sendTextMsg(String msg) {
-    Map<String, Object> text = new HashMap<>();
-    text.put("text", msg);
-
-    Map<String, Object> req = new HashMap<>();
-    req.put("msg_type", "text");
-    req.put("content", text);
-
     String webHookUrl = EnvUtils.get("notification.webhook.url");
-
-    return send(webHookUrl, req);
+    return send(webHookUrl, msg);
   }
 
 }
