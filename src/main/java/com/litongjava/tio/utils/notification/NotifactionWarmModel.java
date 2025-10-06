@@ -140,7 +140,7 @@ public class NotifactionWarmModel {
     }
     // Alarm Content
     if (this.getContent() != null) {
-      sb.append("- Alarm Content : \n");
+      sb.append("- Content : \n");
       sb.append(String.format("%s\n", this.getContent()));
     }
     return sb.toString();
