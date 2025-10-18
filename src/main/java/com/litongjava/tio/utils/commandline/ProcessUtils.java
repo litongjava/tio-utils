@@ -30,7 +30,7 @@ public class ProcessUtils {
     boolean finished = process.waitFor(10 * 60, TimeUnit.SECONDS);
     int exitCode;
     if (!finished) {
-      log.error("process did not respond within 120 seconds. Forcibly terminating...");
+      log.error("{} process did not respond within 120 seconds. Forcibly terminating...", outDir.getAbsolutePath());
       process.destroyForcibly();
       exitCode = -1; // 特殊退出码表示超时
     } else {
@@ -77,7 +77,7 @@ public class ProcessUtils {
     boolean finished = process.waitFor(timeout, TimeUnit.SECONDS);
     int exitCode;
     if (!finished) {
-      log.error("process did not respond within 120 seconds. Forcibly terminating...");
+      log.error("{} process did not respond within 120 seconds. Forcibly terminating...", outDir.getAbsolutePath());
       process.destroyForcibly();
       exitCode = -1; // 特殊退出码表示超时
     } else {
