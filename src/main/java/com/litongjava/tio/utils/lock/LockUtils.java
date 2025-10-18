@@ -30,6 +30,7 @@ public class LockUtils {
 
   /**
    * 获取锁对象，用于synchronized(lockObj)
+   * 
    * @param key
    * @return
    * @author tanyaowu
@@ -41,6 +42,7 @@ public class LockUtils {
 
   /**
    * 获取锁对象，用于synchronized(lockObj)
+   * 
    * @param key
    * @param myLock 获取LockObj的锁，可以为null
    * @return
@@ -68,6 +70,7 @@ public class LockUtils {
 
   /**
    * 获取读写锁
+   * 
    * @param key
    * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
    * @return
@@ -97,11 +100,13 @@ public class LockUtils {
    * 2、没拿到写锁的线程，会等待获取读锁，注：获取到读锁的线程，什么也不会执行<br>
    * 3、当一段代码只允许被一个线程执行时，才用本函数，不要理解成同步等待了<br>
    * <br>
-   * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
+   * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double
+   * check的原理是一样的</strong><br>
+   * 
    * @param key
-   * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
+   * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
    * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
-   * @throws Exception 
+   * @throws Exception
    */
   public static void runWriteOrWaitRead(String key, Object myLock, ReadWriteLockHandler readWriteLockHandler)
       throws Exception {
@@ -114,9 +119,11 @@ public class LockUtils {
    * 2、没拿到写锁的线程，会等待获取读锁，注：获取到读锁的线程，什么也不会执行<br>
    * 3、当一段代码只允许被一个线程执行时，才用本函数，不要理解成同步等待了<br>
    * <br>
-   * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double check的原理是一样的</strong><br>
+   * <strong>注意：对于一些需要判断null等其它条件才执行的操作，在write()方法中建议再检查一次，这个跟double
+   * check的原理是一样的</strong><br>
+   * 
    * @param key
-   * @param myLock 获取ReentrantReadWriteLock的锁，可以为null
+   * @param myLock               获取ReentrantReadWriteLock的锁，可以为null
    * @param readWriteLockHandler 小心：该对象的write()方法并不一定会被执行
    * @param readWaitTimeInSecond 没拿到写锁的线程，等读锁的时间，单位：秒
    * @return
