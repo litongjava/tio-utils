@@ -1,359 +1,147 @@
 package com.litongjava.tio.utils.http;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ContentTypeUtils {
 
-  private static Map<String, String> MIME_TYPES = new HashMap<String, String>();
+  private static final Map<String, String> MIME_TYPES;
 
   /**
-   *
-   * @param fileExt 文件扩展名
-   * @return
+   * 根据文件扩展名返回 Content-Type。 传入可包含前导点或大小写（例如 ".JPG"），内部会标准化。 未知类型返回
+   * "application/octet-stream"。
    */
   public static String getContentType(String fileExt) {
-    String result = MIME_TYPES.get(fileExt);
-    if (result == null) {
-      result = MIME_TYPES.get("anno");
+    if (fileExt == null || fileExt.isEmpty()) {
+      return "application/octet-stream";
     }
-    return result;
+    String key = normalizeExt(fileExt);
+    String result = MIME_TYPES.get(key);
+    return result != null ? result : "application/octet-stream";
+  }
+
+  private static String normalizeExt(String ext) {
+    String e = ext.trim();
+    if (e.startsWith(".")) {
+      e = e.substring(1);
+    }
+    return e.toLowerCase();
   }
 
   static {
-    MIME_TYPES.put("", "application/x-");
-    MIME_TYPES.put("anno", "application/octet-stream");
-    MIME_TYPES.put("tif", "image/tiff");
-    MIME_TYPES.put("0.001", "application/x-001");
-    MIME_TYPES.put("0.301", "application/x-301");
-    MIME_TYPES.put("0.323", "text/h323");
-    MIME_TYPES.put("0.906", "application/x-906");
-    MIME_TYPES.put("0.907", "drawing/907");
-    MIME_TYPES.put("a11", "application/x-a11");
-    MIME_TYPES.put("acp", "audio/x-mei-aac");
-    MIME_TYPES.put("ai", "application/postscript");
-    MIME_TYPES.put("aif", "audio/aiff");
-    MIME_TYPES.put("aifc", "audio/aiff");
-    MIME_TYPES.put("aiff", "audio/aiff");
-    MIME_TYPES.put("anv", "application/x-anv");
-    MIME_TYPES.put("asa", "text/asa");
-    MIME_TYPES.put("asf", "video/x-ms-asf");
-    MIME_TYPES.put("asp", "text/asp");
-    MIME_TYPES.put("asx", "video/x-ms-asf");
-    MIME_TYPES.put("au", "audio/basic");
-    MIME_TYPES.put("avi", "video/avi");
-    MIME_TYPES.put("awf", "application/vnd.adobe.workflow");
-    MIME_TYPES.put("biz", "text/xml");
-    MIME_TYPES.put("bmp", "application/x-bmp");
-    MIME_TYPES.put("bot", "application/x-bot");
-    MIME_TYPES.put("c4t", "application/x-c4t");
-    MIME_TYPES.put("c90", "application/x-c90");
-    MIME_TYPES.put("cal", "application/x-cals");
-    MIME_TYPES.put("cat", "application/vnd.ms-pki.seccat");
-    MIME_TYPES.put("cdf", "application/x-netcdf");
-    MIME_TYPES.put("cdr", "application/x-cdr");
-    MIME_TYPES.put("cel", "application/x-cel");
-    MIME_TYPES.put("cer", "application/x-x509-ca-cert");
-    MIME_TYPES.put("cg4", "application/x-g4");
-    MIME_TYPES.put("cgm", "application/x-cgm");
-    MIME_TYPES.put("cit", "application/x-cit");
-    MIME_TYPES.put("class", "java/");
-    MIME_TYPES.put("cml", "text/xml");
-    MIME_TYPES.put("cmp", "application/x-cmp");
-    MIME_TYPES.put("cmx", "application/x-cmx");
-    MIME_TYPES.put("cot", "application/x-cot");
-    MIME_TYPES.put("crl", "application/pkix-crl");
-    MIME_TYPES.put("crt", "application/x-x509-ca-cert");
-    MIME_TYPES.put("csi", "application/x-csi");
-    MIME_TYPES.put("css", "text/css");
-    MIME_TYPES.put("cut", "application/x-cut");
-    MIME_TYPES.put("dbf", "application/x-dbf");
-    MIME_TYPES.put("dbm", "application/x-dbm");
-    MIME_TYPES.put("dbx", "application/x-dbx");
-    MIME_TYPES.put("dcd", "text/xml");
-    MIME_TYPES.put("dcx", "application/x-dcx");
-    MIME_TYPES.put("der", "application/x-x509-ca-cert");
-    MIME_TYPES.put("dgn", "application/x-dgn");
-    MIME_TYPES.put("dib", "application/x-dib");
-    MIME_TYPES.put("dll", "application/x-msdownload");
-    MIME_TYPES.put("doc", "application/msword");
-    MIME_TYPES.put("dot", "application/msword");
-    MIME_TYPES.put("drw", "application/x-drw");
-    MIME_TYPES.put("dtd", "text/xml");
-    MIME_TYPES.put("dwf", "Model/vnd.dwf");
-    MIME_TYPES.put("dwg", "application/x-dwg");
-    MIME_TYPES.put("dxb", "application/x-dxb");
-    MIME_TYPES.put("dxf", "application/x-dxf");
-    MIME_TYPES.put("edn", "application/vnd.adobe.edn");
-    MIME_TYPES.put("emf", "application/x-emf");
-    MIME_TYPES.put("eml", "message/rfc822");
-    MIME_TYPES.put("ent", "text/xml");
-    MIME_TYPES.put("epi", "application/x-epi");
-    MIME_TYPES.put("eps", "application/x-ps");
-    MIME_TYPES.put("etd", "application/x-ebx");
-    MIME_TYPES.put("exe", "application/x-msdownload");
-    MIME_TYPES.put("fax", "image/fax");
-    MIME_TYPES.put("fdf", "application/vnd.fdf");
-    MIME_TYPES.put("fif", "application/fractals");
-    MIME_TYPES.put("fo", "text/xml");
-    MIME_TYPES.put("frm", "application/x-frm");
-    MIME_TYPES.put("g4", "application/x-g4");
-    MIME_TYPES.put("gbr", "application/x-gbr");
-    MIME_TYPES.put("gif", "image/gif");
-    MIME_TYPES.put("gl2", "application/x-gl2");
-    MIME_TYPES.put("gp4", "application/x-gp4");
-    MIME_TYPES.put("hgl", "application/x-hgl");
-    MIME_TYPES.put("hmr", "application/x-hmr");
-    MIME_TYPES.put("hpg", "application/x-hpgl");
-    MIME_TYPES.put("hpl", "application/x-hpl");
-    MIME_TYPES.put("hqx", "application/mac-binhex40");
-    MIME_TYPES.put("hrf", "application/x-hrf");
-    MIME_TYPES.put("hta", "application/hta");
-    MIME_TYPES.put("htc", "text/x-component");
-    MIME_TYPES.put("htm", "text/html");
-    MIME_TYPES.put("html", "text/html");
-    MIME_TYPES.put("htt", "text/webviewhtml");
-    MIME_TYPES.put("htx", "text/html");
-    MIME_TYPES.put("icb", "application/x-icb");
-    MIME_TYPES.put("ico", "image/x-icon");
-    MIME_TYPES.put("iff", "application/x-iff");
-    MIME_TYPES.put("ig4", "application/x-g4");
-    MIME_TYPES.put("igs", "application/x-igs");
-    MIME_TYPES.put("iii", "application/x-iphone");
-    MIME_TYPES.put("img", "application/x-img");
-    MIME_TYPES.put("ins", "application/x-internet-signup");
-    MIME_TYPES.put("isp", "application/x-internet-signup");
-    MIME_TYPES.put("IVF", "video/x-ivf");
-    MIME_TYPES.put("java", "java/*");
-    MIME_TYPES.put("jfif", "image/jpeg");
-    MIME_TYPES.put("jpe", "image/jpeg");
-    MIME_TYPES.put("jpeg", "image/jpeg");
-    MIME_TYPES.put("jpg", "image/jpeg");
-    MIME_TYPES.put("js", "application/x-javascript");
-    MIME_TYPES.put("jsp", "text/html");
-    MIME_TYPES.put("la1", "audio/x-liquid-file");
-    MIME_TYPES.put("lar", "application/x-laplayer-reg");
-    MIME_TYPES.put("latex", "application/x-latex");
-    MIME_TYPES.put("lavs", "audio/x-liquid-secure");
-    MIME_TYPES.put("lbm", "application/x-lbm");
-    MIME_TYPES.put("lmsff", "audio/x-la-lms");
-    MIME_TYPES.put("ls", "application/x-javascript");
-    MIME_TYPES.put("ltr", "application/x-ltr");
-    MIME_TYPES.put("m1v", "video/x-mpeg");
-    MIME_TYPES.put("m2v", "video/x-mpeg");
-    MIME_TYPES.put("m3u", "audio/mpegurl");
-    MIME_TYPES.put("m4e", "video/mpeg4");
-    MIME_TYPES.put("mac", "application/x-mac");
-    MIME_TYPES.put("man", "application/x-troff-man");
-    MIME_TYPES.put("math", "text/xml");
-    MIME_TYPES.put("mdb", "application/msaccess");
-    MIME_TYPES.put("mfp", "application/x-shockwave-flash");
-    MIME_TYPES.put("mht", "message/rfc822");
-    MIME_TYPES.put("mhtml", "message/rfc822");
-    MIME_TYPES.put("mi", "application/x-mi");
-    MIME_TYPES.put("mid", "audio/mid");
-    MIME_TYPES.put("midi", "audio/mid");
-    MIME_TYPES.put("mil", "application/x-mil");
-    MIME_TYPES.put("mml", "text/xml");
-    MIME_TYPES.put("mnd", "audio/x-musicnet-download");
-    MIME_TYPES.put("mns", "audio/x-musicnet-stream");
-    MIME_TYPES.put("mocha", "application/x-javascript");
-    MIME_TYPES.put("movie", "video/x-sgi-movie");
-    MIME_TYPES.put("mp1", "audio/mp1");
-    MIME_TYPES.put("mp2", "audio/mp2");
-    MIME_TYPES.put("mp2v", "video/mpeg");
-    MIME_TYPES.put("mp3", "audio/mp3");
-    MIME_TYPES.put("mp4", "video/mpeg4");
-    MIME_TYPES.put("mpa", "video/x-mpg");
-    MIME_TYPES.put("mpd", "application/vnd.ms-project");
-    MIME_TYPES.put("mpe", "video/x-mpeg");
-    MIME_TYPES.put("mpeg", "video/mpg");
-    MIME_TYPES.put("mpg", "video/mpg");
-    MIME_TYPES.put("mpga", "audio/rn-mpeg");
-    MIME_TYPES.put("mpp", "application/vnd.ms-project");
-    MIME_TYPES.put("mps", "video/x-mpeg");
-    MIME_TYPES.put("mpt", "application/vnd.ms-project");
-    MIME_TYPES.put("mpv", "video/mpg");
-    MIME_TYPES.put("mpv2", "video/mpeg");
-    MIME_TYPES.put("m3u8", "application/vnd.apple.mpegurl");
-    MIME_TYPES.put("ts", "video/MP2T");
-    MIME_TYPES.put("mpw", "application/vnd.ms-project");
-    MIME_TYPES.put("mpx", "application/vnd.ms-project");
-    MIME_TYPES.put("mtx", "text/xml");
-    MIME_TYPES.put("mxp", "application/x-mmxp");
-    MIME_TYPES.put("net", "image/pnetvue");
-    MIME_TYPES.put("nrf", "application/x-nrf");
-    MIME_TYPES.put("nws", "message/rfc822");
-    MIME_TYPES.put("odc", "text/x-ms-odc");
-    MIME_TYPES.put("out", "application/x-out");
-    MIME_TYPES.put("p10", "application/pkcs10");
-    MIME_TYPES.put("p12", "application/x-pkcs12");
-    MIME_TYPES.put("p7b", "application/x-pkcs7-certificates");
-    MIME_TYPES.put("p7c", "application/pkcs7-mime");
-    MIME_TYPES.put("p7m", "application/pkcs7-mime");
-    MIME_TYPES.put("p7r", "application/x-pkcs7-certreqresp");
-    MIME_TYPES.put("p7s", "application/pkcs7-signature");
-    MIME_TYPES.put("pc5", "application/x-pc5");
-    MIME_TYPES.put("pci", "application/x-pci");
-    MIME_TYPES.put("pcl", "application/x-pcl");
-    MIME_TYPES.put("pcx", "application/x-pcx");
-    MIME_TYPES.put("pdf", "application/pdf");
-    MIME_TYPES.put("pdx", "application/vnd.adobe.pdx");
-    MIME_TYPES.put("pfx", "application/x-pkcs12");
-    MIME_TYPES.put("pgl", "application/x-pgl");
-    MIME_TYPES.put("pic", "application/x-pic");
-    MIME_TYPES.put("pko", "application/vnd.ms-pki.pko");
-    MIME_TYPES.put("pl", "application/x-perl");
-    MIME_TYPES.put("plg", "text/html");
-    MIME_TYPES.put("pls", "audio/scpls");
-    MIME_TYPES.put("plt", "application/x-plt");
-    MIME_TYPES.put("png", "image/png");
-    MIME_TYPES.put("pot", "application/vnd.ms-powerpoint");
-    MIME_TYPES.put("ppa", "application/vnd.ms-powerpoint");
-    MIME_TYPES.put("ppm", "application/x-ppm");
-    MIME_TYPES.put("pps", "application/vnd.ms-powerpoint");
-    MIME_TYPES.put("ppt", "application/vnd.ms-powerpoint");
-    MIME_TYPES.put("pr", "application/x-pr");
-    MIME_TYPES.put("prf", "application/pics-rules");
-    MIME_TYPES.put("prn", "application/x-prn");
-    MIME_TYPES.put("prt", "application/x-prt");
-    MIME_TYPES.put("ps", "application/x-ps");
-    MIME_TYPES.put("ptn", "application/x-ptn");
-    MIME_TYPES.put("pwz", "application/vnd.ms-powerpoint");
-    MIME_TYPES.put("r3t", "text/vnd.rn-realtext3d");
-    MIME_TYPES.put("ra", "audio/vnd.rn-realaudio");
-    MIME_TYPES.put("ram", "audio/x-pn-realaudio");
-    MIME_TYPES.put("ras", "application/x-ras");
-    MIME_TYPES.put("rat", "application/rat-file");
-    MIME_TYPES.put("rdf", "text/xml");
-    MIME_TYPES.put("rec", "application/vnd.rn-recording");
-    MIME_TYPES.put("red", "application/x-red");
-    MIME_TYPES.put("rgb", "application/x-rgb");
-    MIME_TYPES.put("rjs", "application/vnd.rn-realsystem-rjs");
-    MIME_TYPES.put("rjt", "application/vnd.rn-realsystem-rjt");
-    MIME_TYPES.put("rlc", "application/x-rlc");
-    MIME_TYPES.put("rle", "application/x-rle");
-    MIME_TYPES.put("rm", "application/vnd.rn-realmedia");
-    MIME_TYPES.put("rmf", "application/vnd.adobe.rmf");
-    MIME_TYPES.put("rmi", "audio/mid");
-    MIME_TYPES.put("rmj", "application/vnd.rn-realsystem-rmj");
-    MIME_TYPES.put("rmm", "audio/x-pn-realaudio");
-    MIME_TYPES.put("rmp", "application/vnd.rn-rn_music_package");
-    MIME_TYPES.put("rms", "application/vnd.rn-realmedia-secure");
-    MIME_TYPES.put("rmvb", "application/vnd.rn-realmedia-vbr");
-    MIME_TYPES.put("rmx", "application/vnd.rn-realsystem-rmx");
-    MIME_TYPES.put("rnx", "application/vnd.rn-realplayer");
-    MIME_TYPES.put("rp", "image/vnd.rn-realpix");
-    MIME_TYPES.put("rpm", "audio/x-pn-realaudio-plugin");
-    MIME_TYPES.put("rsml", "application/vnd.rn-rsml");
-    MIME_TYPES.put("rt", "text/vnd.rn-realtext");
-    MIME_TYPES.put("rtf", "application/msword");
-    MIME_TYPES.put("rtf", "application/x-rtf");
-    MIME_TYPES.put("rv", "video/vnd.rn-realvideo");
-    MIME_TYPES.put("sam", "application/x-sam");
-    MIME_TYPES.put("sat", "application/x-sat");
-    MIME_TYPES.put("sdp", "application/sdp");
-    MIME_TYPES.put("sdw", "application/x-sdw");
-    MIME_TYPES.put("sit", "application/x-stuffit");
-    MIME_TYPES.put("slb", "application/x-slb");
-    MIME_TYPES.put("sld", "application/x-sld");
-    MIME_TYPES.put("slk", "drawing/x-slk");
-    MIME_TYPES.put("smi", "application/smil");
-    MIME_TYPES.put("smil", "application/smil");
-    MIME_TYPES.put("smk", "application/x-smk");
-    MIME_TYPES.put("snd", "audio/basic");
-    MIME_TYPES.put("sol", "text/plain");
-    MIME_TYPES.put("sor", "text/plain");
-    MIME_TYPES.put("spc", "application/x-pkcs7-certificates");
-    MIME_TYPES.put("spl", "application/futuresplash");
-    MIME_TYPES.put("spp", "text/xml");
-    MIME_TYPES.put("ssm", "application/streamingmedia");
-    MIME_TYPES.put("sst", "application/vnd.ms-pki.certstore");
-    MIME_TYPES.put("stl", "application/vnd.ms-pki.stl");
-    MIME_TYPES.put("stm", "text/html");
-    MIME_TYPES.put("sty", "application/x-sty");
-    MIME_TYPES.put("svg", "image/svg+xml");
-    MIME_TYPES.put("swf", "application/x-shockwave-flash");
-    MIME_TYPES.put("tdf", "application/x-tdf");
-    MIME_TYPES.put("tg4", "application/x-tg4");
-    MIME_TYPES.put("tga", "application/x-tga");
-    MIME_TYPES.put("tif", "image/tiff");
-    MIME_TYPES.put("tiff", "image/tiff");
-    MIME_TYPES.put("tld", "text/xml");
-    MIME_TYPES.put("top", "drawing/x-top");
-    MIME_TYPES.put("torrent", "application/x-bittorrent");
-    MIME_TYPES.put("tsd", "text/xml");
-    MIME_TYPES.put("txt", "text/plain");
-    MIME_TYPES.put("uin", "application/x-icq");
-    MIME_TYPES.put("uls", "text/iuls");
-    MIME_TYPES.put("vcf", "text/x-vcard");
-    MIME_TYPES.put("vda", "application/x-vda");
-    MIME_TYPES.put("vdx", "application/vnd.visio");
-    MIME_TYPES.put("vml", "text/xml");
-    MIME_TYPES.put("vpg", "application/x-vpeg005");
-    MIME_TYPES.put("vsd", "application/vnd.visio");
-    MIME_TYPES.put("vsd", "application/x-vsd");
-    MIME_TYPES.put("vss", "application/vnd.visio");
-    MIME_TYPES.put("vst", "application/vnd.visio");
-    MIME_TYPES.put("vsw", "application/vnd.visio");
-    MIME_TYPES.put("vsx", "application/vnd.visio");
-    MIME_TYPES.put("vtx", "application/vnd.visio");
-    MIME_TYPES.put("vxml", "text/xml");
-    MIME_TYPES.put("wav", "audio/wav");
-    MIME_TYPES.put("wax", "audio/x-ms-wax");
-    MIME_TYPES.put("wb1", "application/x-wb1");
-    MIME_TYPES.put("wb2", "application/x-wb2");
-    MIME_TYPES.put("wb3", "application/x-wb3");
-    MIME_TYPES.put("wbmp", "image/vnd.wap.wbmp");
-    MIME_TYPES.put("wiz", "application/msword");
-    MIME_TYPES.put("wk3", "application/x-wk3");
-    MIME_TYPES.put("wk4", "application/x-wk4");
-    MIME_TYPES.put("wkq", "application/x-wkq");
-    MIME_TYPES.put("wks", "application/x-wks");
-    MIME_TYPES.put("wm", "video/x-ms-wm");
-    MIME_TYPES.put("wma", "audio/x-ms-wma");
-    MIME_TYPES.put("wmd", "application/x-ms-wmd");
-    MIME_TYPES.put("wmf", "application/x-wmf");
-    MIME_TYPES.put("wml", "text/vnd.wap.wml");
-    MIME_TYPES.put("wmv", "video/x-ms-wmv");
-    MIME_TYPES.put("wmx", "video/x-ms-wmx");
-    MIME_TYPES.put("wmz", "application/x-ms-wmz");
-    MIME_TYPES.put("wp6", "application/x-wp6");
-    MIME_TYPES.put("wpd", "application/x-wpd");
-    MIME_TYPES.put("wpg", "application/x-wpg");
-    MIME_TYPES.put("wpl", "application/vnd.ms-wpl");
-    MIME_TYPES.put("wq1", "application/x-wq1");
-    MIME_TYPES.put("wr1", "application/x-wr1");
-    MIME_TYPES.put("wri", "application/x-wri");
-    MIME_TYPES.put("wrk", "application/x-wrk");
-    MIME_TYPES.put("ws", "application/x-ws");
-    MIME_TYPES.put("ws2", "application/x-ws");
-    MIME_TYPES.put("wsc", "text/scriptlet");
-    MIME_TYPES.put("wsdl", "text/xml");
-    MIME_TYPES.put("wvx", "video/x-ms-wvx");
-    MIME_TYPES.put("xdp", "application/vnd.adobe.xdp");
-    MIME_TYPES.put("xdr", "text/xml");
-    MIME_TYPES.put("xfd", "application/vnd.adobe.xfd");
-    MIME_TYPES.put("xfdf", "application/vnd.adobe.xfdf");
-    MIME_TYPES.put("xhtml", "text/html");
-    MIME_TYPES.put("xls", "application/vnd.ms-excel");
-    MIME_TYPES.put("xlw", "application/x-xlw");
-    MIME_TYPES.put("xml", "text/xml");
-    MIME_TYPES.put("xpl", "audio/scpls");
-    MIME_TYPES.put("xq", "text/xml");
-    MIME_TYPES.put("xql", "text/xml");
-    MIME_TYPES.put("xquery", "text/xml");
-    MIME_TYPES.put("xsd", "text/xml");
-    MIME_TYPES.put("xsl", "text/xml");
-    MIME_TYPES.put("xslt", "text/xml");
-    MIME_TYPES.put("xwd", "application/x-xwd");
-    MIME_TYPES.put("x_b", "application/x-x_b");
-    MIME_TYPES.put("sis", "application/vnd.symbian.install");
-    MIME_TYPES.put("sisx", "application/vnd.symbian.install");
-    MIME_TYPES.put("x_t", "application/x-x_t");
-    MIME_TYPES.put("ipa", "application/vnd.iphone");
-    MIME_TYPES.put("apk", "application/vnd.android.package-archive");
-    MIME_TYPES.put("xap", "application/x-silverlight-app");
-    MIME_TYPES.put("vtt", "text/vtt");
+    Map<String, String> m = new HashMap<>();
+
+    // --- 文本 / 标记 ---
+    m.put("txt", "text/plain");
+    m.put("csv", "text/csv");
+    m.put("tsv", "text/tab-separated-values");
+    m.put("css", "text/css");
+    m.put("htm", "text/html");
+    m.put("html", "text/html");
+    m.put("xhtml", "application/xhtml+xml");
+    m.put("xml", "application/xml");
+    m.put("json", "application/json");
+    m.put("map", "application/json"); // source map
+    m.put("vtt", "text/vtt");
+    m.put("yaml", "text/yaml");
+    m.put("yml", "text/yaml");
+
+    // --- 脚本 / 代码 ---
+    m.put("js", "text/javascript"); // WHATWG 推荐；若需也可换成 application/javascript
+    m.put("mjs", "text/javascript");
+    m.put("ts", "application/typescript");
+    m.put("jsx", "text/javascript");
+    m.put("tsx", "application/typescript");
+    m.put("java", "text/x-java-source");
+    m.put("class", "application/java-vm");
+    m.put("wasm", "application/wasm");
+
+    // --- 图片 ---
+    m.put("png", "image/png");
+    m.put("jpg", "image/jpeg");
+    m.put("jpeg", "image/jpeg");
+    m.put("jfif", "image/jpeg");
+    m.put("gif", "image/gif");
+    m.put("bmp", "image/bmp");
+    m.put("webp", "image/webp");
+    m.put("ico", "image/x-icon"); // 或 image/vnd.microsoft.icon
+    m.put("svg", "image/svg+xml");
+    m.put("tif", "image/tiff");
+    m.put("tiff", "image/tiff");
+    m.put("avif", "image/avif");
+    m.put("heic", "image/heic");
+    m.put("heif", "image/heif");
+
+    // --- 音频 ---
+    m.put("mp3", "audio/mpeg");
+    m.put("mpga", "audio/mpeg");
+    m.put("wav", "audio/wav"); // 或 audio/x-wav
+    m.put("ogg", "audio/ogg"); // Ogg 音频容器
+    m.put("oga", "audio/ogg"); // Ogg+Vorbis/Opus 常用扩展
+    m.put("m4a", "audio/mp4");
+    m.put("aac", "audio/aac");
+    m.put("flac", "audio/flac");
+    m.put("mid", "audio/midi");
+    m.put("midi", "audio/midi");
+    m.put("weba", "audio/webm");
+    m.put("m3u", "audio/x-mpegurl");
+    m.put("m3u8", "application/vnd.apple.mpegurl");
+
+    // --- 视频 ---
+    m.put("mp4", "video/mp4");
+    m.put("m4v", "video/mp4");
+    m.put("mpeg", "video/mpeg");
+    m.put("mpg", "video/mpeg");
+    m.put("mp2", "video/mpeg"); // 旧扩展，若只存音频可去掉
+    m.put("mpv", "video/mpeg");
+    m.put("mov", "video/quicktime");
+    m.put("avi", "video/x-msvideo");
+    m.put("wmv", "video/x-ms-wmv");
+    m.put("ogv", "video/ogg");
+    m.put("webm", "video/webm");
+    m.put("ts", "video/mp2t"); // HLS 分片
+    m.put("3gp", "video/3gpp");
+    m.put("3g2", "video/3gpp2");
+
+    // --- 字体 ---
+    m.put("woff", "font/woff");
+    m.put("woff2", "font/woff2");
+    m.put("ttf", "font/ttf");
+    m.put("otf", "font/otf");
+    m.put("eot", "application/vnd.ms-fontobject");
+
+    // --- 文档 / 办公 ---
+    m.put("pdf", "application/pdf");
+    m.put("rtf", "application/rtf");
+    m.put("doc", "application/msword");
+    m.put("dot", "application/msword");
+    m.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    m.put("ppt", "application/vnd.ms-powerpoint");
+    m.put("pps", "application/vnd.ms-powerpoint");
+    m.put("pot", "application/vnd.ms-powerpoint");
+    m.put("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+    m.put("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    m.put("xls", "application/vnd.ms-excel");
+    m.put("xlw", "application/vnd.ms-excel");
+    m.put("csvx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    // --- 压缩 / 包 ---
+    m.put("zip", "application/zip");
+    m.put("gz", "application/gzip");
+    m.put("tar", "application/x-tar");
+    m.put("tgz", "application/gzip"); // 或 application/x-compressed-tar
+    m.put("bz2", "application/x-bzip2");
+    m.put("7z", "application/x-7z-compressed");
+    m.put("rar", "application/vnd.rar");
+
+    // --- 其他常见 ---
+    m.put("apk", "application/vnd.android.package-archive");
+    m.put("ipa", "application/octet-stream"); // iOS 包未注册，统一 octet-stream
+    m.put("xap", "application/x-silverlight-app");
+    m.put("ics", "text/calendar");
+    m.put("eml", "message/rfc822");
+
+    MIME_TYPES = Collections.unmodifiableMap(m);
   }
 }
