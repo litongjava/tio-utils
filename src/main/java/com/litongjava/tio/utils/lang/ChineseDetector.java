@@ -3,7 +3,7 @@ package com.litongjava.tio.utils.lang;
 public class ChineseDetector {
 
   public static boolean isChinese(String text) {
-    return isChinese(text, 0.3d);
+    return isChinese(text, 0.2d);
   }
 
   /**
