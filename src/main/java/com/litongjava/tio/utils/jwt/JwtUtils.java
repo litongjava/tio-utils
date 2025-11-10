@@ -1,8 +1,10 @@
 package com.litongjava.tio.utils.jwt;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Mac;
@@ -185,23 +187,67 @@ public class JwtUtils {
    * @param payload 载荷字符串
    * @return 解析后的Map
    */
-  private static Map<String, Object> parsePayload(String payload) {
+  public static Map<String, Object> parsePayload(String payload) {
     Map<String, Object> payloadMap = new HashMap<>();
 
-    // 移除大括号
-    payload = payload.substring(1, payload.length() - 1);
+    payload = payload.trim();
+    if (payload.startsWith("{") && payload.endsWith("}")) {
+      payload = payload.substring(1, payload.length() - 1);
+    }
 
-    String[] pairs = payload.split(",");
+    List<String> pairs = new ArrayList<>();
+    StringBuilder current = new StringBuilder();
+    boolean inQuotes = false;
+    int bracketLevel = 0;
+
+    for (char c : payload.toCharArray()) {
+      if (c == '"')
+        inQuotes = !inQuotes;
+      else if (!inQuotes) {
+        if (c == '[')
+          bracketLevel++;
+        else if (c == ']')
+          bracketLevel--;
+        else if (c == ',' && bracketLevel == 0) {
+          pairs.add(current.toString());
+          current.setLength(0);
+          continue;
+        }
+      }
+      current.append(c);
+    }
+    if (current.length() > 0)
+      pairs.add(current.toString());
+
     for (String pair : pairs) {
-      String[] keyValue = pair.split(":");
-      String key = keyValue[0].trim().replaceAll("\"", "");
-      Object value = keyValue[1].trim();
+      String[] keyValue = pair.split(":", 2);
+      if (keyValue.length < 2)
+        continue;
 
-      // 尝试将value转换为数字或字符串
-      try {
-        value = Long.parseLong((String) value);
-      } catch (NumberFormatException e) {
-        value = value.toString().replaceAll("\"", "");
+      String key = keyValue[0].trim().replaceAll("\"", "");
+      String rawValue = keyValue[1].trim();
+
+      Object value;
+      if (rawValue.startsWith("[") && rawValue.endsWith("]")) {
+        // 解析数组
+        rawValue = rawValue.substring(1, rawValue.length() - 1);
+        String[] parts = rawValue.split(",");
+        List<Object> list = new ArrayList<>();
+        for (String p : parts) {
+          String v = p.trim().replaceAll("\"", "");
+          try {
+            list.add(Long.parseLong(v));
+          } catch (NumberFormatException e) {
+            list.add(v);
+          }
+        }
+        value = list;
+      } else {
+        try {
+          value = Long.parseLong(rawValue);
+        } catch (NumberFormatException e) {
+          value = rawValue.replaceAll("\"", "");
+        }
       }
 
       payloadMap.put(key, value);
