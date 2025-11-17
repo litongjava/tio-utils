@@ -27,6 +27,7 @@ public class ProcessResult {
   private String executeCode;
 
   private String output;
+  private String json;
   private String message;
   private File file;
   private String text;
