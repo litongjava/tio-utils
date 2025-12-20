@@ -35,6 +35,7 @@ public class ProcessResult {
   private String image;
   private String audio;
   private String video;
+  private String hlsUrl;
   private Double video_length;
   private List<String> texts;
   private List<String> images;
