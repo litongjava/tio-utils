@@ -53,6 +53,10 @@ public class FastJson2Utils {
     return JSON.parseObject(bytes);
   }
 
+  public static <T> T parse(String body, TypeReference<T> tioTypeReference) {
+    return JSON.parseObject(body, tioTypeReference);
+  }
+
   public static JSONArray parseArray(String jsonString) {
     return JSON.parseArray(jsonString);
   }

@@ -143,8 +143,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames,
-      List<String> paramValues) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames, List<String> paramValues)
+      throws Exception {
     return post(url, headerMap, (MediaType) null, null, null, paramNames, paramValues);
   }
 
@@ -156,8 +156,7 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap)
-      throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
     return post(url, headerMap, (MediaType) null, null, paramMap, null, null);
   }
 
@@ -227,15 +226,60 @@ public class HttpUtils {
     }
   }
 
+  public static ResponseVo postText(String url, String payload) {
+    OkHttpClient client = OkHttpClientPool.get60HttpClient();
+    MediaType mediaType = MediaType.parse("text/plain");
+    RequestBody body = RequestBody.create(payload, mediaType);
+
+    Request.Builder builder = new Request.Builder();
+    builder.url(url).post(body);
+
+    Request request = builder.build();
+    try (Response response = client.newCall(request).execute()) {
+      String string = response.body().string();
+      int code = response.code();
+      if (response.isSuccessful()) {
+        return new ResponseVo(true, code, string);
+      } else {
+        return new ResponseVo(false, code, string);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + url, e);
+    }
+  }
+
+  public static ResponseVo postJson(String url, String payload) {
+    OkHttpClient client = OkHttpClientPool.get60HttpClient();
+    MediaType mediaType = MediaType.parse("application/json");
+    RequestBody body = RequestBody.create(payload, mediaType);
+    Request request = new Request.Builder().url(url).post(body).build();
+    
+    try (Response response = client.newCall(request).execute()) {
+      String string = response.body().string();
+      int code = response.code();
+      if (response.isSuccessful()) {
+        return new ResponseVo(true, code, string);
+      } else {
+        return new ResponseVo(false, code, string);
+      }
+
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to request:" + url, e);
+    }
+
+  }
+
   public static ResponseVo postJson(String url, String key, String payload) {
     OkHttpClient client = OkHttpClientPool.get60HttpClient();
     MediaType mediaType = MediaType.parse("application/json");
     RequestBody body = RequestBody.create(payload, mediaType);
-    Request request = new Request.Builder()
-        //
-        .url(url).post(body)
-        //
-        .addHeader("Authorization", "Bearer " + key).build();
+    Request.Builder builder = new Request.Builder();
+    builder.url(url).post(body);
+    //
+    if (key != null) {
+      builder.addHeader("Authorization", "Bearer " + key);
+    }
+    Request request = builder.build();
     try (Response response = client.newCall(request).execute()) {
       String string = response.body().string();
       int code = response.code();
