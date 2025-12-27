@@ -20,7 +20,7 @@ public class ProcessResult {
 
   private Boolean cached;
 
-  private Long sessionIdPrt;
+  private Long prt;
   private Long sessionId;
   private Long taskId;
 
@@ -36,6 +36,7 @@ public class ProcessResult {
   private String audio;
   private String video;
   private String hlsUrl;
+  private String ppt;
   private Double video_length;
   private List<String> texts;
   private List<String> images;

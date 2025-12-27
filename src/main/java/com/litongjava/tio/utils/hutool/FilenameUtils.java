@@ -85,4 +85,10 @@ public class FilenameUtils {
     String subPath = path.substring(lastSlashIndex + 1);
     return subPath;
   }
+
+  public static boolean isImageFile(String name) {
+    String lower = name.toLowerCase();
+    return lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".png") || lower.endsWith(".gif") || lower.endsWith(".bmp");
+  }
+
 }
