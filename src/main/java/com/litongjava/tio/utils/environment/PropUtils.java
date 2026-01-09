@@ -8,7 +8,7 @@ import com.litongjava.tio.utils.hutool.ResourceUtil;
 import com.litongjava.tio.utils.hutool.StrUtil;
 
 /**
- * PropKit. PropUtils can load properties file from CLASSPATH or File object.
+ * PropUtils can load properties file from CLASSPATH or File object.
  */
 public class PropUtils {
 

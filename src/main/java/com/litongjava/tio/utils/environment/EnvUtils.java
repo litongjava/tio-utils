@@ -280,7 +280,7 @@ public class EnvUtils {
         log.info("load:{}", fileName);
         PropUtils.use(fileName);
       } else {
-        // crate file
+        // create file
         PropUtils.use(defaultFilename);
         log.info("load:{}", defaultFilename);
 

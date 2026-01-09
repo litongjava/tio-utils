@@ -30,6 +30,7 @@ public class Prop {
 
   /**
    * Prop constructor.
+   * 
    * @see #Prop(String, String)
    */
   public Prop(String fileName) {
@@ -41,12 +42,14 @@ public class Prop {
    * <p>
    * Example:<br>
    * Prop prop = new Prop("my_config.txt", "UTF-8");<br>
-   * String userName = prop.get("userName");<br><br>
+   * String userName = prop.get("userName");<br>
+   * <br>
    * 
    * prop = new Prop("com/jfinal/file_in_sub_path_of_classpath.txt", "UTF-8");<br>
    * String value = prop.get("key");
    * 
-   * @param fileName the properties file's name in classpath or the sub directory of classpath
+   * @param fileName the properties file's name in classpath or the sub directory
+   *                 of classpath
    * @param encoding the encoding
    */
   public Prop(String fileName, Charset encoding) {
@@ -60,18 +63,7 @@ public class Prop {
       } else {
         File file = new File(fileName);
         if (!file.exists()) {
-          try {
-            if (file.createNewFile()) {
-              log.info("file created successful：" + fileName);
-              inputStream = new FileInputStream(file);
-              properties.load(new InputStreamReader(inputStream, encoding));
-            } else {
-              log.info("failed to create file" + fileName);
-            }
-          } catch (Exception e) {
-            log.warn("failed to create file" + fileName + e.getMessage());
-          }
-
+          throw new RuntimeException("Properties file not found: " + fileName + ". Please check the file manually.");
         } else {
           log.info("load file：" + fileName);
           inputStream = new FileInputStream(file);
@@ -97,6 +89,7 @@ public class Prop {
 
   /**
    * Prop constructor.
+   * 
    * @see #Prop(File, String)
    */
   public Prop(File file) {
@@ -110,7 +103,7 @@ public class Prop {
    * Prop prop = new Prop(new File("/var/config/my_config.txt"), "UTF-8");<br>
    * String userName = prop.get("userName");
    * 
-   * @param file the properties File object
+   * @param file     the properties File object
    * @param encoding the encoding
    */
   public Prop(File file, Charset encoding) {
