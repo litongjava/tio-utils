@@ -281,9 +281,11 @@ public class EnvUtils {
         PropUtils.use(fileName);
       } else {
         // create file
-        PropUtils.use(defaultFilename);
-        log.info("load:{}", defaultFilename);
-
+        File file = new File(defaultFilename);
+        if (file.exists()) {
+          PropUtils.use(defaultFilename);
+          log.info("load:{}", defaultFilename);
+        }
       }
     }
 
@@ -304,6 +306,12 @@ public class EnvUtils {
       log.info("load from path:{}", "secrets.txt");
     }
 
+    File my = new File("my.txt");
+    if (my.exists()) {
+      PropUtils.append(my);
+      log.info("load from path:{}", "EnvUtils.txt");
+    }
+    
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 
