@@ -309,7 +309,7 @@ public class EnvUtils {
     File my = new File("my.txt");
     if (my.exists()) {
       PropUtils.append(my);
-      log.info("load from path:{}", "EnvUtils.txt");
+      log.info("load from path:{}", "my.txt");
     }
     
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
