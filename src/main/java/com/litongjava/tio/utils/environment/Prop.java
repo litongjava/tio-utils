@@ -63,7 +63,7 @@ public class Prop {
       } else {
         File file = new File(fileName);
         if (!file.exists()) {
-          throw new RuntimeException("Properties file not found: " + fileName + ". Please check the file manually.");
+          log.warn("Properties file not found: " + fileName + ". Please check the file manually.");
         } else {
           log.info("load file：" + fileName);
           inputStream = new FileInputStream(file);
