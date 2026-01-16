@@ -5,13 +5,15 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.constants.ServerConfigKeys;
 import com.litongjava.tio.utils.hutool.ResourceUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class EnvUtils {
+  private static final Logger log = LoggerFactory.getLogger(EnvUtils.class);
+  
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
   private static Map<String, String> appMap = new HashMap<>();

@@ -9,14 +9,15 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Prop. Prop can load properties file from CLASSPATH or File object.
  */
-@Slf4j
 public class Prop {
-
+  private static final Logger log = LoggerFactory.getLogger(Prop.class);
+  
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
 
   protected Properties properties;

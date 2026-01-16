@@ -8,11 +8,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.tio.utils.thread.pool.DefaultThreadFactory;
 import com.litongjava.tio.utils.thread.pool.SynThreadPoolExecutor;
 import com.litongjava.tio.utils.thread.pool.TioCallerRunsPolicy;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class provides utility methods for managing thread pools.
@@ -22,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
  * </p>
  * 
  */
-@Slf4j
 public class Threads {
+  private static final Logger log = LoggerFactory.getLogger( Threads.class);
   public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
   public static final int CORE_POOL_SIZE = AVAILABLE_PROCESSORS;
   public static final int MAX_POOL_SIZE_FOR_TIO = Integer.getInteger("TIO_MAX_POOL_SIZE_FOR_TIO", Math.max(CORE_POOL_SIZE * 3, 64));

@@ -3,17 +3,19 @@ package com.litongjava.tio.utils.notification;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.http.HttpUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
 import com.litongjava.tio.utils.thread.TioThreadUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 
-@Slf4j
 public class LarksuiteNotificationUtils {
-
+  private static final Logger log = LoggerFactory.getLogger(LarksuiteNotificationUtils.class);
+  
   public static Response send(Map<String, Object> reqMap) {
     String webHookUrl = EnvUtils.get("notification.webhook.url");
     return send(webHookUrl, reqMap);

@@ -8,11 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class ProcessUtils {
 
+  private static final Logger log = LoggerFactory.getLogger(ProcessUtils.class);
+  
   /** 默认读取日志的最大字节数（每个文件），防止 OOM：2MB */
   private static final int DEFAULT_MAX_READ_BYTES = 2 * 1024 * 1024;
   /** destroy() 后的宽限期（秒） */
