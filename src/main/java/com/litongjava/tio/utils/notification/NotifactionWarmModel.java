@@ -30,6 +30,7 @@ public class NotifactionWarmModel {
   private String stackTrace;
   private String sessionId;
   private String taskId;
+  private String text;
   private String content;
 
   private Map<String, String> headers;
@@ -142,6 +143,12 @@ public class NotifactionWarmModel {
     if (taskId != null) {
       sb.append("- TaskId : \n");
       sb.append(String.format("%s\n", taskId));
+    }
+    
+    
+    if (text != null) {
+      sb.append("- Text : \n");
+      sb.append(String.format("%s\n", text));
     }
     
     // Alarm Content
@@ -356,6 +363,15 @@ public class NotifactionWarmModel {
 
   public NotifactionWarmModel setTaskId(String taskId) {
     this.taskId = taskId;
+    return this;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public NotifactionWarmModel setText(String text) {
+    this.text = text;
     return this;
   }
 
