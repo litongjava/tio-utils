@@ -6,9 +6,8 @@ import java.util.Map;
 
 import com.litongjava.tio.utils.json.JsonUtils;
 
-
 public class NotifactionWarmModel {
-  //yyyy-MM-dd HH:mm:ssXXX  -> e.g. 2025-07-08 10:30:00+08:00
+  // yyyy-MM-dd HH:mm:ssXXX -> e.g. 2025-07-08 10:30:00+08:00
   public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss XXX");
 
   private ZonedDateTime time;
@@ -34,7 +33,8 @@ public class NotifactionWarmModel {
   private Map<String, String> headers;
   private Map<String, Object[]> params;
 
-  public NotifactionWarmModel(ZonedDateTime time, String env, String appGroupName, String appName, String warningName, String level, String deviceName, String content) {
+  public NotifactionWarmModel(ZonedDateTime time, String env, String appGroupName, String appName, String warningName,
+      String level, String deviceName, String content) {
     this.time = time;
     this.appEnv = env;
     this.appGroupName = appGroupName;
@@ -59,7 +59,7 @@ public class NotifactionWarmModel {
       sb.append(String.format("- App Env : %s\n", appEnv));
     }
     // App Group Name
-    if (appGroupName!= null) {
+    if (appGroupName != null) {
       sb.append(String.format("- App Group Name : %s\n", appGroupName));
     }
     // App Name
@@ -112,7 +112,7 @@ public class NotifactionWarmModel {
     if (headers != null) {
       sb.append(String.format("- UserAgent : %s\n", JsonUtils.toJson(headers)));
     }
-    if (params!= null) {
+    if (params != null) {
       sb.append(String.format("- UserAgent : %s\n", JsonUtils.toJson(params)));
     }
     // Request Body
@@ -120,12 +120,12 @@ public class NotifactionWarmModel {
       sb.append(String.format("- Request Body : %s\n", requestBody));
     }
 
- // Request Body
+    // Request Body
     if (statusCode != null) {
       sb.append(String.format("- Status Code : %d\n", statusCode));
     }
-    
-    if (exceptionId!= null) {
+
+    if (exceptionId != null) {
       sb.append(String.format("- Exception Id : %s\n", exceptionId));
     }
     // Stack Trace
@@ -144,168 +144,189 @@ public class NotifactionWarmModel {
     return time;
   }
 
-  public void setTime(ZonedDateTime time) {
+  public NotifactionWarmModel setTime(ZonedDateTime time) {
     this.time = time;
+    return this;
   }
 
   public String getAppEnv() {
     return appEnv;
   }
 
-  public void setAppEnv(String appEnv) {
+  public NotifactionWarmModel setAppEnv(String appEnv) {
     this.appEnv = appEnv;
+    return this;
   }
 
   public String getAppGroupName() {
     return appGroupName;
   }
 
-  public void setAppGroupName(String appGroupName) {
+  public NotifactionWarmModel setAppGroupName(String appGroupName) {
     this.appGroupName = appGroupName;
+    return this;
   }
 
   public String getAppName() {
     return appName;
   }
 
-  public void setAppName(String appName) {
+  public NotifactionWarmModel setAppName(String appName) {
     this.appName = appName;
+    return this;
   }
 
   public String getWarningName() {
     return warningName;
   }
 
-  public void setWarningName(String warningName) {
+  public NotifactionWarmModel setWarningName(String warningName) {
     this.warningName = warningName;
+    return this;
   }
 
   public String getLevel() {
     return level;
   }
 
-  public void setLevel(String level) {
+  public NotifactionWarmModel setLevel(String level) {
     this.level = level;
+    return this;
   }
 
   public String getDeviceName() {
     return deviceName;
   }
 
-  public void setDeviceName(String deviceName) {
+  public NotifactionWarmModel setDeviceName(String deviceName) {
     this.deviceName = deviceName;
+    return this;
   }
 
   public String getUserIp() {
     return userIp;
   }
 
-  public void setUserIp(String userIp) {
+  public NotifactionWarmModel setUserIp(String userIp) {
     this.userIp = userIp;
+    return this;
   }
 
   public String getUserId() {
     return userId;
   }
 
-  public void setUserId(String userId) {
+  public NotifactionWarmModel setUserId(String userId) {
     this.userId = userId;
+    return this;
   }
 
   public String getRequestId() {
     return requestId;
   }
 
-  public void setRequestId(String requestId) {
+  public NotifactionWarmModel setRequestId(String requestId) {
     this.requestId = requestId;
+    return this;
   }
 
   public String getHost() {
     return host;
   }
 
-  public void setHost(String host) {
+  public NotifactionWarmModel setHost(String host) {
     this.host = host;
+    return this;
   }
 
   public String getReferer() {
     return referer;
   }
 
-  public void setReferer(String referer) {
+  public NotifactionWarmModel setReferer(String referer) {
     this.referer = referer;
+    return this;
   }
 
   public String getUserAgent() {
     return userAgent;
   }
 
-  public void setUserAgent(String userAgent) {
+  public NotifactionWarmModel setUserAgent(String userAgent) {
     this.userAgent = userAgent;
+    return this;
   }
 
   public String getRequestLine() {
     return requestLine;
   }
 
-  public void setRequestLine(String requestLine) {
+  public NotifactionWarmModel setRequestLine(String requestLine) {
     this.requestLine = requestLine;
+    return this;
   }
 
   public String getRequestBody() {
     return requestBody;
   }
 
-  public void setRequestBody(String requestBody) {
+  public NotifactionWarmModel setRequestBody(String requestBody) {
     this.requestBody = requestBody;
+    return this;
   }
 
   public Integer getStatusCode() {
     return statusCode;
   }
 
-  public void setStatusCode(Integer statusCode) {
+  public NotifactionWarmModel setStatusCode(Integer statusCode) {
     this.statusCode = statusCode;
+    return this;
   }
 
   public String getExceptionId() {
     return exceptionId;
   }
 
-  public void setExceptionId(String exceptionId) {
+  public NotifactionWarmModel setExceptionId(String exceptionId) {
     this.exceptionId = exceptionId;
+    return this;
   }
 
   public String getStackTrace() {
     return stackTrace;
   }
 
-  public void setStackTrace(String stackTrace) {
+  public NotifactionWarmModel setStackTrace(String stackTrace) {
     this.stackTrace = stackTrace;
+    return this;
   }
 
   public String getContent() {
     return content;
   }
 
-  public void setContent(String content) {
+  public NotifactionWarmModel setContent(String content) {
     this.content = content;
+    return this;
   }
 
   public Map<String, String> getHeaders() {
     return headers;
   }
 
-  public void setHeaders(Map<String, String> headers) {
+  public NotifactionWarmModel setHeaders(Map<String, String> headers) {
     this.headers = headers;
+    return this;
   }
 
   public Map<String, Object[]> getParams() {
     return params;
   }
 
-  public void setParams(Map<String, Object[]> params) {
+  public NotifactionWarmModel setParams(Map<String, Object[]> params) {
     this.params = params;
+    return this;
   }
 
   public static DateTimeFormatter getDatetimeformatter() {
