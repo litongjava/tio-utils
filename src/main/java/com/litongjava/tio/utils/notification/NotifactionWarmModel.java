@@ -28,6 +28,8 @@ public class NotifactionWarmModel {
   private Integer statusCode;
   private String exceptionId;
   private String stackTrace;
+  private String sessionId;
+  private String taskId;
   private String content;
 
   private Map<String, String> headers;
@@ -132,6 +134,16 @@ public class NotifactionWarmModel {
     if (stackTrace != null) {
       sb.append(String.format("- Stack Trace : %s\n", stackTrace));
     }
+    if (sessionId != null) {
+      sb.append("- SessionId : \n");
+      sb.append(String.format("%s\n", sessionId));
+    }
+    
+    if (taskId != null) {
+      sb.append("- TaskId : \n");
+      sb.append(String.format("%s\n", taskId));
+    }
+    
     // Alarm Content
     if (content != null) {
       sb.append("- Content : \n");
@@ -326,6 +338,24 @@ public class NotifactionWarmModel {
 
   public NotifactionWarmModel setParams(Map<String, Object[]> params) {
     this.params = params;
+    return this;
+  }
+
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public NotifactionWarmModel setSessionId(String sessionId) {
+    this.sessionId = sessionId;
+    return this;
+  }
+
+  public String getTaskId() {
+    return taskId;
+  }
+
+  public NotifactionWarmModel setTaskId(String taskId) {
+    this.taskId = taskId;
     return this;
   }
 
