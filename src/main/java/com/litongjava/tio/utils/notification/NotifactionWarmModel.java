@@ -1,10 +1,15 @@
 package com.litongjava.tio.utils.notification;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import com.litongjava.constants.ServerConfigKeys;
+import com.litongjava.tio.utils.environment.EnvUtils;
 import com.litongjava.tio.utils.json.JsonUtils;
+import com.litongjava.tio.utils.network.IpUtils;
 
 public class NotifactionWarmModel {
   // yyyy-MM-dd HH:mm:ssXXX -> e.g. 2025-07-08 10:30:00+08:00
@@ -139,18 +144,17 @@ public class NotifactionWarmModel {
       sb.append("- SessionId : \n");
       sb.append(String.format("%s\n", sessionId));
     }
-    
+
     if (taskId != null) {
       sb.append("- TaskId : \n");
       sb.append(String.format("%s\n", taskId));
     }
-    
-    
+
     if (text != null) {
       sb.append("- Text : \n");
       sb.append(String.format("%s\n", text));
     }
-    
+
     // Alarm Content
     if (content != null) {
       sb.append("- Content : \n");
@@ -377,5 +381,31 @@ public class NotifactionWarmModel {
 
   public static DateTimeFormatter getDatetimeformatter() {
     return dateTimeFormatter;
+  }
+
+  public static NotifactionWarmModel fromException(String warningName, String level, String content,
+      String stackTrace) {
+    NotifactionWarmModel model = new NotifactionWarmModel();
+    model.setStackTrace(stackTrace);
+    String localIp = IpUtils.getLocalIp();
+    model.setAppEnv(EnvUtils.env());
+    model.setAppGroupName(ServerConfigKeys.APP_GROUP_NAME);
+    model.setAppName(EnvUtils.get(ServerConfigKeys.APP_NAME));
+
+    model.setWarningName(warningName);
+
+    model.setLevel(level);
+    model.setDeviceName(localIp);
+    model.setTime(ZonedDateTime.now());
+    model.setContent(content);
+    return model;
+  }
+
+  public static NotifactionWarmModel fromException(String warningName, String level, String content, Exception e) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    e.printStackTrace(pw);
+    String stackTrace = sw.toString();
+    return fromException(warningName, level, content, stackTrace);
   }
 }
