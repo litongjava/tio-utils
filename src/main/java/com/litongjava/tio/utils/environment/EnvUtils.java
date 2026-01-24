@@ -13,7 +13,7 @@ import com.litongjava.tio.utils.hutool.ResourceUtil;
 
 public class EnvUtils {
   private static final Logger log = LoggerFactory.getLogger(EnvUtils.class);
-  
+
   private static String[] args;
   private static Map<String, String> cmdArgsMap = new HashMap<>();
   private static Map<String, String> appMap = new HashMap<>();
@@ -313,8 +313,12 @@ public class EnvUtils {
       PropUtils.append(my);
       log.info("load from path:{}", "my.txt");
     }
-    
+
     log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 
+  public static void load(String[] args) {
+    buildCmdArgsMap(args);
+    load();
+  }
 }
