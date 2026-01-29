@@ -35,6 +35,8 @@ public class NotifactionWarmModel {
   private String stackTrace;
   private String sessionId;
   private String taskId;
+  private String url;
+  private String requestUrl;
   private String text;
   private String content;
 
@@ -148,6 +150,16 @@ public class NotifactionWarmModel {
     if (taskId != null) {
       sb.append("- TaskId : \n");
       sb.append(String.format("%s\n", taskId));
+    }
+
+    if (url != null) {
+      sb.append("- URL : \n");
+      sb.append(String.format("%s\n", url));
+    }
+
+    if (requestUrl != null) {
+      sb.append("- RequestUrl : \n");
+      sb.append(String.format("%s\n", requestUrl));
     }
 
     if (text != null) {
@@ -381,6 +393,22 @@ public class NotifactionWarmModel {
 
   public static DateTimeFormatter getDatetimeformatter() {
     return dateTimeFormatter;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getRequestUrl() {
+    return requestUrl;
+  }
+
+  public void setRequestUrl(String requestUrl) {
+    this.requestUrl = requestUrl;
   }
 
   public static NotifactionWarmModel fromException(String warningName, String level, String content,
