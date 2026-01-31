@@ -14,9 +14,8 @@ public class ProcessResult {
   private Long prt;
   private Long sessionId;
   private Long taskId;
-
+  private String sources;
   private String executeCode;
-
   private String output;
   private String json;
   private String message;
@@ -302,4 +301,13 @@ public class ProcessResult {
   public void setData(Object data) {
     this.data = data;
   }
+
+  public String getSources() {
+    return sources;
+  }
+
+  public void setSources(String sources) {
+    this.sources = sources;
+  }
+  
 }
