@@ -37,13 +37,15 @@ public class EnvUtils {
   }
 
   public static Map<String, String> buildCmdArgsMap(String[] args) {
-    EnvUtils.args = args;
     Map<String, String> result = new HashMap<>();
-    for (String arg : args) {
-      if (arg.startsWith("--")) {
-        String[] parts = arg.substring(2).split("=", 2);
-        if (parts.length == 2) {
-          result.put(parts[0], parts[1]);
+    EnvUtils.args = args;
+    if (args != null) {
+      for (String arg : args) {
+        if (arg.startsWith("--")) {
+          String[] parts = arg.substring(2).split("=", 2);
+          if (parts.length == 2) {
+            result.put(parts[0], parts[1]);
+          }
         }
       }
     }
