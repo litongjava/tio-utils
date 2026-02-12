@@ -143,8 +143,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames, List<String> paramValues)
-      throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, List<String> paramNames,
+      List<String> paramValues) throws Exception {
     return post(url, headerMap, (MediaType) null, null, null, paramNames, paramValues);
   }
 
@@ -156,7 +156,8 @@ public class HttpUtils {
    * @return
    * @throws Exception
    */
-  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap) throws Exception {
+  public static Response post(String url, Map<String, String> headerMap, Map<String, String> paramMap)
+      throws Exception {
     return post(url, headerMap, (MediaType) null, null, paramMap, null, null);
   }
 
@@ -194,7 +195,16 @@ public class HttpUtils {
   }
 
   public static ResponseVo call(Request request) {
-    Call call = OkHttpClientPool.getHttpClient().newCall(request);
+    OkHttpClient httpClient = OkHttpClientPool.getHttpClient();
+    return call(httpClient, request);
+  }
+
+  public static ResponseVo call(OkHttpClient httpClient, Request request) {
+    Call call = httpClient.newCall(request);
+    return call(call);
+  }
+
+  public static ResponseVo call(Call call) {
     try (Response response = call.execute()) {
       Headers headers = response.headers();
       int code = response.code();
@@ -253,7 +263,7 @@ public class HttpUtils {
     MediaType mediaType = MediaType.parse("application/json");
     RequestBody body = RequestBody.create(payload, mediaType);
     Request request = new Request.Builder().url(url).post(body).build();
-    
+
     try (Response response = client.newCall(request).execute()) {
       String string = response.body().string();
       int code = response.code();
