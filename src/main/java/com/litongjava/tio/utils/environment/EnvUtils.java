@@ -19,6 +19,7 @@ public class EnvUtils {
   private static Map<String, String> appMap = new HashMap<>();
   public static final String defaultFilename = "app.properties";
   public static final String envKey = "app.env";
+  private static volatile boolean loaded = false;
 
   public static String[] getArgs() {
     return args;
@@ -272,51 +273,55 @@ public class EnvUtils {
   }
 
   public static void load() {
-    String env = env();
-    if (ResourceUtil.getResource(defaultFilename) != null) {
-      // 主文件会自动加载从文件
-      PropUtils.use(defaultFilename, env);
-      log.info("load:{}", defaultFilename);
-    } else {
-      // 直接加载从文件
-      if (env != null) {
-        String fileName = "app-" + env + ".properties";
-        log.info("load:{}", fileName);
-        PropUtils.use(fileName);
+    if (!loaded) {
+      loaded = true;
+      String env = env();
+      if (ResourceUtil.getResource(defaultFilename) != null) {
+        // 主文件会自动加载从文件
+        PropUtils.use(defaultFilename, env);
+        log.info("load:{}", defaultFilename);
       } else {
-        // create file
-        File file = new File(defaultFilename);
-        if (file.exists()) {
-          PropUtils.use(defaultFilename);
-          log.info("load:{}", defaultFilename);
+        // 直接加载从文件
+        if (env != null) {
+          String fileName = "app-" + env + ".properties";
+          log.info("load:{}", fileName);
+          PropUtils.use(fileName);
+        } else {
+          // create file
+          File file = new File(defaultFilename);
+          if (file.exists()) {
+            PropUtils.use(defaultFilename);
+            log.info("load:{}", defaultFilename);
+          }
         }
       }
+
+      if (ResourceUtil.getResource(".env") != null) {
+        log.info("load from classpath:{}", ".env");
+        PropUtils.append(".env");
+      }
+
+      File file = new File(".env");
+      if (file.exists()) {
+        PropUtils.append(file);
+        log.info("load from path:{}", ".env");
+      }
+
+      File secretsFile = new File("secrets.txt");
+      if (secretsFile.exists()) {
+        PropUtils.append(secretsFile);
+        log.info("load from path:{}", "secrets.txt");
+      }
+
+      File my = new File("my.txt");
+      if (my.exists()) {
+        PropUtils.append(my);
+        log.info("load from path:{}", "my.txt");
+      }
+
+      log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
     }
 
-    if (ResourceUtil.getResource(".env") != null) {
-      log.info("load from classpath:{}", ".env");
-      PropUtils.append(".env");
-    }
-
-    File file = new File(".env");
-    if (file.exists()) {
-      PropUtils.append(file);
-      log.info("load from path:{}", ".env");
-    }
-
-    File secretsFile = new File("secrets.txt");
-    if (secretsFile.exists()) {
-      PropUtils.append(secretsFile);
-      log.info("load from path:{}", "secrets.txt");
-    }
-
-    File my = new File("my.txt");
-    if (my.exists()) {
-      PropUtils.append(my);
-      log.info("load from path:{}", "my.txt");
-    }
-
-    log.info("app.env:{} app.name:{}", env(), get(ServerConfigKeys.APP_NAME));
   }
 
   public static void load(String[] args) {
