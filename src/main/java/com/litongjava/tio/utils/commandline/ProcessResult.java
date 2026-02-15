@@ -1,6 +1,5 @@
 package com.litongjava.tio.utils.commandline;
 
-import java.io.File;
 import java.util.List;
 
 public class ProcessResult {
@@ -19,7 +18,7 @@ public class ProcessResult {
   private String output;
   private String json;
   private String message;
-  private File file;
+  private String file;
   private String text;
   private String subtitle;
   private String image;
@@ -43,15 +42,6 @@ public class ProcessResult {
     this.cached = cached;
   }
 
-  public ProcessResult(File file) {
-    this.file = file;
-  }
-
-  public ProcessResult(File file, boolean cached) {
-    this.file = file;
-    this.cached = cached;
-  }
-
   public static ProcessResult buildMessage(String message) {
     return new ProcessResult().setMessage(message);
   }
@@ -60,7 +50,7 @@ public class ProcessResult {
   }
 
   public ProcessResult(int exitCode, String stdOut, String stdErr, Long elapsed, Boolean cached, Long prt,
-      Long sessionId, Long taskId, String executeCode, String output, String json, String message, File file,
+      Long sessionId, Long taskId, String executeCode, String output, String json, String message, String file,
       String text, String subtitle, String image, String audio, String video, String hlsUrl, String ppt,
       Double video_length, List<String> texts, List<String> images, List<String> audios, List<String> videos,
       Object data) {
@@ -190,11 +180,11 @@ public class ProcessResult {
     return this;
   }
 
-  public File getFile() {
+  public String getFile() {
     return file;
   }
 
-  public void setFile(File file) {
+  public void setFile(String file) {
     this.file = file;
   }
 
