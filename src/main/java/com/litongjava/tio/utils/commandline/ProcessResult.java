@@ -1,5 +1,6 @@
 package com.litongjava.tio.utils.commandline;
 
+import java.io.File;
 import java.util.List;
 
 public class ProcessResult {
@@ -298,6 +299,13 @@ public class ProcessResult {
 
   public void setSources(String sources) {
     this.sources = sources;
+  }
+  
+  public static ProcessResult fromFile(File file, boolean b) {
+    ProcessResult processResult = new ProcessResult();
+    processResult.setCached(b);
+    processResult.setFile(file.getPath());
+    return processResult;
   }
   
 }
