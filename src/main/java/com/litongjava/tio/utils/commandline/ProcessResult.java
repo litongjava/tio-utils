@@ -19,7 +19,7 @@ public class ProcessResult {
   private String output;
   private String json;
   private String message;
-  private String file;
+  private String path;
   private String text;
   private String subtitle;
   private String image;
@@ -68,7 +68,7 @@ public class ProcessResult {
     this.output = output;
     this.json = json;
     this.message = message;
-    this.file = file;
+    this.path = file;
     this.text = text;
     this.subtitle = subtitle;
     this.image = image;
@@ -181,12 +181,12 @@ public class ProcessResult {
     return this;
   }
 
-  public String getFile() {
-    return file;
+  public String getPath() {
+    return path;
   }
 
-  public void setFile(String file) {
-    this.file = file;
+  public void setPath(String file) {
+    this.path = file;
   }
 
   public String getText() {
@@ -304,7 +304,7 @@ public class ProcessResult {
   public static ProcessResult fromFile(File file, boolean b) {
     ProcessResult processResult = new ProcessResult();
     processResult.setCached(b);
-    processResult.setFile(file.getPath());
+    processResult.setPath(file.getPath());
     return processResult;
   }
   
